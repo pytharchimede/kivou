@@ -147,7 +147,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
           );
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text('Réservation créée.')));
-      Navigator.of(context).pop();
+      context.go('/home');
     }).catchError((e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context)

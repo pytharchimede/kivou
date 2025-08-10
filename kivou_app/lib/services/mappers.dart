@@ -3,6 +3,9 @@ import 'package:kivou_app/models/service_provider.dart';
 // Normalise une URL d'image: si elle commence par '/', on préfixe avec le domaine
 String normalizeImageUrl(String? u) {
   if (u == null || u.isEmpty) return '';
+  if (u.startsWith('http://fidest.ci')) {
+    return u.replaceFirst('http://', 'https://');
+  }
   if (u.startsWith('http://') || u.startsWith('https://')) return u;
   if (u.startsWith('/')) return 'https://fidest.ci$u';
   return u;

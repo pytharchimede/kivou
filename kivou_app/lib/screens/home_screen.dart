@@ -27,94 +27,103 @@ class HomeScreen extends ConsumerWidget {
               icon: const Icon(Icons.person)),
         ],
       ),
-      body: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Champ de recherche
-                  TextField(
-                    decoration: const InputDecoration(
-                      hintText: 'Rechercher un service, un prestataire…',
-                      prefixIcon: Icon(Icons.search),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          // Invalider et recharger
+          ref.invalidate(remoteProvidersFutureProvider);
+          try {
+            await ref.read(remoteProvidersFutureProvider.future);
+          } catch (_) {}
+        },
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Champ de recherche
+                    TextField(
+                      decoration: const InputDecoration(
+                        hintText: 'Rechercher un service, un prestataire…',
+                        prefixIcon: Icon(Icons.search),
+                      ),
+                      onChanged: (v) => ref
+                          .read(searchFiltersProvider.notifier)
+                          .updateSearchQuery(v),
                     ),
-                    onChanged: (v) => ref
-                        .read(searchFiltersProvider.notifier)
-                        .updateSearchQuery(v),
-                  ),
-                  const SizedBox(height: 12),
-                  // Catégories
-                  SizedBox(
-                    height: 40,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        for (final cat in const [
-                          'Tous',
-                          'Ménage',
-                          'Plomberie',
-                          'Électricité',
-                          'Menuiserie',
-                          'Informatique',
-                          'Serrurerie',
-                          'Peinture',
-                          'Déménagement',
-                          'Climatisation',
-                          'Jardinage',
-                        ])
-                          ServiceChip(
-                            label: cat,
-                            selected:
-                                ref.watch(searchFiltersProvider).category ==
-                                    cat,
-                            onTap: () => ref
-                                .read(searchFiltersProvider.notifier)
-                                .updateCategory(cat),
-                          ),
-                      ],
+                    const SizedBox(height: 12),
+                    // Catégories
+                    SizedBox(
+                      height: 40,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          for (final cat in const [
+                            'Tous',
+                            'Ménage',
+                            'Plomberie',
+                            'Électricité',
+                            'Menuiserie',
+                            'Informatique',
+                            'Serrurerie',
+                            'Peinture',
+                            'Déménagement',
+                            'Climatisation',
+                            'Jardinage',
+                          ])
+                            ServiceChip(
+                              label: cat,
+                              selected:
+                                  ref.watch(searchFiltersProvider).category ==
+                                      cat,
+                              onTap: () => ref
+                                  .read(searchFiltersProvider.notifier)
+                                  .updateCategory(cat),
+                            ),
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 12),
-                  // Carte réelle Google Maps centrée sur Abidjan - Koumassi
-                  _KoumassiMap(),
-                  const SizedBox(height: 12),
-                ],
+                    const SizedBox(height: 12),
+                    // Carte réelle Google Maps centrée sur Abidjan - Koumassi
+                    _KoumassiMap(),
+                    const SizedBox(height: 12),
+                  ],
+                ),
               ),
             ),
-          ),
-          providers.when(
-            data: (list) => SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, i) {
-                  final p = list[i];
-                  return Padding(
-                    padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
-                    child: ProviderCard(
-                      provider: p,
-                      userLat: 5.35,
-                      userLng: -4.02,
-                    ),
-                  );
-                },
-                childCount: list.length,
+            providers.when(
+              data: (list) => SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, i) {
+                    final p = list[i];
+                    return Padding(
+                      padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
+                      child: ProviderCard(
+                        provider: p,
+                        userLat: 5.35,
+                        userLng: -4.02,
+                      ),
+                    );
+                  },
+                  childCount: list.length,
+                ),
               ),
+              loading: () => const SliverToBoxAdapter(
+                  child: Padding(
+                padding: EdgeInsets.all(24),
+                child: Center(child: CircularProgressIndicator()),
+              )),
+              error: (e, st) => SliverToBoxAdapter(
+                  child: Padding(
+                padding: EdgeInsets.all(24),
+                child: Center(child: Text('Erreur chargement: $e')),
+              )),
             ),
-            loading: () => const SliverToBoxAdapter(
-                child: Padding(
-              padding: EdgeInsets.all(24),
-              child: Center(child: CircularProgressIndicator()),
-            )),
-            error: (e, st) => SliverToBoxAdapter(
-                child: Padding(
-              padding: EdgeInsets.all(24),
-              child: Center(child: Text('Erreur chargement: $e')),
-            )),
-          ),
-          const SliverToBoxAdapter(child: SizedBox(height: 16)),
-        ],
+            const SliverToBoxAdapter(child: SizedBox(height: 16)),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {

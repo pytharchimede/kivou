@@ -32,27 +32,38 @@ class OrdersScreen extends ConsumerWidget {
           onPressed: () => context.go('/home'),
         ),
       ),
-      body: future.when(
-        data: (bookings) => bookings.isEmpty
-            ? const Center(child: Text('Aucune commande'))
-            : ListView.separated(
-                padding: const EdgeInsets.all(12),
-                itemCount: bookings.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 8),
-                itemBuilder: (context, i) {
-                  final b = bookings[i];
-                  return ListTile(
-                    tileColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
-                    title: Text(b['service_category'].toString()),
-                    subtitle: Text(b['scheduled_at'].toString()),
-                    trailing: Text(b['status'].toString()),
-                  );
-                },
-              ),
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, st) => Center(child: Text('Erreur: $e')),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          ref.invalidate(ordersFutureProvider);
+          try {
+            await ref.read(ordersFutureProvider.future);
+          } catch (_) {}
+        },
+        child: future.when(
+          data: (bookings) => bookings.isEmpty
+              ? ListView(children: const [
+                  SizedBox(height: 120),
+                  Center(child: Text('Aucune commande')),
+                ])
+              : ListView.separated(
+                  padding: const EdgeInsets.all(12),
+                  itemCount: bookings.length,
+                  separatorBuilder: (_, __) => const SizedBox(height: 8),
+                  itemBuilder: (context, i) {
+                    final b = bookings[i];
+                    return ListTile(
+                      tileColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                      title: Text(b['service_category'].toString()),
+                      subtitle: Text(b['scheduled_at'].toString()),
+                      trailing: Text(b['status'].toString()),
+                    );
+                  },
+                ),
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (e, st) => Center(child: Text('Erreur: $e')),
+        ),
       ),
     );
   }

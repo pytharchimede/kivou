@@ -144,7 +144,8 @@ class _ProviderRegistrationScreenState
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Profil prestataire créé.')));
-      Navigator.of(context).pop();
+      if (!mounted) return;
+      context.go('/home');
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context)
