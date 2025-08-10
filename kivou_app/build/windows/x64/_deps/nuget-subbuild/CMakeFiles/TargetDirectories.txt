@@ -1,0 +1,3 @@
+C:/PROJETS MOBILE/prestataires/kivou_app/build/windows/x64/_deps/nuget-subbuild/CMakeFiles/nuget-populate.dir
+C:/PROJETS MOBILE/prestataires/kivou_app/build/windows/x64/_deps/nuget-subbuild/CMakeFiles/ALL_BUILD.dir
+C:/PROJETS MOBILE/prestataires/kivou_app/build/windows/x64/_deps/nuget-subbuild/CMakeFiles/ZERO_CHECK.dir

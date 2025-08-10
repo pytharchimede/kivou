@@ -1,0 +1,240 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.example.kivou_app"
+4    android:versionCode="1"
+5    android:versionName="1.0.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="21"
+9        android:targetSdkVersion="35" />
+10    <!--
+11         Required to query activities that can process text, see:
+12         https://developer.android.com/training/package-visibility and
+13         https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
+14
+15         In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin.
+16    -->
+17    <queries>
+17-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:39:5-44:15
+18        <intent>
+18-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:40:9-43:18
+19            <action android:name="android.intent.action.PROCESS_TEXT" />
+19-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:41:13-72
+19-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:41:21-70
+20
+21            <data android:mimeType="text/plain" />
+21-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:42:13-50
+21-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:42:19-48
+22        </intent>
+23        <!-- Needs to be explicitly declared on Android R+ -->
+24        <package android:name="com.google.android.apps.maps" />
+24-->[com.google.android.gms:play-services-maps:19.2.0] C:\Users\PC\.gradle\caches\transforms-3\eda746ae5d0ab057451c90834029836a\transformed\jetified-play-services-maps-19.2.0\AndroidManifest.xml:29:7-61
+24-->[com.google.android.gms:play-services-maps:19.2.0] C:\Users\PC\.gradle\caches\transforms-3\eda746ae5d0ab057451c90834029836a\transformed\jetified-play-services-maps-19.2.0\AndroidManifest.xml:29:16-59
+25    </queries>
+26    <!-- Include required permissions for Google Maps API to run. -->
+27    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+27-->[com.google.android.gms:play-services-maps:19.2.0] C:\Users\PC\.gradle\caches\transforms-3\eda746ae5d0ab057451c90834029836a\transformed\jetified-play-services-maps-19.2.0\AndroidManifest.xml:20:5-78
+27-->[com.google.android.gms:play-services-maps:19.2.0] C:\Users\PC\.gradle\caches\transforms-3\eda746ae5d0ab057451c90834029836a\transformed\jetified-play-services-maps-19.2.0\AndroidManifest.xml:20:22-76
+28    <uses-permission android:name="android.permission.INTERNET" />
+28-->[com.google.android.gms:play-services-maps:19.2.0] C:\Users\PC\.gradle\caches\transforms-3\eda746ae5d0ab057451c90834029836a\transformed\jetified-play-services-maps-19.2.0\AndroidManifest.xml:21:5-66
+28-->[com.google.android.gms:play-services-maps:19.2.0] C:\Users\PC\.gradle\caches\transforms-3\eda746ae5d0ab057451c90834029836a\transformed\jetified-play-services-maps-19.2.0\AndroidManifest.xml:21:22-64
+29
+30    <uses-feature
+30-->[com.google.android.gms:play-services-maps:19.2.0] C:\Users\PC\.gradle\caches\transforms-3\eda746ae5d0ab057451c90834029836a\transformed\jetified-play-services-maps-19.2.0\AndroidManifest.xml:22:5-24:33
+31        android:glEsVersion="0x00020000"
+31-->[com.google.android.gms:play-services-maps:19.2.0] C:\Users\PC\.gradle\caches\transforms-3\eda746ae5d0ab057451c90834029836a\transformed\jetified-play-services-maps-19.2.0\AndroidManifest.xml:23:8-40
+32        android:required="true" />
+32-->[com.google.android.gms:play-services-maps:19.2.0] C:\Users\PC\.gradle\caches\transforms-3\eda746ae5d0ab057451c90834029836a\transformed\jetified-play-services-maps-19.2.0\AndroidManifest.xml:24:8-31
+33
+34    <permission
+34-->[androidx.core:core:1.13.1] C:\Users\PC\.gradle\caches\transforms-3\889ae3adf7a24645889ee22f4dad2cac\transformed\core-1.13.1\AndroidManifest.xml:22:5-24:47
+35        android:name="com.example.kivou_app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+35-->[androidx.core:core:1.13.1] C:\Users\PC\.gradle\caches\transforms-3\889ae3adf7a24645889ee22f4dad2cac\transformed\core-1.13.1\AndroidManifest.xml:23:9-81
+36        android:protectionLevel="signature" />
+36-->[androidx.core:core:1.13.1] C:\Users\PC\.gradle\caches\transforms-3\889ae3adf7a24645889ee22f4dad2cac\transformed\core-1.13.1\AndroidManifest.xml:24:9-44
+37
+38    <uses-permission android:name="com.example.kivou_app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+38-->[androidx.core:core:1.13.1] C:\Users\PC\.gradle\caches\transforms-3\889ae3adf7a24645889ee22f4dad2cac\transformed\core-1.13.1\AndroidManifest.xml:26:5-97
+38-->[androidx.core:core:1.13.1] C:\Users\PC\.gradle\caches\transforms-3\889ae3adf7a24645889ee22f4dad2cac\transformed\core-1.13.1\AndroidManifest.xml:26:22-94
+39
+40    <application
+41        android:name="android.app.Application"
+41-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:4:9-42
+42        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+42-->[androidx.core:core:1.13.1] C:\Users\PC\.gradle\caches\transforms-3\889ae3adf7a24645889ee22f4dad2cac\transformed\core-1.13.1\AndroidManifest.xml:28:18-86
+43        android:extractNativeLibs="true"
+44        android:icon="@mipmap/ic_launcher"
+44-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:5:9-43
+45        android:label="kivou_app" >
+45-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:3:9-34
+46        <activity
+46-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:6:9-27:20
+47            android:name="com.example.kivou_app.MainActivity"
+47-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:7:13-41
+48            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+48-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:12:13-163
+49            android:exported="true"
+49-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:8:13-36
+50            android:hardwareAccelerated="true"
+50-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:13:13-47
+51            android:launchMode="singleTop"
+51-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:9:13-43
+52            android:taskAffinity=""
+52-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:10:13-36
+53            android:theme="@style/LaunchTheme"
+53-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:11:13-47
+54            android:windowSoftInputMode="adjustResize" >
+54-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:14:13-55
+55
+56            <!--
+57                 Specifies an Android theme to apply to this Activity as soon as
+58                 the Android process has started. This theme is visible to the user
+59                 while the Flutter UI initializes. After that, this theme continues
+60                 to determine the Window background behind the Flutter UI.
+61            -->
+62            <meta-data
+62-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:19:13-22:17
+63                android:name="io.flutter.embedding.android.NormalTheme"
+63-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:20:15-70
+64                android:resource="@style/NormalTheme" />
+64-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:21:15-52
+65
+66            <intent-filter>
+66-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:23:13-26:29
+67                <action android:name="android.intent.action.MAIN" />
+67-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:24:17-68
+67-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:24:25-66
+68
+69                <category android:name="android.intent.category.LAUNCHER" />
+69-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:25:17-76
+69-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:25:27-74
+70            </intent-filter>
+71        </activity>
+72        <!--
+73             Don't delete the meta-data below.
+74             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
+75        -->
+76        <meta-data
+76-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:30:9-32:33
+77            android:name="flutterEmbedding"
+77-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:31:13-44
+78            android:value="2" />
+78-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:32:13-30
+79
+80        <service
+80-->[:geolocator_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\geolocator_android\intermediates\merged_manifest\release\AndroidManifest.xml:8:9-12:56
+81            android:name="com.baseflow.geolocator.GeolocatorLocationService"
+81-->[:geolocator_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\geolocator_android\intermediates\merged_manifest\release\AndroidManifest.xml:9:13-77
+82            android:enabled="true"
+82-->[:geolocator_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\geolocator_android\intermediates\merged_manifest\release\AndroidManifest.xml:10:13-35
+83            android:exported="false"
+83-->[:geolocator_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\geolocator_android\intermediates\merged_manifest\release\AndroidManifest.xml:11:13-37
+84            android:foregroundServiceType="location" />
+84-->[:geolocator_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\geolocator_android\intermediates\merged_manifest\release\AndroidManifest.xml:12:13-53
+85
+86        <activity
+86-->[:url_launcher_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\url_launcher_android\intermediates\merged_manifest\release\AndroidManifest.xml:8:9-11:74
+87            android:name="io.flutter.plugins.urllauncher.WebViewActivity"
+87-->[:url_launcher_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\url_launcher_android\intermediates\merged_manifest\release\AndroidManifest.xml:9:13-74
+88            android:exported="false"
+88-->[:url_launcher_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\url_launcher_android\intermediates\merged_manifest\release\AndroidManifest.xml:10:13-37
+89            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+89-->[:url_launcher_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\url_launcher_android\intermediates\merged_manifest\release\AndroidManifest.xml:11:13-71
+90
+91        <uses-library
+91-->[androidx.window:window:1.2.0] C:\Users\PC\.gradle\caches\transforms-3\8859fd2468ade3ef2655d1f63d6737f2\transformed\jetified-window-1.2.0\AndroidManifest.xml:23:9-25:40
+92            android:name="androidx.window.extensions"
+92-->[androidx.window:window:1.2.0] C:\Users\PC\.gradle\caches\transforms-3\8859fd2468ade3ef2655d1f63d6737f2\transformed\jetified-window-1.2.0\AndroidManifest.xml:24:13-54
+93            android:required="false" />
+93-->[androidx.window:window:1.2.0] C:\Users\PC\.gradle\caches\transforms-3\8859fd2468ade3ef2655d1f63d6737f2\transformed\jetified-window-1.2.0\AndroidManifest.xml:25:13-37
+94        <uses-library
+94-->[androidx.window:window:1.2.0] C:\Users\PC\.gradle\caches\transforms-3\8859fd2468ade3ef2655d1f63d6737f2\transformed\jetified-window-1.2.0\AndroidManifest.xml:26:9-28:40
+95            android:name="androidx.window.sidecar"
+95-->[androidx.window:window:1.2.0] C:\Users\PC\.gradle\caches\transforms-3\8859fd2468ade3ef2655d1f63d6737f2\transformed\jetified-window-1.2.0\AndroidManifest.xml:27:13-51
+96            android:required="false" /> <!-- Needs to be explicitly declared on P+ -->
+96-->[androidx.window:window:1.2.0] C:\Users\PC\.gradle\caches\transforms-3\8859fd2468ade3ef2655d1f63d6737f2\transformed\jetified-window-1.2.0\AndroidManifest.xml:28:13-37
+97        <uses-library
+97-->[com.google.android.gms:play-services-maps:19.2.0] C:\Users\PC\.gradle\caches\transforms-3\eda746ae5d0ab057451c90834029836a\transformed\jetified-play-services-maps-19.2.0\AndroidManifest.xml:33:7-86
+98            android:name="org.apache.http.legacy"
+98-->[com.google.android.gms:play-services-maps:19.2.0] C:\Users\PC\.gradle\caches\transforms-3\eda746ae5d0ab057451c90834029836a\transformed\jetified-play-services-maps-19.2.0\AndroidManifest.xml:33:21-58
+99            android:required="false" />
+99-->[com.google.android.gms:play-services-maps:19.2.0] C:\Users\PC\.gradle\caches\transforms-3\eda746ae5d0ab057451c90834029836a\transformed\jetified-play-services-maps-19.2.0\AndroidManifest.xml:33:59-83
+100
+101        <activity
+101-->[com.google.android.gms:play-services-base:18.5.0] C:\Users\PC\.gradle\caches\transforms-3\5721d2dca1c20b34574c347f20f3254f\transformed\jetified-play-services-base-18.5.0\AndroidManifest.xml:5:9-173
+102            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+102-->[com.google.android.gms:play-services-base:18.5.0] C:\Users\PC\.gradle\caches\transforms-3\5721d2dca1c20b34574c347f20f3254f\transformed\jetified-play-services-base-18.5.0\AndroidManifest.xml:5:19-85
+103            android:exported="false"
+103-->[com.google.android.gms:play-services-base:18.5.0] C:\Users\PC\.gradle\caches\transforms-3\5721d2dca1c20b34574c347f20f3254f\transformed\jetified-play-services-base-18.5.0\AndroidManifest.xml:5:146-170
+104            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+104-->[com.google.android.gms:play-services-base:18.5.0] C:\Users\PC\.gradle\caches\transforms-3\5721d2dca1c20b34574c347f20f3254f\transformed\jetified-play-services-base-18.5.0\AndroidManifest.xml:5:86-145
+105
+106        <meta-data
+106-->[com.google.android.gms:play-services-basement:18.4.0] C:\Users\PC\.gradle\caches\transforms-3\d0eaaf09591c103f6aef4a2fc790ee26\transformed\jetified-play-services-basement-18.4.0\AndroidManifest.xml:6:9-122
+107            android:name="com.google.android.gms.version"
+107-->[com.google.android.gms:play-services-basement:18.4.0] C:\Users\PC\.gradle\caches\transforms-3\d0eaaf09591c103f6aef4a2fc790ee26\transformed\jetified-play-services-basement-18.4.0\AndroidManifest.xml:6:20-65
+108            android:value="@integer/google_play_services_version" />
+108-->[com.google.android.gms:play-services-basement:18.4.0] C:\Users\PC\.gradle\caches\transforms-3\d0eaaf09591c103f6aef4a2fc790ee26\transformed\jetified-play-services-basement-18.4.0\AndroidManifest.xml:6:66-119
+109
+110        <provider
+110-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\PC\.gradle\caches\transforms-3\40a1bd5ff2ce65cd1fad055cc690d356\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:24:9-32:20
+111            android:name="androidx.startup.InitializationProvider"
+111-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\PC\.gradle\caches\transforms-3\40a1bd5ff2ce65cd1fad055cc690d356\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:25:13-67
+112            android:authorities="com.example.kivou_app.androidx-startup"
+112-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\PC\.gradle\caches\transforms-3\40a1bd5ff2ce65cd1fad055cc690d356\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:26:13-68
+113            android:exported="false" >
+113-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\PC\.gradle\caches\transforms-3\40a1bd5ff2ce65cd1fad055cc690d356\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:27:13-37
+114            <meta-data
+114-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\PC\.gradle\caches\transforms-3\40a1bd5ff2ce65cd1fad055cc690d356\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:29:13-31:52
+115                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+115-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\PC\.gradle\caches\transforms-3\40a1bd5ff2ce65cd1fad055cc690d356\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:30:17-78
+116                android:value="androidx.startup" />
+116-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\PC\.gradle\caches\transforms-3\40a1bd5ff2ce65cd1fad055cc690d356\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:31:17-49
+117            <meta-data
+117-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC\.gradle\caches\transforms-3\408a642162969e960684d9c16b2f116a\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:29:13-31:52
+118                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+118-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC\.gradle\caches\transforms-3\408a642162969e960684d9c16b2f116a\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:30:17-85
+119                android:value="androidx.startup" />
+119-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC\.gradle\caches\transforms-3\408a642162969e960684d9c16b2f116a\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:31:17-49
+120        </provider>
+121
+122        <receiver
+122-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC\.gradle\caches\transforms-3\408a642162969e960684d9c16b2f116a\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:34:9-52:20
+123            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+123-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC\.gradle\caches\transforms-3\408a642162969e960684d9c16b2f116a\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:35:13-76
+124            android:directBootAware="false"
+124-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC\.gradle\caches\transforms-3\408a642162969e960684d9c16b2f116a\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:36:13-44
+125            android:enabled="true"
+125-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC\.gradle\caches\transforms-3\408a642162969e960684d9c16b2f116a\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:37:13-35
+126            android:exported="true"
+126-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC\.gradle\caches\transforms-3\408a642162969e960684d9c16b2f116a\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:38:13-36
+127            android:permission="android.permission.DUMP" >
+127-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC\.gradle\caches\transforms-3\408a642162969e960684d9c16b2f116a\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:39:13-57
+128            <intent-filter>
+128-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC\.gradle\caches\transforms-3\408a642162969e960684d9c16b2f116a\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:40:13-42:29
+129                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+129-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC\.gradle\caches\transforms-3\408a642162969e960684d9c16b2f116a\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:41:17-91
+129-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC\.gradle\caches\transforms-3\408a642162969e960684d9c16b2f116a\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:41:25-88
+130            </intent-filter>
+131            <intent-filter>
+131-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC\.gradle\caches\transforms-3\408a642162969e960684d9c16b2f116a\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:43:13-45:29
+132                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+132-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC\.gradle\caches\transforms-3\408a642162969e960684d9c16b2f116a\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:44:17-85
+132-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC\.gradle\caches\transforms-3\408a642162969e960684d9c16b2f116a\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:44:25-82
+133            </intent-filter>
+134            <intent-filter>
+134-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC\.gradle\caches\transforms-3\408a642162969e960684d9c16b2f116a\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:46:13-48:29
+135                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+135-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC\.gradle\caches\transforms-3\408a642162969e960684d9c16b2f116a\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:47:17-88
+135-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC\.gradle\caches\transforms-3\408a642162969e960684d9c16b2f116a\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:47:25-85
+136            </intent-filter>
+137            <intent-filter>
+137-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC\.gradle\caches\transforms-3\408a642162969e960684d9c16b2f116a\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:49:13-51:29
+138                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+138-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC\.gradle\caches\transforms-3\408a642162969e960684d9c16b2f116a\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:50:17-95
+138-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC\.gradle\caches\transforms-3\408a642162969e960684d9c16b2f116a\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:50:25-92
+139            </intent-filter>
+140        </receiver>
+141    </application>
+142
+143</manifest>
