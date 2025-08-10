@@ -19,6 +19,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
   DateTime date = DateTime.now().add(const Duration(days: 1));
   TimeOfDay time = const TimeOfDay(hour: 9, minute: 0);
   double duration = 2.0;
+  bool _submitting = false;
 
   @override
   Widget build(BuildContext context) {
@@ -93,8 +94,14 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
           ]),
           const SizedBox(height: 16),
           ElevatedButton(
-            onPressed: () => _confirm(total),
-            child: const Text('3) Confirmer (sans paiement)'),
+            onPressed: _submitting ? null : () => _confirm(total),
+            child: _submitting
+                ? const SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : const Text('3) Confirmer (sans paiement)'),
           ),
         ],
       ),
@@ -117,6 +124,8 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
   }
 
   void _confirm(double total) {
+    if (_submitting) return;
+    setState(() => _submitting = true);
     final auth = ref.read(authStateProvider);
     final at =
         DateTime(date.year, date.month, date.day, time.hour, time.minute);
@@ -139,12 +148,6 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
     )
         .then((_) {
       if (!mounted) return;
-      // Pousser une notification locale (cloche)
-      ref.read(notificationsProvider.notifier).push(
-            title: 'Nouvelle commande',
-            body:
-                'Vous avez réservé $service le ${DateFormat.yMd().format(date)} à ${time.format(context)}.',
-          );
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text('Réservation créée.')));
       context.go('/home');
@@ -152,6 +155,8 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
       if (!mounted) return;
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Erreur: $e')));
+    }).whenComplete(() {
+      if (mounted) setState(() => _submitting = false);
     });
   }
 }

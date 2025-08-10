@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS reviews (
 -- Notifications persistantes
 CREATE TABLE IF NOT EXISTS notifications (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT NOT NULL,
+  user_id INT DEFAULT NULL,
   provider_id INT DEFAULT NULL,
   title VARCHAR(190) NOT NULL,
   body TEXT,

@@ -26,13 +26,13 @@ $id = $repo->create([
     'duration' => (float)$body['duration'],
     'total_price' => (float)$body['total_price'],
 ]);
-// Create a notification for the user
+// Create a notification for the provider (not the client)
 try {
     $pdo = db();
-    $stN = $pdo->prepare('INSERT INTO notifications (user_id, provider_id, title, body) VALUES (?,?,?,?)');
-    $title = 'Réservation créée';
-    $bodyMsg = 'Votre réservation a été créée pour le ' . $body['scheduled_at'];
-    $stN->execute([$userId, (int)$body['provider_id'], $title, $bodyMsg]);
+    $stN = $pdo->prepare('INSERT INTO notifications (user_id, provider_id, title, body) VALUES (NULL,?,?,?)');
+    $title = 'Nouvelle commande';
+    $bodyMsg = 'Vous avez une nouvelle commande prévue le ' . $body['scheduled_at'];
+    $stN->execute([(int)$body['provider_id'], $title, $bodyMsg]);
 } catch (Throwable $e) { /* ignore notification errors */
 }
 

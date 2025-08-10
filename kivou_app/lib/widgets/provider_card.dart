@@ -32,14 +32,20 @@ class ProviderCard extends StatelessWidget {
               children: [
                 AspectRatio(
                   aspectRatio: 16 / 9,
-                  child: Image.network(
-                    provider.photoUrl,
-                    fit: BoxFit.cover,
-                    errorBuilder: (c, e, s) => Container(
-                        color: Colors.grey[200],
-                        child:
-                            const Center(child: Icon(Icons.image, size: 48))),
-                  ),
+                  child: provider.photoUrl.isNotEmpty
+                      ? Image.network(
+                          provider.photoUrl,
+                          fit: BoxFit.cover,
+                          errorBuilder: (c, e, s) => Container(
+                              color: Colors.grey[200],
+                              child: const Center(
+                                  child: Icon(Icons.image, size: 48))),
+                        )
+                      : Container(
+                          color: Colors.grey[200],
+                          child:
+                              const Center(child: Icon(Icons.image, size: 48)),
+                        ),
                 ),
                 Positioned(
                   right: 8,
