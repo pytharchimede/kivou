@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\PROJETS MOBILE\prestataires\kivou_app\build\windows\x64\_deps\nuget-subbuild\CMakeFiles\9c2a27c5df19446a4fc525d7aa5b1e95\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{0A12A55C-051D-3D66-AE69-00D8D285510F}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
