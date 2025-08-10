@@ -28,9 +28,9 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
           appBar: AppBar(
             title: const Text('Réserver'),
             leading: IconButton(
-              icon: const Icon(Icons.home_outlined),
-              onPressed: () => Navigator.of(context)
-                  .pushNamedAndRemoveUntil('/home', (route) => false),
+              icon: const Icon(Icons.arrow_back_ios_new_rounded),
+              tooltip: 'Accueil',
+              onPressed: () => context.go('/home'),
             ),
           ),
           body: const Center(child: Text('Prestataire introuvable')));
@@ -46,9 +46,9 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
       appBar: AppBar(
         title: Text('Réserver ${provider.name}'),
         leading: IconButton(
-          icon: const Icon(Icons.home_outlined),
-          onPressed: () => Navigator.of(context)
-              .pushNamedAndRemoveUntil('/home', (route) => false),
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+          tooltip: 'Accueil',
+          onPressed: () => context.go('/home'),
         ),
       ),
       body: ListView(
@@ -94,7 +94,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () => _confirm(total),
-            child: const Text('3) Confirmer (paiement simulé)'),
+            child: const Text('3) Confirmer (sans paiement)'),
           ),
         ],
       ),
@@ -139,6 +139,12 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
     )
         .then((_) {
       if (!mounted) return;
+      // Pousser une notification locale (cloche)
+      ref.read(notificationsProvider.notifier).push(
+            title: 'Nouvelle commande',
+            body:
+                'Vous avez réservé $service le ${DateFormat.yMd().format(date)} à ${time.format(context)}.',
+          );
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text('Réservation créée.')));
       Navigator.of(context).pop();

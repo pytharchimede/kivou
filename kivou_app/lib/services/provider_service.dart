@@ -21,6 +21,7 @@ class ProviderService {
     String? description,
     double? latitude,
     double? longitude,
+    String? photoUrl,
   }) {
     return _api.postJson('/api/providers/register.php', {
       'name': name,
@@ -31,6 +32,7 @@ class ProviderService {
       'description': description,
       'latitude': latitude,
       'longitude': longitude,
+      if (photoUrl != null) 'photo_url': photoUrl,
     });
   }
 

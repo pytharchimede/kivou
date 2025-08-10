@@ -18,6 +18,7 @@ class HomeScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('KIVOU'),
         actions: [
+          _BellButton(),
           IconButton(
               onPressed: () => context.go('/orders'),
               icon: const Icon(Icons.receipt_long)),
@@ -122,6 +123,96 @@ class HomeScreen extends ConsumerWidget {
         label: const Text('Filtres'),
         icon: const Icon(Icons.filter_list),
       ),
+    );
+  }
+}
+
+class _BellButton extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final items = ref.watch(notificationsProvider);
+    final hasUnread = items.isNotEmpty; // simplifié: tout est non lu
+    return Stack(
+      children: [
+        IconButton(
+          tooltip: 'Notifications',
+          icon: const Icon(Icons.notifications_outlined),
+          onPressed: () => _showNotifications(context, ref),
+        ),
+        if (hasUnread)
+          Positioned(
+            right: 10,
+            top: 10,
+            child: Container(
+              width: 8,
+              height: 8,
+              decoration: BoxDecoration(
+                color: Colors.redAccent,
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  void _showNotifications(BuildContext context, WidgetRef ref) {
+    final items = ref.read(notificationsProvider);
+    showModalBottomSheet(
+      context: context,
+      showDragHandle: true,
+      isScrollControlled: true,
+      builder: (context) {
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    const Icon(Icons.notifications),
+                    const SizedBox(width: 8),
+                    const Text('Notifications',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold)),
+                    const Spacer(),
+                    TextButton(
+                      onPressed: () =>
+                          ref.read(notificationsProvider.notifier).clear(),
+                      child: const Text('Vider'),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                if (items.isEmpty)
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 24),
+                    child: Center(child: Text('Aucune notification')),
+                  )
+                else
+                  Flexible(
+                    child: ListView.separated(
+                      shrinkWrap: true,
+                      itemCount: items.length,
+                      separatorBuilder: (_, __) => const Divider(height: 1),
+                      itemBuilder: (context, i) {
+                        final it = items[i];
+                        return ListTile(
+                          leading:
+                              const Icon(Icons.notifications_active_outlined),
+                          title: Text(it['title'] ?? ''),
+                          subtitle: Text(it['body'] ?? ''),
+                        );
+                      },
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

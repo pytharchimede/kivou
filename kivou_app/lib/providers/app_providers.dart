@@ -76,6 +76,26 @@ class AuthController extends StateNotifier<AuthState> {
   }
 }
 
+/// Notifications (cloche) réactives
+final notificationsProvider =
+    StateNotifierProvider<NotificationsNotifier, List<Map<String, String>>>(
+        (ref) => NotificationsNotifier());
+
+class NotificationsNotifier extends StateNotifier<List<Map<String, String>>> {
+  NotificationsNotifier() : super(const []);
+
+  void push({required String title, required String body}) {
+    final item = <String, String>{
+      'title': title,
+      'body': body,
+      'ts': DateTime.now().toIso8601String(),
+    };
+    state = [item, ...state];
+  }
+
+  void clear() => state = const [];
+}
+
 final providerServiceProvider = Provider<ProviderService>(
     (ref) => ProviderService(ref.read(apiClientProvider)));
 

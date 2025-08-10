@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../providers/app_providers.dart';
 import '../models/service_provider.dart';
 import '../services/mappers.dart';
@@ -63,6 +64,11 @@ class _ProviderDetailScaffold extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(provider.name),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+          onPressed: () => GoRouter.of(context).go('/home'),
+          tooltip: 'Accueil',
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -89,6 +95,36 @@ class _ProviderDetailScaffold extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Carte position prestataire
+                  if (provider.latitude != 0 && provider.longitude != 0) ...[
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: SizedBox(
+                        height: 160,
+                        child: GoogleMap(
+                          initialCameraPosition: CameraPosition(
+                            target:
+                                LatLng(provider.latitude, provider.longitude),
+                            zoom: 15,
+                          ),
+                          markers: {
+                            Marker(
+                              markerId: MarkerId('p-${provider.id}'),
+                              position:
+                                  LatLng(provider.latitude, provider.longitude),
+                              infoWindow: InfoWindow(title: provider.name),
+                            )
+                          },
+                          zoomControlsEnabled: false,
+                          myLocationEnabled: false,
+                          myLocationButtonEnabled: false,
+                          compassEnabled: false,
+                          mapToolbarEnabled: false,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                  ],
                   Row(
                     children: [
                       _buildStars(provider.rating),

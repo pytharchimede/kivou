@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 // import 'package:intl/intl.dart';
 import '../providers/app_providers.dart';
 import '../services/booking_service.dart';
@@ -26,9 +27,9 @@ class OrdersScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Mes commandes'),
         leading: IconButton(
-          icon: const Icon(Icons.home_outlined),
-          onPressed: () => Navigator.of(context)
-              .pushNamedAndRemoveUntil('/home', (route) => false),
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+          tooltip: 'Accueil',
+          onPressed: () => context.go('/home'),
         ),
       ),
       body: future.when(

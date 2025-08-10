@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/app_providers.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:go_router/go_router.dart';
+import 'dart:io';
+import '../services/upload_service.dart';
 
 class ProviderRegistrationScreen extends ConsumerStatefulWidget {
   const ProviderRegistrationScreen({super.key});
@@ -17,6 +21,7 @@ class _ProviderRegistrationScreenState
   final _cats = TextEditingController();
   final _price = TextEditingController(text: '100');
   bool loading = false;
+  File? _photo;
 
   @override
   void dispose() {
@@ -39,15 +44,33 @@ class _ProviderRegistrationScreenState
       appBar: AppBar(
         title: const Text('Devenir prestataire'),
         leading: IconButton(
-          icon: const Icon(Icons.home_outlined),
-          onPressed: () => Navigator.of(context)
-              .pushNamedAndRemoveUntil('/home', (route) => false),
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+          tooltip: 'Accueil',
+          onPressed: () => context.go('/home'),
         ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(
           child: Column(children: [
+            Row(
+              children: [
+                CircleAvatar(
+                  radius: 30,
+                  backgroundImage: _photo != null ? FileImage(_photo!) : null,
+                  child: _photo == null
+                      ? const Icon(Icons.person, size: 30)
+                      : null,
+                ),
+                const SizedBox(width: 12),
+                OutlinedButton.icon(
+                  onPressed: _pickImage,
+                  icon: const Icon(Icons.photo_camera),
+                  label: const Text('Photo du prestataire'),
+                )
+              ],
+            ),
+            const SizedBox(height: 12),
             TextField(
                 controller: _name,
                 decoration:
@@ -86,10 +109,25 @@ class _ProviderRegistrationScreenState
     );
   }
 
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final XFile? picked =
+        await picker.pickImage(source: ImageSource.gallery, imageQuality: 85);
+    if (picked != null) setState(() => _photo = File(picked.path));
+  }
+
   Future<void> _submit() async {
     setState(() => loading = true);
     try {
       final svc = ref.read(providerServiceProvider);
+      String? uploadedUrl;
+      if (_photo != null) {
+        final token = ref.read(authStateProvider).token;
+        uploadedUrl = await UploadService().uploadProviderPhoto(
+          _photo!,
+          bearerToken: token,
+        );
+      }
       final cats = _cats.text
           .split(',')
           .map((e) => e.trim())
@@ -101,6 +139,7 @@ class _ProviderRegistrationScreenState
         phone: _phone.text.trim(),
         categories: cats,
         pricePerHour: double.tryParse(_price.text) ?? 100,
+        photoUrl: uploadedUrl,
       );
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
