@@ -33,4 +33,8 @@ class ProviderService {
       'longitude': longitude,
     });
   }
+
+  Future<Map<String, dynamic>> detail(int id) async {
+    return _api.getJson('/api/providers/detail.php', {'id': id});
+  }
 }

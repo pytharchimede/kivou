@@ -4538,6 +4538,7 @@ com.baseflow.geolocator.utils.Utils:
     public void <init>()
 com.example.kivou_app.R$drawable
 com.example.kivou_app.R$mipmap
+com.example.kivou_app.R$string
 com.example.kivou_app.R$style
 com.example.kivou_app.R
 com.getkeepsafe.relinker.ApkLibraryInstaller:

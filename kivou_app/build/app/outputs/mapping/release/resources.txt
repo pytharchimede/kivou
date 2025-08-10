@@ -2,28 +2,28 @@ Marking dimen:browser_actions_context_menu_min_padding:2131034113 reachable: ref
 Marking dimen:browser_actions_context_menu_max_width:2131034112 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking drawable:amu_bubble_mask:2131099648 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking drawable:amu_bubble_shadow:2131099649 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking string:common_google_play_services_enable_button:2131427336 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking string:common_google_play_services_update_button:2131427346 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking string:common_google_play_services_install_button:2131427339 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking string:common_google_play_services_unknown_issue:2131427344 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking string:common_google_play_services_updating_text:2131427349 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking string:common_google_play_services_unsupported_text:2131427345 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking string:common_google_play_services_enable_text:2131427337 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking string:common_google_play_services_wear_update_text:2131427350 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking string:common_google_play_services_update_text:2131427347 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking string:common_google_play_services_install_text:2131427340 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking string:common_google_play_services_enable_title:2131427338 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking string:common_google_play_services_update_title:2131427348 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking string:common_google_play_services_install_title:2131427341 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking string:common_google_play_services_enable_button:2131427337 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking string:common_google_play_services_update_button:2131427347 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking string:common_google_play_services_install_button:2131427340 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking string:common_google_play_services_unknown_issue:2131427345 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking string:common_google_play_services_updating_text:2131427350 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking string:common_google_play_services_unsupported_text:2131427346 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking string:common_google_play_services_enable_text:2131427338 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking string:common_google_play_services_wear_update_text:2131427351 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking string:common_google_play_services_update_text:2131427348 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking string:common_google_play_services_install_text:2131427341 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking string:common_google_play_services_enable_title:2131427339 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking string:common_google_play_services_update_title:2131427349 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking string:common_google_play_services_install_title:2131427342 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking string:androidx_startup:2131427328 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:amu_text:2131165228 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking style:amu_ClusterIcon_TextAppearance:2131492875 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:tag_window_insets_animation_callback:2131165283 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:tag_on_apply_window_listener:2131165275 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking drawable:common_full_open_on_phone:2131099650 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking string:common_google_play_services_notification_ticker:2131427343 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking string:common_open_on_phone:2131427351 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking string:common_google_play_services_notification_channel_name:2131427342 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking string:common_google_play_services_notification_ticker:2131427344 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking string:common_open_on_phone:2131427352 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking string:common_google_play_services_notification_channel_name:2131427343 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking layout:amu_text_bubble:2131296257 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking style:amu_Bubble_TextAppearance_Dark:2131492873 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 android.content.res.Resources#getIdentifier present: true
@@ -1828,7 +1828,7 @@ arguments
 BackgroundColor
 SCROLL_DOWN
 Marking integer:status_bar_notification_info_maxnum:2131230721 used because it matches string pool constant status_
-Marking string:status_bar_notification_info_overflow:2131427358 used because it matches string pool constant status_
+Marking string:status_bar_notification_info_overflow:2131427360 used because it matches string pool constant status_
 Marking id:locale:2131165256 used because it matches string pool constant locale
 Marking id:locale:2131165256 used because it matches string pool constant locale
 Marking id:topToBottom:2131165289 used because it matches string pool constant top
@@ -1990,7 +1990,7 @@ Marking id:none:2131165259 used because it matches string pool constant none
 Marking id:none:2131165259 used because it matches string pool constant none
 Marking id:dark:2131165240 used because it matches string pool constant dark
 Marking id:dark:2131165240 used because it matches string pool constant dark
-Marking string:copy_toast_msg:2131427354 used because it matches string pool constant copy
+Marking string:copy_toast_msg:2131427355 used because it matches string pool constant copy
 Marking attr:tag:2130903099 used because it matches string pool constant tag
 Marking attr:tag:2130903099 used because it matches string pool constant tag
 Marking id:tag_accessibility_actions:2131165271 used because it matches string pool constant tag
@@ -2378,6 +2378,7 @@ Marking id:tag_window_insets_animation_callback:2131165283 used because it match
     @style/TextAppearance_Compat_Notification_Time
 @mipmap/ic_launcher : reachable=true
 @string/androidx_startup : reachable=true
+@string/app_name : reachable=false
 @string/call_notification_answer_action : reachable=false
 @string/call_notification_answer_video_action : reachable=false
 @string/call_notification_decline_action : reachable=false
@@ -2407,6 +2408,7 @@ Marking id:tag_window_insets_animation_callback:2131165283 used because it match
 @string/fallback_menu_item_copy_link : reachable=false
 @string/fallback_menu_item_open_in_browser : reachable=false
 @string/fallback_menu_item_share_link : reachable=false
+@string/google_maps_api_key : reachable=true
 @string/status_bar_notification_info_overflow : reachable=true
 @style/LaunchTheme : reachable=true
     @drawable/launch_background
@@ -2568,24 +2570,25 @@ The root reachable resources are:
  layout:notification_template_part_time:2131296269
  mipmap:ic_launcher:2131361792
  string:androidx_startup:2131427328
- string:common_google_play_services_enable_button:2131427336
- string:common_google_play_services_enable_text:2131427337
- string:common_google_play_services_enable_title:2131427338
- string:common_google_play_services_install_button:2131427339
- string:common_google_play_services_install_text:2131427340
- string:common_google_play_services_install_title:2131427341
- string:common_google_play_services_notification_channel_name:2131427342
- string:common_google_play_services_notification_ticker:2131427343
- string:common_google_play_services_unknown_issue:2131427344
- string:common_google_play_services_unsupported_text:2131427345
- string:common_google_play_services_update_button:2131427346
- string:common_google_play_services_update_text:2131427347
- string:common_google_play_services_update_title:2131427348
- string:common_google_play_services_updating_text:2131427349
- string:common_google_play_services_wear_update_text:2131427350
- string:common_open_on_phone:2131427351
- string:copy_toast_msg:2131427354
- string:status_bar_notification_info_overflow:2131427358
+ string:common_google_play_services_enable_button:2131427337
+ string:common_google_play_services_enable_text:2131427338
+ string:common_google_play_services_enable_title:2131427339
+ string:common_google_play_services_install_button:2131427340
+ string:common_google_play_services_install_text:2131427341
+ string:common_google_play_services_install_title:2131427342
+ string:common_google_play_services_notification_channel_name:2131427343
+ string:common_google_play_services_notification_ticker:2131427344
+ string:common_google_play_services_unknown_issue:2131427345
+ string:common_google_play_services_unsupported_text:2131427346
+ string:common_google_play_services_update_button:2131427347
+ string:common_google_play_services_update_text:2131427348
+ string:common_google_play_services_update_title:2131427349
+ string:common_google_play_services_updating_text:2131427350
+ string:common_google_play_services_wear_update_text:2131427351
+ string:common_open_on_phone:2131427352
+ string:copy_toast_msg:2131427355
+ string:google_maps_api_key:2131427359
+ string:status_bar_notification_info_overflow:2131427360
  style:LaunchTheme:2131492864
  style:NormalTheme:2131492865
  style:amu_Bubble_TextAppearance_Dark:2131492873
@@ -2690,18 +2693,19 @@ Unused resources are:
  layout:custom_dialog:2131296261
  layout:ime_base_split_test_activity:2131296262
  layout:ime_secondary_split_test_activity:2131296263
- string:call_notification_answer_action:2131427329
- string:call_notification_answer_video_action:2131427330
- string:call_notification_decline_action:2131427331
- string:call_notification_hang_up_action:2131427332
- string:call_notification_incoming_text:2131427333
- string:call_notification_ongoing_text:2131427334
- string:call_notification_screening_text:2131427335
- string:common_signin_button_text:2131427352
- string:common_signin_button_text_long:2131427353
- string:fallback_menu_item_copy_link:2131427355
- string:fallback_menu_item_open_in_browser:2131427356
- string:fallback_menu_item_share_link:2131427357
+ string:app_name:2131427329
+ string:call_notification_answer_action:2131427330
+ string:call_notification_answer_video_action:2131427331
+ string:call_notification_decline_action:2131427332
+ string:call_notification_hang_up_action:2131427333
+ string:call_notification_incoming_text:2131427334
+ string:call_notification_ongoing_text:2131427335
+ string:call_notification_screening_text:2131427336
+ string:common_signin_button_text:2131427353
+ string:common_signin_button_text_long:2131427354
+ string:fallback_menu_item_copy_link:2131427356
+ string:fallback_menu_item_open_in_browser:2131427357
+ string:fallback_menu_item_share_link:2131427358
  style:TextAppearance_Compat_Notification:2131492866
  style:TextAppearance_Compat_Notification_Line2:2131492868
  style:TextAppearance_Compat_Notification_Title:2131492870

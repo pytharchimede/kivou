@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../providers/app_providers.dart';
-import '../utils/mock_data.dart';
 import '../widgets/provider_card.dart';
 import '../widgets/service_chip.dart';
 import '../widgets/filter_sheet.dart';
@@ -51,7 +51,19 @@ class HomeScreen extends ConsumerWidget {
                     child: ListView(
                       scrollDirection: Axis.horizontal,
                       children: [
-                        for (final cat in MockData.serviceCategories)
+                        for (final cat in const [
+                          'Tous',
+                          'Ménage',
+                          'Plomberie',
+                          'Électricité',
+                          'Menuiserie',
+                          'Informatique',
+                          'Serrurerie',
+                          'Peinture',
+                          'Déménagement',
+                          'Climatisation',
+                          'Jardinage',
+                        ])
                           ServiceChip(
                             label: cat,
                             selected:
@@ -65,31 +77,8 @@ class HomeScreen extends ConsumerWidget {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  // Carte simulée
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: Container(
-                      height: 140,
-                      color: Colors.blueGrey[50],
-                      child: Stack(children: [
-                        Positioned.fill(
-                          child: CustomPaint(
-                            painter: _MapMockPainter(),
-                          ),
-                        ),
-                        Positioned(
-                          right: 8,
-                          top: 8,
-                          child: FilledButton.icon(
-                            onPressed: () => FilterSheet.show(context,
-                                child: const _FiltersContent()),
-                            icon: const Icon(Icons.tune),
-                            label: const Text('Filtres'),
-                          ),
-                        ),
-                      ]),
-                    ),
-                  ),
+                  // Carte réelle Google Maps centrée sur Abidjan - Koumassi
+                  _KoumassiMap(),
                   const SizedBox(height: 12),
                 ],
               ),
@@ -104,8 +93,8 @@ class HomeScreen extends ConsumerWidget {
                     padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
                     child: ProviderCard(
                       provider: p,
-                      userLat: MockData.userLatitude,
-                      userLng: MockData.userLongitude,
+                      userLat: 5.35,
+                      userLng: -4.02,
                     ),
                   );
                 },
@@ -217,32 +206,71 @@ class _FiltersContent extends ConsumerWidget {
   }
 }
 
-class _MapMockPainter extends CustomPainter {
+class _KoumassiMap extends ConsumerWidget {
+  _KoumassiMap();
+
+  static const LatLng _koumassiCenter = LatLng(5.309, -4.012);
+
   @override
-  void paint(Canvas canvas, Size size) {
-    final bg = Paint()..color = const Color(0xFFEFF3F6);
-    canvas.drawRect(Offset.zero & size, bg);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final providers = ref.watch(remoteProvidersFutureProvider);
+    final theme = Theme.of(context);
 
-    final grid = Paint()
-      ..color = const Color(0xFFD5DEE7)
-      ..strokeWidth = 1;
-    for (double x = 0; x < size.width; x += 20) {
-      canvas.drawLine(Offset(x, 0), Offset(x, size.height), grid);
-    }
-    for (double y = 0; y < size.height; y += 20) {
-      canvas.drawLine(Offset(0, y), Offset(size.width, y), grid);
-    }
+    Set<Marker> markers = {};
+    providers.when(
+      data: (list) {
+        markers = list
+            .where((p) => p.latitude != 0 && p.longitude != 0)
+            .map((p) => Marker(
+                  markerId: MarkerId('p-${p.id}'),
+                  position: LatLng(p.latitude, p.longitude),
+                  infoWindow: InfoWindow(title: p.name),
+                  onTap: () => context.go('/provider/${p.id}'),
+                ))
+            .toSet();
+      },
+      loading: () {},
+      error: (_, __) {},
+    );
 
-    // marqueurs aléatoires simulés mais déterministes par taille
-    final marker = Paint()..color = const Color(0xFF1976D2);
-    final center = Offset(size.width * 0.5, size.height * 0.55);
-    canvas.drawCircle(center, 6, marker);
-    canvas.drawCircle(center + const Offset(40, -30), 5, marker);
-    canvas.drawCircle(center + const Offset(-45, -10), 5, marker);
-    canvas.drawCircle(center + const Offset(-10, 35), 5, marker);
-    canvas.drawCircle(center + const Offset(55, 20), 5, marker);
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(16),
+      child: SizedBox(
+        height: 180,
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: GoogleMap(
+                initialCameraPosition: const CameraPosition(
+                  target: _koumassiCenter,
+                  zoom: 13.0,
+                ),
+                markers: markers,
+                zoomControlsEnabled: false,
+                myLocationEnabled: false,
+                myLocationButtonEnabled: false,
+                compassEnabled: false,
+                mapToolbarEnabled: false,
+              ),
+            ),
+            Positioned(
+              right: 8,
+              top: 8,
+              child: FilledButton.icon(
+                style: ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll(
+                    theme.colorScheme.primary.withOpacity(0.95),
+                  ),
+                ),
+                onPressed: () =>
+                    FilterSheet.show(context, child: const _FiltersContent()),
+                icon: const Icon(Icons.tune),
+                label: const Text('Filtres'),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

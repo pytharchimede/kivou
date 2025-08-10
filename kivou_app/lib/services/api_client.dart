@@ -77,6 +77,31 @@ class ApiClient {
     final data = map['data'];
     return (data is List<dynamic>) ? data : const [];
   }
+
+  Future<Map<String, dynamic>> getJson(String path,
+      [Map<String, dynamic>? query]) async {
+    final headers = {
+      if (_bearerToken != null) 'Authorization': 'Bearer $_bearerToken',
+    };
+    final res = await _client.get(_u(path, query), headers: headers);
+    final raw = res.body;
+    Map<String, dynamic>? map;
+    try {
+      map = (raw.isNotEmpty ? jsonDecode(raw) : null) as Map<String, dynamic>?;
+    } catch (_) {
+      map = null;
+    }
+    if (map == null) {
+      throw ApiException('INVALID_RESPONSE',
+          'Réponse serveur invalide (HTTP ${res.statusCode}).');
+    }
+    if (res.statusCode >= 400 || map['ok'] != true) {
+      throw ApiException(map['error']?.toString() ?? 'HTTP_${res.statusCode}',
+          map['message']?.toString() ?? 'Erreur inconnue');
+    }
+    final data = map['data'];
+    return (data is Map<String, dynamic>) ? data : <String, dynamic>{};
+  }
 }
 
 class ApiException implements Exception {

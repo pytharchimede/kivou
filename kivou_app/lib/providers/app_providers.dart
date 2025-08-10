@@ -2,17 +2,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/service_provider.dart';
 import '../models/booking.dart';
 import '../models/review.dart';
-import '../utils/mock_data.dart';
 import '../services/api_client.dart';
 import '../services/provider_service.dart';
 import '../services/mappers.dart';
 import '../services/session_storage.dart';
 import '../services/auth_service.dart';
 
-/// Provider pour la liste des prestataires
-final providersProvider = Provider<List<ServiceProvider>>((ref) {
-  return MockData.providers;
-});
+/// Provider pour la liste des prestataires (local cache optionnel)
+final providersProvider = Provider<List<ServiceProvider>>((ref) => const []);
 
 /// Client et services API
 final apiClientProvider = Provider<ApiClient>((ref) => ApiClient());
@@ -103,7 +100,7 @@ final bookingsProvider =
 
 /// Notifier pour gérer les réservations
 class BookingsNotifier extends StateNotifier<List<Booking>> {
-  BookingsNotifier() : super(MockData.generateMockBookings());
+  BookingsNotifier() : super(const []);
 
   /// Ajouter une nouvelle réservation
   void addBooking(Booking booking) {
@@ -209,8 +206,7 @@ final filteredProvidersProvider = Provider<List<ServiceProvider>>((ref) {
     }
 
     // Filtrer par distance
-    final distance =
-        provider.distanceFrom(MockData.userLatitude, MockData.userLongitude);
+    final distance = provider.distanceFrom(5.35, -4.02);
     if (distance > filters.maxDistance) {
       return false;
     }
@@ -236,12 +232,8 @@ final filteredProvidersProvider = Provider<List<ServiceProvider>>((ref) {
 });
 
 /// Provider pour la localisation de l'utilisateur
-final userLocationProvider = Provider<UserLocation>((ref) {
-  return UserLocation(
-    latitude: MockData.userLatitude,
-    longitude: MockData.userLongitude,
-  );
-});
+final userLocationProvider = Provider<UserLocation>(
+    (ref) => UserLocation(latitude: 5.35, longitude: -4.02));
 
 /// Classe pour la localisation de l'utilisateur
 class UserLocation {
@@ -262,7 +254,7 @@ final reviewsProvider =
 
 /// Notifier pour gérer les avis
 class ReviewsNotifier extends StateNotifier<List<Review>> {
-  ReviewsNotifier() : super(MockData.generateMockReviews());
+  ReviewsNotifier() : super(const []);
 
   /// Ajouter un nouvel avis
   void addReview(Review review) {
@@ -288,7 +280,10 @@ class ReviewsNotifier extends StateNotifier<List<Review>> {
 /// Provider pour obtenir un prestataire par ID
 final providerByIdProvider =
     Provider.family<ServiceProvider?, String>((ref, id) {
-  final providers = ref.watch(providersProvider);
+  final providers = ref.watch(remoteProvidersFutureProvider).maybeWhen(
+        data: (list) => list,
+        orElse: () => const <ServiceProvider>[],
+      );
   try {
     return providers.firstWhere((p) => p.id == id);
   } catch (e) {
