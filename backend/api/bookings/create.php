@@ -26,4 +26,14 @@ $id = $repo->create([
     'duration' => (float)$body['duration'],
     'total_price' => (float)$body['total_price'],
 ]);
+// Create a notification for the user
+try {
+    $pdo = db();
+    $stN = $pdo->prepare('INSERT INTO notifications (user_id, provider_id, title, body) VALUES (?,?,?,?)');
+    $title = 'Réservation créée';
+    $bodyMsg = 'Votre réservation a été créée pour le ' . $body['scheduled_at'];
+    $stN->execute([$userId, (int)$body['provider_id'], $title, $bodyMsg]);
+} catch (Throwable $e) { /* ignore notification errors */
+}
+
 json_ok(['id' => (int)$id], 201);

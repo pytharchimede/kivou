@@ -157,6 +157,8 @@ class _BellButton extends ConsumerWidget {
   }
 
   void _showNotifications(BuildContext context, WidgetRef ref) {
+    // Charger depuis l'API si connecté
+    ref.read(notificationsProvider.notifier).load();
     final items = ref.read(notificationsProvider);
     showModalBottomSheet(
       context: context,

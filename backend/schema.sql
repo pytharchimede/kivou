@@ -65,3 +65,16 @@ CREATE TABLE IF NOT EXISTS reviews (
   CONSTRAINT fk_reviews_user FOREIGN KEY (user_id) REFERENCES users(id),
   CONSTRAINT fk_reviews_provider FOREIGN KEY (provider_id) REFERENCES service_providers(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Notifications persistantes
+CREATE TABLE IF NOT EXISTS notifications (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  provider_id INT DEFAULT NULL,
+  title VARCHAR(190) NOT NULL,
+  body TEXT,
+  is_read TINYINT(1) DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_notifications_user FOREIGN KEY (user_id) REFERENCES users(id),
+  CONSTRAINT fk_notifications_provider FOREIGN KEY (provider_id) REFERENCES service_providers(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/app_providers.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import '../services/upload_service.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -68,13 +71,14 @@ class ProfileScreen extends ConsumerWidget {
   }
 }
 
-class _ProfileHeader extends StatelessWidget {
+class _ProfileHeader extends ConsumerWidget {
   final Map<String, dynamic>? user;
   const _ProfileHeader({required this.user});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final avatarUrl = user?['avatar_url']?.toString();
     return Container(
       margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.all(16),
@@ -89,10 +93,57 @@ class _ProfileHeader extends StatelessWidget {
       ),
       child: Row(
         children: [
-          CircleAvatar(
-            radius: 36,
-            backgroundColor: theme.colorScheme.primary.withOpacity(.15),
-            child: const Icon(Icons.person, size: 40),
+          Stack(
+            children: [
+              CircleAvatar(
+                radius: 36,
+                backgroundColor: theme.colorScheme.primary.withOpacity(.15),
+                backgroundImage: (avatarUrl != null && avatarUrl.isNotEmpty)
+                    ? NetworkImage(avatarUrl)
+                    : null,
+                child: (avatarUrl == null || avatarUrl.isEmpty)
+                    ? const Icon(Icons.person, size: 40)
+                    : null,
+              ),
+              if (user != null)
+                Positioned(
+                  right: -4,
+                  bottom: -4,
+                  child: IconButton(
+                    tooltip: 'Changer la photo',
+                    style: IconButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        minimumSize: Size(32, 32)),
+                    icon: const Icon(Icons.photo_camera, size: 18),
+                    onPressed: () async {
+                      final picker = ImagePicker();
+                      final picked = await picker.pickImage(
+                          source: ImageSource.gallery, imageQuality: 85);
+                      if (picked == null) return;
+                      final file = File(picked.path);
+                      final token = ref.read(authStateProvider).token;
+                      try {
+                        final url = await UploadService()
+                            .uploadUserAvatar(file, bearerToken: token);
+                        await ref
+                            .read(authStateProvider.notifier)
+                            .updateAvatar(url);
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content:
+                                      Text('Photo de profil mise à jour')));
+                        }
+                      } catch (e) {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Erreur: $e')));
+                        }
+                      }
+                    },
+                  ),
+                ),
+            ],
           ),
           const SizedBox(width: 16),
           Expanded(

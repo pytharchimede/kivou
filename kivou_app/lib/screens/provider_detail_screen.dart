@@ -95,36 +95,42 @@ class _ProviderDetailScaffold extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Carte position prestataire
-                  if (provider.latitude != 0 && provider.longitude != 0) ...[
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: SizedBox(
-                        height: 160,
-                        child: GoogleMap(
-                          initialCameraPosition: CameraPosition(
-                            target:
-                                LatLng(provider.latitude, provider.longitude),
-                            zoom: 15,
-                          ),
-                          markers: {
-                            Marker(
-                              markerId: MarkerId('p-${provider.id}'),
-                              position:
-                                  LatLng(provider.latitude, provider.longitude),
-                              infoWindow: InfoWindow(title: provider.name),
-                            )
-                          },
-                          zoomControlsEnabled: false,
-                          myLocationEnabled: false,
-                          myLocationButtonEnabled: false,
-                          compassEnabled: false,
-                          mapToolbarEnabled: false,
+                  // Carte position prestataire (toujours visible, avec fallback Koumassi)
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: SizedBox(
+                      height: 160,
+                      child: GoogleMap(
+                        initialCameraPosition: CameraPosition(
+                          target: (provider.latitude != 0 &&
+                                  provider.longitude != 0)
+                              ? LatLng(provider.latitude, provider.longitude)
+                              : const LatLng(5.309, -4.012), // Koumassi
+                          zoom: (provider.latitude != 0 &&
+                                  provider.longitude != 0)
+                              ? 15
+                              : 13,
                         ),
+                        markers: (provider.latitude != 0 &&
+                                provider.longitude != 0)
+                            ? {
+                                Marker(
+                                  markerId: MarkerId('p-${provider.id}'),
+                                  position: LatLng(
+                                      provider.latitude, provider.longitude),
+                                  infoWindow: InfoWindow(title: provider.name),
+                                )
+                              }
+                            : {},
+                        zoomControlsEnabled: false,
+                        myLocationEnabled: false,
+                        myLocationButtonEnabled: false,
+                        compassEnabled: false,
+                        mapToolbarEnabled: false,
                       ),
                     ),
-                    const SizedBox(height: 12),
-                  ],
+                  ),
+                  const SizedBox(height: 12),
                   Row(
                     children: [
                       _buildStars(provider.rating),

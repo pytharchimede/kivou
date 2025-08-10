@@ -1,14 +1,23 @@
-class NotificationService {
-  final List<Map<String, String>> _items = [];
-  List<Map<String, String>> get items => List.unmodifiable(_items);
+import 'api_client.dart';
 
-  void push({required String title, required String body}) {
-    _items.insert(0, {
+class NotificationService {
+  final ApiClient _api;
+  NotificationService(this._api);
+
+  Future<List<Map<String, dynamic>>> list() async {
+    final data = await _api.getList('/api/notifications/list.php');
+    return data.cast<Map<String, dynamic>>();
+  }
+
+  Future<void> create({required String title, String? body, int? providerId}) {
+    return _api.postJson('/api/notifications/create.php', {
       'title': title,
-      'body': body,
-      'ts': DateTime.now().toIso8601String(),
+      if (body != null) 'body': body,
+      if (providerId != null) 'provider_id': providerId,
     });
   }
 
-  void clear() => _items.clear();
+  Future<void> markRead(int id) {
+    return _api.postJson('/api/notifications/mark_read.php', {'id': id});
+  }
 }

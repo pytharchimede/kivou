@@ -42,4 +42,26 @@ class UploadService {
     if (match == null) throw Exception('Upload parse error: $body');
     return match.group(1)!;
   }
+
+  Future<String> uploadUserAvatar(
+    File file, {
+    String? bearerToken,
+  }) async {
+    final uri = Uri.parse('$baseUrl/api/users/upload_avatar.php');
+    final req = http.MultipartRequest('POST', uri);
+    if (bearerToken != null && bearerToken.isNotEmpty) {
+      req.headers['Authorization'] = 'Bearer $bearerToken';
+    }
+    req.files.add(await http.MultipartFile.fromPath('file', file.path));
+    final streamed = await req.send();
+    final res = await http.Response.fromStream(streamed);
+    if (res.statusCode >= 400 || !res.body.contains('"ok":true')) {
+      throw Exception('Upload avatar failed: ${res.statusCode} ${res.body}');
+    }
+    final match = RegExp('"url"\s*:\s*"([^"]+)"').firstMatch(res.body);
+    if (match == null) {
+      throw Exception('Upload avatar parse error: ${res.body}');
+    }
+    return match.group(1)!;
+  }
 }

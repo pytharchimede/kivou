@@ -7,6 +7,7 @@ import '../services/provider_service.dart';
 import '../services/mappers.dart';
 import '../services/session_storage.dart';
 import '../services/auth_service.dart';
+import '../services/notification_service.dart';
 
 /// Provider pour la liste des prestataires (local cache optionnel)
 final providersProvider = Provider<List<ServiceProvider>>((ref) => const []);
@@ -74,23 +75,53 @@ class AuthController extends StateNotifier<AuthState> {
     ref.read(apiClientProvider).setBearerToken(null);
     state = const AuthState();
   }
+
+  Future<void> updateAvatar(String url) async {
+    if (state.user == null) return;
+    final newUser = Map<String, dynamic>.from(state.user!);
+    newUser['avatar_url'] = url;
+    // persist
+    await ref.read(sessionStorageProvider).saveSession(state.token!, newUser);
+    state = state.copyWith(user: newUser);
+  }
 }
 
 /// Notifications (cloche) réactives
-final notificationsProvider =
-    StateNotifierProvider<NotificationsNotifier, List<Map<String, String>>>(
-        (ref) => NotificationsNotifier());
+final notificationServiceProvider = Provider<NotificationService>(
+    (ref) => NotificationService(ref.read(apiClientProvider)));
 
-class NotificationsNotifier extends StateNotifier<List<Map<String, String>>> {
-  NotificationsNotifier() : super(const []);
+final notificationsProvider =
+    StateNotifierProvider<NotificationsNotifier, List<Map<String, dynamic>>>(
+        (ref) => NotificationsNotifier(ref));
+
+class NotificationsNotifier extends StateNotifier<List<Map<String, dynamic>>> {
+  final Ref ref;
+  NotificationsNotifier(this.ref) : super(const []);
+
+  Future<void> load() async {
+    try {
+      final items = await ref.read(notificationServiceProvider).list();
+      state = items;
+    } catch (_) {}
+  }
 
   void push({required String title, required String body}) {
-    final item = <String, String>{
+    final item = <String, dynamic>{
+      'id': DateTime.now().millisecondsSinceEpoch,
       'title': title,
       'body': body,
-      'ts': DateTime.now().toIso8601String(),
+      'is_read': false,
+      'created_at': DateTime.now().toIso8601String(),
     };
     state = [item, ...state];
+    // best effort server-side create
+    final auth = ref.read(authStateProvider);
+    if (auth.isAuthenticated) {
+      ref
+          .read(notificationServiceProvider)
+          .create(title: title, body: body)
+          .catchError((_) {});
+    }
   }
 
   void clear() => state = const [];
