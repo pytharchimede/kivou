@@ -5,6 +5,7 @@ namespace Kivou\Models;
 class ServiceProvider
 {
     public int $id;
+    public ?int $ownerUserId = null;
     public string $name;
     public string $email;
     public string $phone;
@@ -26,6 +27,9 @@ class ServiceProvider
     {
         $p = new self();
         $p->id = (int)$r['id'];
+        if (isset($r['owner_user_id'])) {
+            $p->ownerUserId = $r['owner_user_id'] !== null ? (int)$r['owner_user_id'] : null;
+        }
         $p->name = $r['name'];
         $p->email = $r['email'];
         $p->phone = $r['phone'];
@@ -49,6 +53,7 @@ class ServiceProvider
     {
         return [
             'id' => $this->id,
+            'owner_user_id' => $this->ownerUserId,
             'name' => $this->name,
             'email' => $this->email,
             'phone' => $this->phone,

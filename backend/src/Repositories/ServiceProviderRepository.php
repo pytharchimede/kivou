@@ -16,7 +16,7 @@ class ServiceProviderRepository
 
     public function list(array $filters = []): array
     {
-        $sql = 'SELECT id,name,email,phone,photo_url,description,categories,rating,reviews_count,price_per_hour,latitude,longitude,gallery,available_days,working_start,working_end,is_available FROM service_providers';
+        $sql = 'SELECT id,owner_user_id,name,email,phone,photo_url,description,categories,rating,reviews_count,price_per_hour,latitude,longitude,gallery,available_days,working_start,working_end,is_available FROM service_providers';
         $where = [];
         $params = [];
         if (!empty($filters['category']) && strtolower($filters['category']) !== 'tous') {
@@ -44,7 +44,7 @@ class ServiceProviderRepository
 
     public function create(array $d): int
     {
-        $st = $this->pdo->prepare('INSERT INTO service_providers (name,email,phone,photo_url,description,categories,rating,reviews_count,price_per_hour,latitude,longitude,gallery,available_days,working_start,working_end,is_available) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
+        $st = $this->pdo->prepare('INSERT INTO service_providers (owner_user_id,name,email,phone,photo_url,description,categories,rating,reviews_count,price_per_hour,latitude,longitude,gallery,available_days,working_start,working_end,is_available) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
         $name = trim($d['name'] ?? 'Prestataire');
         $email = trim($d['email'] ?? '');
         $phone = trim($d['phone'] ?? '');
@@ -60,7 +60,8 @@ class ServiceProviderRepository
         $start = $d['working_start'] ?? '08:00';
         $end = $d['working_end'] ?? '18:00';
         $avail = isset($d['is_available']) ? ((int)$d['is_available'] ? 1 : 0) : 1;
-        $st->execute([$name, $email, $phone, $photo, $desc, $cats, 0, 0, $price, $lat, $lng, $gallery, $days, $start, $end, $avail]);
+        $owner = isset($d['owner_user_id']) ? (int)$d['owner_user_id'] : null;
+        $st->execute([$owner, $name, $email, $phone, $photo, $desc, $cats, 0, 0, $price, $lat, $lng, $gallery, $days, $start, $end, $avail]);
         return (int)$this->pdo->lastInsertId();
     }
 }

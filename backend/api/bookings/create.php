@@ -26,13 +26,21 @@ $id = $repo->create([
     'duration' => (float)$body['duration'],
     'total_price' => (float)$body['total_price'],
 ]);
-// Create a notification for the provider (not the client)
+// Create a notification for the provider owner (user who created the provider)
 try {
     $pdo = db();
-    $stN = $pdo->prepare('INSERT INTO notifications (user_id, provider_id, title, body) VALUES (NULL,?,?,?)');
+    // Récupérer directement le propriétaire du prestataire
+    $ownerUserId = null;
+    $stP = $pdo->prepare('SELECT owner_user_id FROM service_providers WHERE id=?');
+    $stP->execute([(int)$body['provider_id']]);
+    $prov = $stP->fetch();
+    if ($prov && isset($prov['owner_user_id'])) {
+        $ownerUserId = $prov['owner_user_id'] !== null ? (int)$prov['owner_user_id'] : null;
+    }
+    $stN = $pdo->prepare('INSERT INTO notifications (user_id, provider_id, title, body) VALUES (?,?,?,?)');
     $title = 'Nouvelle commande';
     $bodyMsg = 'Vous avez une nouvelle commande prévue le ' . $body['scheduled_at'];
-    $stN->execute([(int)$body['provider_id'], $title, $bodyMsg]);
+    $stN->execute([$ownerUserId, (int)$body['provider_id'], $title, $bodyMsg]);
 } catch (Throwable $e) { /* ignore notification errors */
 }
 

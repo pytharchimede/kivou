@@ -1,6 +1,7 @@
 /// Modèle représentant un prestataire de service
 class ServiceProvider {
   final String id;
+  final int? ownerUserId;
   final String name;
   final String email;
   final String phone;
@@ -20,6 +21,7 @@ class ServiceProvider {
 
   ServiceProvider({
     required this.id,
+    required this.ownerUserId,
     required this.name,
     required this.email,
     required this.phone,
@@ -75,6 +77,7 @@ class ServiceProvider {
   }) {
     return ServiceProvider(
       id: id,
+      ownerUserId: ownerUserId,
       name: name ?? this.name,
       email: email ?? this.email,
       phone: phone ?? this.phone,

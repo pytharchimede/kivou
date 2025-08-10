@@ -1,14 +1,21 @@
 import 'package:kivou_app/models/service_provider.dart';
 
-// Normalise une URL d'image: si elle commence par '/', on préfixe avec le domaine
+// Normalise une URL d'image: gère http->https, chemins relatifs avec ou sans '/'
 String normalizeImageUrl(String? u) {
   if (u == null || u.isEmpty) return '';
-  if (u.startsWith('http://fidest.ci')) {
-    return u.replaceFirst('http://', 'https://');
+  final s = u.trim();
+  if (s.startsWith('http://fidest.ci')) {
+    return s.replaceFirst('http://', 'https://');
   }
-  if (u.startsWith('http://') || u.startsWith('https://')) return u;
-  if (u.startsWith('/')) return 'https://fidest.ci$u';
-  return u;
+  if (s.startsWith('http://') || s.startsWith('https://')) return s;
+  if (s.startsWith('/')) return 'https://fidest.ci$s';
+  // Cas: 'kivou/backend/uploads/...' ou 'uploads/...'
+  if (s.startsWith('kivou/')) return 'https://fidest.ci/$s';
+  if (s.startsWith('backend/uploads') || s.startsWith('uploads/')) {
+    return 'https://fidest.ci/kivou/$s'
+        .replaceFirst('kivou/backend', 'kivou/backend');
+  }
+  return s;
 }
 
 ServiceProvider providerFromApi(Map<String, dynamic> j) {
@@ -24,6 +31,11 @@ ServiceProvider providerFromApi(Map<String, dynamic> j) {
 
   return ServiceProvider(
     id: (j['id'] ?? '').toString(),
+    ownerUserId: (j['owner_user_id'] == null || j['owner_user_id'] == '')
+        ? null
+        : (j['owner_user_id'] is num)
+            ? (j['owner_user_id'] as num).toInt()
+            : int.tryParse(j['owner_user_id'].toString()),
     name: j['name'] ?? '',
     email: j['email'] ?? '',
     phone: j['phone'] ?? '',

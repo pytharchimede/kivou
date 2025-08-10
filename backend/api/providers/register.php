@@ -10,6 +10,7 @@ require_fields($body, ['name', 'email', 'phone', 'categories', 'price_per_hour']
 
 $repo = new \Kivou\Repositories\ServiceProviderRepository();
 $id = $repo->create([
+    'owner_user_id' => (int)$claims['sub'],
     'name' => $body['name'],
     'email' => $body['email'],
     'phone' => $body['phone'],

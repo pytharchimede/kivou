@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS service_providers (
   id INT AUTO_INCREMENT PRIMARY KEY,
+  owner_user_id INT DEFAULT NULL,
   name VARCHAR(190) NOT NULL,
   email VARCHAR(190) NOT NULL,
   phone VARCHAR(64) NOT NULL,
@@ -29,6 +30,10 @@ CREATE TABLE IF NOT EXISTS service_providers (
   is_available TINYINT(1) DEFAULT 1,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- FK propriétaire prestataire
+ALTER TABLE service_providers
+  ADD CONSTRAINT fk_service_providers_owner FOREIGN KEY (owner_user_id) REFERENCES users(id);
 
 CREATE TABLE IF NOT EXISTS bookings (
   id INT AUTO_INCREMENT PRIMARY KEY,
