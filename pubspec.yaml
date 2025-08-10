@@ -1,0 +1,43 @@
+name: kivou_app
+description: "KIVOU - Marketplace de prestataires à domicile"
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.6.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State Management
+  flutter_riverpod: ^2.0.0
+
+  # Navigation
+  go_router: ^7.0.0
+
+  # Maps & Location
+  google_maps_flutter: ^2.2.5
+  geolocator: ^9.0.2
+
+  # Networking & Images
+  cached_network_image: ^3.2.1
+  url_launcher: ^6.1.7
+  http: ^1.2.2
+
+  # UI & Utils
+  intl: ^0.18.0
+  flutter_svg: ^2.0.5
+  animations: ^2.0.7
+
+  # Icons
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
