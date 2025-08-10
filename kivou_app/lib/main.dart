@@ -9,6 +9,7 @@ import 'screens/booking_screen.dart';
 import 'screens/orders_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/auth_screen.dart';
+import 'screens/provider_registration_screen.dart';
 import 'utils/app_theme.dart';
 
 void main() {
@@ -76,6 +77,11 @@ final GoRouter _router = GoRouter(
       path: '/auth',
       name: 'auth',
       builder: (context, state) => const AuthScreen(),
+    ),
+    GoRoute(
+      path: '/become-provider',
+      name: 'become-provider',
+      builder: (context, state) => const ProviderRegistrationScreen(),
     ),
   ],
 );

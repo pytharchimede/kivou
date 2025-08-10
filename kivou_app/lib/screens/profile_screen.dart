@@ -45,6 +45,11 @@ class ProfileScreen extends ConsumerWidget {
                       icon: const Icon(Icons.receipt),
                       label: const Text('Mes commandes')),
                   const SizedBox(height: 8),
+              ElevatedButton.icon(
+                onPressed: () => context.go('/become-provider'),
+                icon: const Icon(Icons.work_outline),
+                label: const Text('Devenir prestataire')),
+              const SizedBox(height: 8),
                   ElevatedButton.icon(
                       onPressed: () =>
                           ref.read(authStateProvider.notifier).logout(),
