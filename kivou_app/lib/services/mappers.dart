@@ -1,16 +1,30 @@
 import 'package:kivou_app/models/service_provider.dart';
 
+// Normalise une URL d'image: si elle commence par '/', on préfixe avec le domaine
+String normalizeImageUrl(String? u) {
+  if (u == null || u.isEmpty) return '';
+  if (u.startsWith('http://') || u.startsWith('https://')) return u;
+  if (u.startsWith('/')) return 'https://fidest.ci$u';
+  return u;
+}
+
 ServiceProvider providerFromApi(Map<String, dynamic> j) {
   List<String> _split(String? s) => s == null || s.isEmpty
       ? []
       : s.split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
+
+  final photo = normalizeImageUrl(j['photo_url']?.toString());
+  final rawGallery = (j['gallery'] is List)
+      ? List<String>.from(j['gallery'])
+      : _split(j['gallery']?.toString());
+  final gallery = rawGallery.map(normalizeImageUrl).toList();
 
   return ServiceProvider(
     id: (j['id'] ?? '').toString(),
     name: j['name'] ?? '',
     email: j['email'] ?? '',
     phone: j['phone'] ?? '',
-    photoUrl: j['photo_url'] ?? '',
+    photoUrl: photo,
     description: j['description'] ?? '',
     categories: (j['categories'] is List)
         ? List<String>.from(j['categories'])
@@ -30,9 +44,7 @@ ServiceProvider providerFromApi(Map<String, dynamic> j) {
     longitude: (j['longitude'] is num)
         ? (j['longitude'] as num).toDouble()
         : double.tryParse(j['longitude']?.toString() ?? '0') ?? 0,
-    gallery: (j['gallery'] is List)
-        ? List<String>.from(j['gallery'])
-        : _split(j['gallery']?.toString()),
+    gallery: gallery,
     availableDays: (j['available_days'] is List)
         ? List<String>.from(j['available_days'])
         : _split(j['available_days']?.toString()),

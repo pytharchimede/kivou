@@ -78,7 +78,14 @@ class _ProfileHeader extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final avatarUrl = user?['avatar_url']?.toString();
+    String _norm(String? u) {
+      if (u == null || u.isEmpty) return '';
+      if (u.startsWith('http://') || u.startsWith('https://')) return u;
+      if (u.startsWith('/')) return 'https://fidest.ci' + u;
+      return u;
+    }
+
+    final avatarUrl = _norm(user?['avatar_url']?.toString());
     return Container(
       margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.all(16),
@@ -98,10 +105,9 @@ class _ProfileHeader extends ConsumerWidget {
               CircleAvatar(
                 radius: 36,
                 backgroundColor: theme.colorScheme.primary.withOpacity(.15),
-                backgroundImage: (avatarUrl != null && avatarUrl.isNotEmpty)
-                    ? NetworkImage(avatarUrl)
-                    : null,
-                child: (avatarUrl == null || avatarUrl.isEmpty)
+                backgroundImage:
+                    avatarUrl.isNotEmpty ? NetworkImage(avatarUrl) : null,
+                child: avatarUrl.isEmpty
                     ? const Icon(Icons.person, size: 40)
                     : null,
               ),
