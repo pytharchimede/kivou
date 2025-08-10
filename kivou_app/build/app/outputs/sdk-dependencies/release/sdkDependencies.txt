@@ -531,6 +531,70 @@ library {
 }
 library {
   maven_library {
+    groupId: "androidx.security"
+    artifactId: "security-crypto"
+    version: "1.1.0-alpha06"
+  }
+  digests {
+    sha256: "\227a\021\027\v?\023\322\360\371E}\237\237W\223G\024<\266\\\005Be\220m3\307a\212L*"
+  }
+  repo_index {
+  }
+}
+library {
+  maven_library {
+    groupId: "com.google.crypto.tink"
+    artifactId: "tink-android"
+    version: "1.9.0"
+  }
+  digests {
+    sha256: "\324\233\335\232\302I\340\232q}Q\337\243jT\377%\360\237\371\016\017\2740\237S\207\236i\313x\211"
+  }
+  repo_index {
+    value: 1
+  }
+}
+library {
+  maven_library {
+    groupId: "com.google.code.findbugs"
+    artifactId: "jsr305"
+    version: "3.0.2"
+  }
+  digests {
+    sha256: "vj\322\240x?&\207\226,\212\327L\356\3148\242\213\237r\242\320\205\356C\213x\023\351(\320\307"
+  }
+  repo_index {
+    value: 1
+  }
+}
+library {
+  maven_library {
+    groupId: "com.google.code.gson"
+    artifactId: "gson"
+    version: "2.10.1"
+  }
+  digests {
+    sha256: "BA\301Jw\'\303O\356\246P~\310\0011\212=J\220\360p\344RV\201\a\237\271N\344\305\223"
+  }
+  repo_index {
+    value: 1
+  }
+}
+library {
+  maven_library {
+    groupId: "com.google.errorprone"
+    artifactId: "error_prone_annotations"
+    version: "2.18.0"
+  }
+  digests {
+    sha256: "\236h\024\313q\201i\210\244\375\033\a\251\223\250\362\033\267\005\215R,\026+\035\350I\341\233\352T\256"
+  }
+  repo_index {
+    value: 1
+  }
+}
+library {
+  maven_library {
     groupId: "com.google.android.gms"
     artifactId: "play-services-location"
     version: "21.2.0"
@@ -655,7 +719,7 @@ library {
 }
 library {
   digests {
-    sha256: "\361\373m\244$\vi/\371\347\266\345\276\257Z+\'\212\362J\365[\370eO\217>\251\177\202\231Z"
+    sha256: "\300bz\347\260\257\375\230\033\025$\020Q|S\177qb=\006F\330\235;\255\352N\250~>_\\"
   }
 }
 library_dependencies {
@@ -1003,41 +1067,55 @@ library_dependencies {
 }
 library_dependencies {
   library_index: 44
+  library_dep_index: 0
+  library_dep_index: 0
+  library_dep_index: 31
   library_dep_index: 45
+}
+library_dependencies {
+  library_index: 45
+  library_dep_index: 0
   library_dep_index: 46
   library_dep_index: 47
+  library_dep_index: 48
+}
+library_dependencies {
+  library_index: 49
+  library_dep_index: 50
+  library_dep_index: 51
+  library_dep_index: 52
   library_dep_index: 2
   library_dep_index: 9
   library_dep_index: 10
 }
 library_dependencies {
-  library_index: 45
-  library_dep_index: 31
-  library_dep_index: 29
-  library_dep_index: 35
-  library_dep_index: 46
-  library_dep_index: 47
-}
-library_dependencies {
-  library_index: 46
-  library_dep_index: 31
-  library_dep_index: 29
-  library_dep_index: 35
-}
-library_dependencies {
-  library_index: 47
-  library_dep_index: 46
-}
-library_dependencies {
-  library_index: 48
-  library_dep_index: 31
-  library_dep_index: 35
-  library_dep_index: 45
-  library_dep_index: 46
-  library_dep_index: 47
-}
-library_dependencies {
   library_index: 50
+  library_dep_index: 31
+  library_dep_index: 29
+  library_dep_index: 35
+  library_dep_index: 51
+  library_dep_index: 52
+}
+library_dependencies {
+  library_index: 51
+  library_dep_index: 31
+  library_dep_index: 29
+  library_dep_index: 35
+}
+library_dependencies {
+  library_index: 52
+  library_dep_index: 51
+}
+library_dependencies {
+  library_index: 53
+  library_dep_index: 31
+  library_dep_index: 35
+  library_dep_index: 50
+  library_dep_index: 51
+  library_dep_index: 52
+}
+library_dependencies {
+  library_index: 55
   library_dep_index: 0
   library_dep_index: 30
   library_dep_index: 31
@@ -1049,17 +1127,19 @@ library_dependencies {
 module_dependencies {
   module_name: "base"
   dependency_index: 5
-  dependency_index: 51
-  dependency_index: 52
-  dependency_index: 53
+  dependency_index: 56
+  dependency_index: 57
+  dependency_index: 58
   dependency_index: 0
   dependency_index: 7
   dependency_index: 44
-  dependency_index: 29
-  dependency_index: 48
+  dependency_index: 45
   dependency_index: 49
-  dependency_index: 50
+  dependency_index: 29
+  dependency_index: 53
   dependency_index: 54
+  dependency_index: 55
+  dependency_index: 59
 }
 repositories {
   maven_repo {

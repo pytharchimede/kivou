@@ -1,12 +1,15 @@
 <dependencies>
   <compile
-      roots="__local_aars__:C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\flutter\release\libs.jar:unspecified@jar,C:\PROJETS MOBILE\prestataires\kivou_app\android@@:flutter_plugin_android_lifecycle::release,C:\PROJETS MOBILE\prestataires\kivou_app\android@@:geolocator_android::release,C:\PROJETS MOBILE\prestataires\kivou_app\android@@:google_maps_flutter_android::release,C:\PROJETS MOBILE\prestataires\kivou_app\android@@:path_provider_android::release,C:\PROJETS MOBILE\prestataires\kivou_app\android@@:sqflite_android::release,C:\PROJETS MOBILE\prestataires\kivou_app\android@@:url_launcher_android::release,org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22@jar,io.flutter:flutter_embedding_release:1.0.0-cb4b5fff73850b2e42bd4de7cb9a4310a78ac40d@jar,androidx.fragment:fragment:1.7.1@aar,androidx.activity:activity:1.8.1@aar,androidx.loader:loader:1.0.0@aar,androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0@aar,androidx.lifecycle:lifecycle-livedata:2.7.0@aar,androidx.lifecycle:lifecycle-viewmodel:2.7.0@aar,androidx.lifecycle:lifecycle-viewmodel:2.7.0@aar,androidx.lifecycle:lifecycle-livedata-core:2.7.0@aar,androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0@aar,androidx.core:core-ktx:1.13.1@aar,androidx.viewpager:viewpager:1.0.0@aar,androidx.customview:customview:1.0.0@aar,androidx.core:core:1.13.1@aar,androidx.core:core:1.13.1@aar,androidx.lifecycle:lifecycle-runtime:2.7.0@aar,androidx.lifecycle:lifecycle-process:2.7.0@aar,androidx.lifecycle:lifecycle-common-java8:2.7.0@jar,androidx.lifecycle:lifecycle-common:2.7.0@jar,androidx.window:window:1.2.0@aar,androidx.window:window-java:1.2.0@aar,androidx.annotation:annotation-experimental:1.4.0@aar,androidx.savedstate:savedstate:1.2.1@aar,androidx.arch.core:core-runtime:2.2.0@aar,androidx.arch.core:core-common:2.2.0@jar,androidx.versionedparcelable:versionedparcelable:1.1.1@aar,androidx.collection:collection:1.1.0@jar,androidx.annotation:annotation-jvm:1.9.1@jar,org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3@jar,org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.7.3@jar,org.jetbrains.kotlin:kotlin-stdlib:1.9.24@jar,org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22@jar,io.flutter:armeabi_v7a_release:1.0.0-cb4b5fff73850b2e42bd4de7cb9a4310a78ac40d@jar,io.flutter:arm64_v8a_release:1.0.0-cb4b5fff73850b2e42bd4de7cb9a4310a78ac40d@jar,io.flutter:x86_64_release:1.0.0-cb4b5fff73850b2e42bd4de7cb9a4310a78ac40d@jar,org.jetbrains:annotations:23.0.0@jar,androidx.startup:startup-runtime:1.1.1@aar,androidx.tracing:tracing:1.2.0@aar,com.getkeepsafe.relinker:relinker:1.4.5@aar">
+      roots="__local_aars__:C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\flutter\release\libs.jar:unspecified@jar,C:\PROJETS MOBILE\prestataires\kivou_app\android@@:flutter_plugin_android_lifecycle::release,C:\PROJETS MOBILE\prestataires\kivou_app\android@@:flutter_secure_storage::release,C:\PROJETS MOBILE\prestataires\kivou_app\android@@:geolocator_android::release,C:\PROJETS MOBILE\prestataires\kivou_app\android@@:google_maps_flutter_android::release,C:\PROJETS MOBILE\prestataires\kivou_app\android@@:path_provider_android::release,C:\PROJETS MOBILE\prestataires\kivou_app\android@@:sqflite_android::release,C:\PROJETS MOBILE\prestataires\kivou_app\android@@:url_launcher_android::release,org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22@jar,io.flutter:flutter_embedding_release:1.0.0-cb4b5fff73850b2e42bd4de7cb9a4310a78ac40d@jar,androidx.fragment:fragment:1.7.1@aar,androidx.activity:activity:1.8.1@aar,androidx.loader:loader:1.0.0@aar,androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0@aar,androidx.lifecycle:lifecycle-livedata:2.7.0@aar,androidx.lifecycle:lifecycle-viewmodel:2.7.0@aar,androidx.lifecycle:lifecycle-viewmodel:2.7.0@aar,androidx.lifecycle:lifecycle-livedata-core:2.7.0@aar,androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0@aar,androidx.core:core-ktx:1.13.1@aar,androidx.viewpager:viewpager:1.0.0@aar,androidx.customview:customview:1.0.0@aar,androidx.core:core:1.13.1@aar,androidx.core:core:1.13.1@aar,androidx.lifecycle:lifecycle-runtime:2.7.0@aar,androidx.lifecycle:lifecycle-process:2.7.0@aar,androidx.lifecycle:lifecycle-common-java8:2.7.0@jar,androidx.lifecycle:lifecycle-common:2.7.0@jar,androidx.window:window:1.2.0@aar,androidx.window:window-java:1.2.0@aar,androidx.annotation:annotation-experimental:1.4.0@aar,androidx.savedstate:savedstate:1.2.1@aar,androidx.arch.core:core-runtime:2.2.0@aar,androidx.arch.core:core-common:2.2.0@jar,androidx.versionedparcelable:versionedparcelable:1.1.1@aar,androidx.collection:collection:1.1.0@jar,androidx.annotation:annotation-jvm:1.9.1@jar,org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3@jar,org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.7.3@jar,org.jetbrains.kotlin:kotlin-stdlib:1.9.24@jar,org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22@jar,io.flutter:armeabi_v7a_release:1.0.0-cb4b5fff73850b2e42bd4de7cb9a4310a78ac40d@jar,io.flutter:arm64_v8a_release:1.0.0-cb4b5fff73850b2e42bd4de7cb9a4310a78ac40d@jar,io.flutter:x86_64_release:1.0.0-cb4b5fff73850b2e42bd4de7cb9a4310a78ac40d@jar,org.jetbrains:annotations:23.0.0@jar,androidx.startup:startup-runtime:1.1.1@aar,androidx.tracing:tracing:1.2.0@aar,com.getkeepsafe.relinker:relinker:1.4.5@aar">
     <dependency
         name="__local_aars__:C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\flutter\release\libs.jar:unspecified@jar"
         simpleName="__local_aars__:C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\flutter\release\libs.jar"/>
     <dependency
         name="C:\PROJETS MOBILE\prestataires\kivou_app\android@@:flutter_plugin_android_lifecycle::release"
         simpleName="io.flutter.plugins.flutter_plugin_android_lifecycle:flutter_plugin_android_lifecycle"/>
+    <dependency
+        name="C:\PROJETS MOBILE\prestataires\kivou_app\android@@:flutter_secure_storage::release"
+        simpleName="com.it_nomads.fluttersecurestorage:flutter_secure_storage"/>
     <dependency
         name="C:\PROJETS MOBILE\prestataires\kivou_app\android@@:geolocator_android::release"
         simpleName="com.baseflow.geolocator:geolocator_android"/>
@@ -138,7 +141,7 @@
         simpleName="com.getkeepsafe.relinker:relinker"/>
   </compile>
   <package
-      roots="__local_aars__:C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\flutter\release\libs.jar:unspecified@jar,C:\PROJETS MOBILE\prestataires\kivou_app\android@@:google_maps_flutter_android::release,C:\PROJETS MOBILE\prestataires\kivou_app\android@@:flutter_plugin_android_lifecycle::release,C:\PROJETS MOBILE\prestataires\kivou_app\android@@:geolocator_android::release,C:\PROJETS MOBILE\prestataires\kivou_app\android@@:path_provider_android::release,C:\PROJETS MOBILE\prestataires\kivou_app\android@@:sqflite_android::release,C:\PROJETS MOBILE\prestataires\kivou_app\android@@:url_launcher_android::release,com.google.android.gms:play-services-location:21.2.0@aar,io.flutter:flutter_embedding_release:1.0.0-cb4b5fff73850b2e42bd4de7cb9a4310a78ac40d@jar,androidx.browser:browser:1.8.0@aar,androidx.window:window:1.2.0@aar,androidx.window:window-java:1.2.0@aar,com.google.android.gms:play-services-maps:19.2.0@aar,com.google.android.gms:play-services-base:18.5.0@aar,com.google.android.gms:play-services-tasks:18.2.0@aar,com.google.android.gms:play-services-basement:18.4.0@aar,androidx.fragment:fragment:1.7.1@aar,androidx.fragment:fragment:1.7.1@aar,androidx.activity:activity:1.8.1@aar,androidx.loader:loader:1.0.0@aar,androidx.viewpager:viewpager:1.0.0@aar,androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0@aar,androidx.lifecycle:lifecycle-livedata:2.7.0@aar,androidx.lifecycle:lifecycle-viewmodel:2.7.0@aar,androidx.lifecycle:lifecycle-viewmodel:2.7.0@aar,androidx.lifecycle:lifecycle-livedata-core:2.7.0@aar,androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0@aar,androidx.core:core-ktx:1.13.1@aar,androidx.customview:customview:1.0.0@aar,androidx.core:core:1.13.1@aar,androidx.core:core:1.13.1@aar,androidx.lifecycle:lifecycle-runtime:2.7.0@aar,androidx.lifecycle:lifecycle-process:2.7.0@aar,androidx.lifecycle:lifecycle-common-java8:2.7.0@jar,androidx.savedstate:savedstate:1.2.1@aar,androidx.lifecycle:lifecycle-common:2.7.0@jar,org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.7.3@jar,org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3@jar,org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22@jar,androidx.profileinstaller:profileinstaller:1.3.1@aar,androidx.startup:startup-runtime:1.1.1@aar,androidx.tracing:tracing:1.2.0@aar,androidx.interpolator:interpolator:1.0.0@aar,androidx.versionedparcelable:versionedparcelable:1.1.1@aar,androidx.collection:collection:1.1.0@jar,androidx.arch.core:core-runtime:2.2.0@aar,androidx.arch.core:core-common:2.2.0@jar,androidx.concurrent:concurrent-futures:1.1.0@jar,androidx.window.extensions.core:core:1.0.0@aar,androidx.annotation:annotation-jvm:1.9.1@jar,androidx.annotation:annotation-experimental:1.4.0@aar,org.jetbrains.kotlin:kotlin-stdlib:1.9.24@jar,org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22@jar,io.flutter:armeabi_v7a_release:1.0.0-cb4b5fff73850b2e42bd4de7cb9a4310a78ac40d@jar,io.flutter:arm64_v8a_release:1.0.0-cb4b5fff73850b2e42bd4de7cb9a4310a78ac40d@jar,io.flutter:x86_64_release:1.0.0-cb4b5fff73850b2e42bd4de7cb9a4310a78ac40d@jar,com.google.maps.android:android-maps-utils:3.6.0@aar,com.getkeepsafe.relinker:relinker:1.4.5@aar,com.google.guava:listenablefuture:1.0@jar,org.jetbrains:annotations:23.0.0@jar">
+      roots="__local_aars__:C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\flutter\release\libs.jar:unspecified@jar,C:\PROJETS MOBILE\prestataires\kivou_app\android@@:google_maps_flutter_android::release,C:\PROJETS MOBILE\prestataires\kivou_app\android@@:flutter_plugin_android_lifecycle::release,C:\PROJETS MOBILE\prestataires\kivou_app\android@@:flutter_secure_storage::release,C:\PROJETS MOBILE\prestataires\kivou_app\android@@:geolocator_android::release,C:\PROJETS MOBILE\prestataires\kivou_app\android@@:path_provider_android::release,C:\PROJETS MOBILE\prestataires\kivou_app\android@@:sqflite_android::release,C:\PROJETS MOBILE\prestataires\kivou_app\android@@:url_launcher_android::release,com.google.android.gms:play-services-location:21.2.0@aar,io.flutter:flutter_embedding_release:1.0.0-cb4b5fff73850b2e42bd4de7cb9a4310a78ac40d@jar,androidx.browser:browser:1.8.0@aar,androidx.window:window:1.2.0@aar,androidx.window:window-java:1.2.0@aar,com.google.android.gms:play-services-maps:19.2.0@aar,com.google.android.gms:play-services-base:18.5.0@aar,com.google.android.gms:play-services-tasks:18.2.0@aar,com.google.android.gms:play-services-basement:18.4.0@aar,androidx.fragment:fragment:1.7.1@aar,androidx.fragment:fragment:1.7.1@aar,androidx.activity:activity:1.8.1@aar,androidx.loader:loader:1.0.0@aar,androidx.viewpager:viewpager:1.0.0@aar,androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0@aar,androidx.lifecycle:lifecycle-livedata:2.7.0@aar,androidx.lifecycle:lifecycle-viewmodel:2.7.0@aar,androidx.lifecycle:lifecycle-viewmodel:2.7.0@aar,androidx.lifecycle:lifecycle-livedata-core:2.7.0@aar,androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0@aar,androidx.core:core-ktx:1.13.1@aar,androidx.customview:customview:1.0.0@aar,androidx.core:core:1.13.1@aar,androidx.core:core:1.13.1@aar,androidx.lifecycle:lifecycle-runtime:2.7.0@aar,androidx.lifecycle:lifecycle-process:2.7.0@aar,androidx.lifecycle:lifecycle-common-java8:2.7.0@jar,androidx.savedstate:savedstate:1.2.1@aar,androidx.lifecycle:lifecycle-common:2.7.0@jar,org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.7.3@jar,org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3@jar,org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22@jar,androidx.security:security-crypto:1.1.0-alpha06@aar,com.google.crypto.tink:tink-android:1.9.0@jar,androidx.profileinstaller:profileinstaller:1.3.1@aar,androidx.startup:startup-runtime:1.1.1@aar,androidx.tracing:tracing:1.2.0@aar,androidx.versionedparcelable:versionedparcelable:1.1.1@aar,androidx.collection:collection:1.1.0@jar,androidx.interpolator:interpolator:1.0.0@aar,androidx.arch.core:core-runtime:2.2.0@aar,androidx.arch.core:core-common:2.2.0@jar,androidx.concurrent:concurrent-futures:1.1.0@jar,androidx.window.extensions.core:core:1.0.0@aar,androidx.annotation:annotation-jvm:1.9.1@jar,androidx.annotation:annotation-experimental:1.4.0@aar,org.jetbrains.kotlin:kotlin-stdlib:1.9.24@jar,org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22@jar,io.flutter:armeabi_v7a_release:1.0.0-cb4b5fff73850b2e42bd4de7cb9a4310a78ac40d@jar,io.flutter:arm64_v8a_release:1.0.0-cb4b5fff73850b2e42bd4de7cb9a4310a78ac40d@jar,io.flutter:x86_64_release:1.0.0-cb4b5fff73850b2e42bd4de7cb9a4310a78ac40d@jar,com.google.maps.android:android-maps-utils:3.6.0@aar,com.getkeepsafe.relinker:relinker:1.4.5@aar,com.google.code.findbugs:jsr305:3.0.2@jar,com.google.code.gson:gson:2.10.1@jar,com.google.errorprone:error_prone_annotations:2.18.0@jar,com.google.guava:listenablefuture:1.0@jar,org.jetbrains:annotations:23.0.0@jar">
     <dependency
         name="__local_aars__:C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\flutter\release\libs.jar:unspecified@jar"
         simpleName="__local_aars__:C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\flutter\release\libs.jar"/>
@@ -148,6 +151,9 @@
     <dependency
         name="C:\PROJETS MOBILE\prestataires\kivou_app\android@@:flutter_plugin_android_lifecycle::release"
         simpleName="io.flutter.plugins.flutter_plugin_android_lifecycle:flutter_plugin_android_lifecycle"/>
+    <dependency
+        name="C:\PROJETS MOBILE\prestataires\kivou_app\android@@:flutter_secure_storage::release"
+        simpleName="com.it_nomads.fluttersecurestorage:flutter_secure_storage"/>
     <dependency
         name="C:\PROJETS MOBILE\prestataires\kivou_app\android@@:geolocator_android::release"
         simpleName="com.baseflow.geolocator:geolocator_android"/>
@@ -248,6 +254,12 @@
         name="org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22@jar"
         simpleName="org.jetbrains.kotlin:kotlin-stdlib-jdk7"/>
     <dependency
+        name="androidx.security:security-crypto:1.1.0-alpha06@aar"
+        simpleName="androidx.security:security-crypto"/>
+    <dependency
+        name="com.google.crypto.tink:tink-android:1.9.0@jar"
+        simpleName="com.google.crypto.tink:tink-android"/>
+    <dependency
         name="androidx.profileinstaller:profileinstaller:1.3.1@aar"
         simpleName="androidx.profileinstaller:profileinstaller"/>
     <dependency
@@ -257,14 +269,14 @@
         name="androidx.tracing:tracing:1.2.0@aar"
         simpleName="androidx.tracing:tracing"/>
     <dependency
-        name="androidx.interpolator:interpolator:1.0.0@aar"
-        simpleName="androidx.interpolator:interpolator"/>
-    <dependency
         name="androidx.versionedparcelable:versionedparcelable:1.1.1@aar"
         simpleName="androidx.versionedparcelable:versionedparcelable"/>
     <dependency
         name="androidx.collection:collection:1.1.0@jar"
         simpleName="androidx.collection:collection"/>
+    <dependency
+        name="androidx.interpolator:interpolator:1.0.0@aar"
+        simpleName="androidx.interpolator:interpolator"/>
     <dependency
         name="androidx.arch.core:core-runtime:2.2.0@aar"
         simpleName="androidx.arch.core:core-runtime"/>
@@ -304,6 +316,15 @@
     <dependency
         name="com.getkeepsafe.relinker:relinker:1.4.5@aar"
         simpleName="com.getkeepsafe.relinker:relinker"/>
+    <dependency
+        name="com.google.code.findbugs:jsr305:3.0.2@jar"
+        simpleName="com.google.code.findbugs:jsr305"/>
+    <dependency
+        name="com.google.code.gson:gson:2.10.1@jar"
+        simpleName="com.google.code.gson:gson"/>
+    <dependency
+        name="com.google.errorprone:error_prone_annotations:2.18.0@jar"
+        simpleName="com.google.errorprone:error_prone_annotations"/>
     <dependency
         name="com.google.guava:listenablefuture:1.0@jar"
         simpleName="com.google.guava:listenablefuture"/>

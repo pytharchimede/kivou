@@ -6,10 +6,12 @@ import '../services/provider_service.dart';
 class ProviderRegistrationScreen extends ConsumerStatefulWidget {
   const ProviderRegistrationScreen({super.key});
   @override
-  ConsumerState<ProviderRegistrationScreen> createState() => _ProviderRegistrationScreenState();
+  ConsumerState<ProviderRegistrationScreen> createState() =>
+      _ProviderRegistrationScreenState();
 }
 
-class _ProviderRegistrationScreenState extends ConsumerState<ProviderRegistrationScreen> {
+class _ProviderRegistrationScreenState
+    extends ConsumerState<ProviderRegistrationScreen> {
   final _name = TextEditingController();
   final _email = TextEditingController();
   final _phone = TextEditingController();
@@ -31,7 +33,8 @@ class _ProviderRegistrationScreenState extends ConsumerState<ProviderRegistratio
   Widget build(BuildContext context) {
     final auth = ref.watch(authStateProvider);
     if (!auth.isAuthenticated) {
-      return const Scaffold(body: Center(child: Text('Veuillez vous connecter.')));
+      return const Scaffold(
+          body: Center(child: Text('Veuillez vous connecter.')));
     }
     return Scaffold(
       appBar: AppBar(title: const Text('Devenir prestataire')),
@@ -39,21 +42,36 @@ class _ProviderRegistrationScreenState extends ConsumerState<ProviderRegistratio
         padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(
           child: Column(children: [
-            TextField(controller: _name, decoration: const InputDecoration(labelText: 'Nom du prestataire')),
+            TextField(
+                controller: _name,
+                decoration:
+                    const InputDecoration(labelText: 'Nom du prestataire')),
             const SizedBox(height: 12),
-            TextField(controller: _email, decoration: const InputDecoration(labelText: 'Email')),
+            TextField(
+                controller: _email,
+                decoration: const InputDecoration(labelText: 'Email')),
             const SizedBox(height: 12),
-            TextField(controller: _phone, decoration: const InputDecoration(labelText: 'Téléphone')),
+            TextField(
+                controller: _phone,
+                decoration: const InputDecoration(labelText: 'Téléphone')),
             const SizedBox(height: 12),
-            TextField(controller: _cats, decoration: const InputDecoration(labelText: 'Catégories (séparées par des virgules)')),
+            TextField(
+                controller: _cats,
+                decoration: const InputDecoration(
+                    labelText: 'Catégories (séparées par des virgules)')),
             const SizedBox(height: 12),
-            TextField(controller: _price, decoration: const InputDecoration(labelText: 'Tarif horaire'), keyboardType: TextInputType.number),
+            TextField(
+                controller: _price,
+                decoration: const InputDecoration(labelText: 'Tarif horaire'),
+                keyboardType: TextInputType.number),
             const SizedBox(height: 16),
             SizedBox(
               width: double.infinity,
               child: FilledButton(
                 onPressed: loading ? null : _submit,
-                child: loading ? const CircularProgressIndicator() : const Text('Enregistrer'),
+                child: loading
+                    ? const CircularProgressIndicator()
+                    : const Text('Enregistrer'),
               ),
             )
           ]),
@@ -66,7 +84,11 @@ class _ProviderRegistrationScreenState extends ConsumerState<ProviderRegistratio
     setState(() => loading = true);
     try {
       final svc = ref.read(providerServiceProvider);
-      final cats = _cats.text.split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
+      final cats = _cats.text
+          .split(',')
+          .map((e) => e.trim())
+          .where((e) => e.isNotEmpty)
+          .toList();
       await svc.registerProvider(
         name: _name.text.trim(),
         email: _email.text.trim(),
@@ -75,11 +97,13 @@ class _ProviderRegistrationScreenState extends ConsumerState<ProviderRegistratio
         pricePerHour: double.tryParse(_price.text) ?? 100,
       );
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Profil prestataire créé.')));
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Profil prestataire créé.')));
       Navigator.of(context).pop();
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erreur: $e')));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Erreur: $e')));
     } finally {
       if (mounted) setState(() => loading = false);
     }
