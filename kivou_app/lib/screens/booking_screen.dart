@@ -25,7 +25,14 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
     final provider = ref.watch(providerByIdProvider(widget.providerId));
     if (provider == null) {
       return Scaffold(
-          appBar: AppBar(title: const Text('Réserver')),
+          appBar: AppBar(
+            title: const Text('Réserver'),
+            leading: IconButton(
+              icon: const Icon(Icons.home_outlined),
+              onPressed: () => Navigator.of(context)
+                  .pushNamedAndRemoveUntil('/home', (route) => false),
+            ),
+          ),
           body: const Center(child: Text('Prestataire introuvable')));
     }
     service = service.isEmpty
@@ -36,7 +43,14 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
     final total = provider.pricePerHour * duration;
 
     return Scaffold(
-      appBar: AppBar(title: Text('Réserver ${provider.name}')),
+      appBar: AppBar(
+        title: Text('Réserver ${provider.name}'),
+        leading: IconButton(
+          icon: const Icon(Icons.home_outlined),
+          onPressed: () => Navigator.of(context)
+              .pushNamedAndRemoveUntil('/home', (route) => false),
+        ),
+      ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [

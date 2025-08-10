@@ -36,7 +36,14 @@ class _ProviderRegistrationScreenState
           body: Center(child: Text('Veuillez vous connecter.')));
     }
     return Scaffold(
-      appBar: AppBar(title: const Text('Devenir prestataire')),
+      appBar: AppBar(
+        title: const Text('Devenir prestataire'),
+        leading: IconButton(
+          icon: const Icon(Icons.home_outlined),
+          onPressed: () => Navigator.of(context)
+              .pushNamedAndRemoveUntil('/home', (route) => false),
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(

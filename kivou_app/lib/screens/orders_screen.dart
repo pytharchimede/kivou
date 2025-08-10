@@ -23,7 +23,14 @@ class OrdersScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final future = ref.watch(ordersFutureProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('Mes commandes')),
+      appBar: AppBar(
+        title: const Text('Mes commandes'),
+        leading: IconButton(
+          icon: const Icon(Icons.home_outlined),
+          onPressed: () => Navigator.of(context)
+              .pushNamedAndRemoveUntil('/home', (route) => false),
+        ),
+      ),
       body: future.when(
         data: (bookings) => bookings.isEmpty
             ? const Center(child: Text('Aucune commande'))

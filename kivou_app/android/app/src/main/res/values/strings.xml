@@ -2,5 +2,5 @@
 <resources>
     <string name="app_name">KIVOU</string>
     <!-- Renseignez votre clé Google Maps ici (Android) -->
-    <string name="google_maps_api_key">YOUR_GOOGLE_MAPS_API_KEY</string>
+    <string name="google_maps_api_key">AIzaSyBYpFYrEc_LxyOUWu8QdAlCOh0L6tBeIis</string>
 </resources>

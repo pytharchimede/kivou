@@ -48,6 +48,11 @@ class _AuthScreenState extends ConsumerState<AuthScreen>
     return Scaffold(
       appBar: AppBar(
         title: const Text('Connexion / Inscription'),
+        leading: IconButton(
+          icon: const Icon(Icons.home_outlined),
+          onPressed: () => Navigator.of(context)
+              .pushNamedAndRemoveUntil('/home', (route) => false),
+        ),
         bottom: TabBar(controller: _tab, tabs: const [
           Tab(text: 'Se connecter'),
           Tab(text: 'Créer un compte'),
