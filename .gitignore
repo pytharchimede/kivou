@@ -1,0 +1,15 @@
+# Secrets et env locaux
+kivou_app/env/
+
+# Artefacts Flutter / Dart
+kivou_app/.dart_tool/
+kivou_app/build/
+
+# Fichiers générés Android/iOS
+kivou_app/android/.gradle/
+kivou_app/android/local.properties
+kivou_app/ios/Flutter/Generated.xcconfig
+kivou_app/ios/Flutter/flutter_export_environment.sh
+
+# VS Code
+.vscode/

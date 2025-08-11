@@ -7,6 +7,7 @@ import 'dart:io';
 import '../services/upload_service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:convert';
+import 'package:flutter/services.dart' show rootBundle, MethodChannel;
 import 'package:http/http.dart' as http;
 import '../services/category_service.dart';
 
@@ -472,12 +473,42 @@ class _PlacesAutocompleteFieldState extends State<_PlacesAutocompleteField> {
   List<Map<String, String>> _predictions = [];
   bool _loading = false;
   http.Client _client = http.Client();
+  static Map<String, dynamic>? _cachedEnv;
+  static const MethodChannel _envChannel = MethodChannel('env');
 
   @override
   void initState() {
     super.initState();
     _apiKey =
         const String.fromEnvironment('GOOGLE_MAPS_API_KEY', defaultValue: '');
+    // Fallback: charge depuis un fichier d'assets env si disponible (assets/env.json)
+    if (_apiKey.isEmpty) _loadEnvFromAssets();
+    // Dernier fallback: demander à la plateforme (Android) la clé @string/google_maps_api_key
+    if (_apiKey.isEmpty) _loadEnvFromPlatform();
+  }
+
+  Future<void> _loadEnvFromAssets() async {
+    try {
+      if (_cachedEnv == null) {
+        final jsonStr = await rootBundle.loadString('assets/env.json');
+        _cachedEnv = json.decode(jsonStr) as Map<String, dynamic>;
+      }
+      final k = (_cachedEnv?['GOOGLE_MAPS_API_KEY'] ?? '').toString();
+      if (k.isNotEmpty && mounted) {
+        setState(() => _apiKey = k);
+      }
+    } catch (_) {
+      // ignore: asset load failures silently
+    }
+  }
+
+  Future<void> _loadEnvFromPlatform() async {
+    try {
+      final k = await _envChannel.invokeMethod<String>('getGoogleMapsApiKey');
+      if ((k ?? '').isNotEmpty && mounted) setState(() => _apiKey = k!);
+    } catch (_) {
+      // ignore platform failures
+    }
   }
 
   Future<void> _onChanged(String value) async {

@@ -21,6 +21,12 @@
   </testSourceProviders>
   <testFixturesSourceProviders>
   </testFixturesSourceProviders>
+  <resValues>
+    <resValue
+        type="string"
+        name="google_maps_api_key"
+        value="AIzaSyBYpFYrEc_LxyOUWu8QdAlCOh0L6tBeIis" />
+  </resValues>
   <manifestPlaceholders>
     <placeholder
         name="applicationName"

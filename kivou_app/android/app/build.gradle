@@ -28,6 +28,22 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        // Injecte la clé Google Maps dans les ressources Android via resValue
+        // La valeur est lue depuis local.properties (GOOGLE_MAPS_API_KEY) si définie
+        def googleMapsKey = project.hasProperty('GOOGLE_MAPS_API_KEY') ? project.GOOGLE_MAPS_API_KEY : null
+        if (googleMapsKey == null) {
+            // Essaie local.properties
+            def props = new Properties()
+            def lp = rootProject.file('local.properties')
+            if (lp.exists()) {
+                lp.withInputStream { stream -> props.load(stream) }
+                googleMapsKey = props.getProperty('GOOGLE_MAPS_API_KEY')
+            }
+        }
+        if (googleMapsKey == null) {
+            googleMapsKey = ""
+        }
+        resValue "string", "google_maps_api_key", googleMapsKey
     }
 
     buildTypes {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">KIVOU</string>
-    <!-- Renseignez votre clé Google Maps ici (Android) -->
-    <string name="google_maps_api_key">AIzaSyBYpFYrEc_LxyOUWu8QdAlCOh0L6tBeIis</string>
+    <!-- La clé Google Maps est injectée par Gradle via resValue (voir build.gradle). -->
+    <!-- Laissez la ressource non définie ici pour éviter d'exposer la clé dans le code source. -->
 </resources>

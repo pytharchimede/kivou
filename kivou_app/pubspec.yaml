@@ -43,3 +43,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    # Permet un fallback local pour les clés sans passer par --dart-define
+    - assets/env.json
