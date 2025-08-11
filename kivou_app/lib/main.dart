@@ -11,6 +11,8 @@ import 'screens/owner_orders_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/auth_screen.dart';
 import 'screens/provider_registration_screen.dart';
+import 'screens/chat_list_screen.dart';
+import 'screens/chat_room_screen.dart';
 import 'utils/app_theme.dart';
 
 void main() {
@@ -88,6 +90,19 @@ final GoRouter _router = GoRouter(
       path: '/owner-orders',
       name: 'owner-orders',
       builder: (context, state) => const OwnerOrdersScreen(),
+    ),
+    GoRoute(
+      path: '/chats',
+      name: 'chats',
+      builder: (context, state) => const ChatListScreen(),
+    ),
+    GoRoute(
+      path: '/chat/:id',
+      name: 'chat-room',
+      builder: (context, state) {
+        final id = int.tryParse(state.pathParameters['id'] ?? '') ?? 0;
+        return ChatRoomScreen(conversationId: id);
+      },
     ),
   ],
 );

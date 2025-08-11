@@ -182,6 +182,52 @@ class _ProviderDetailScaffold extends StatelessWidget {
                           leading: const Icon(Icons.phone),
                           title: Text(_displayPhone(provider.phone)),
                         ),
+                        const SizedBox(height: 8),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: FilledButton.icon(
+                              onPressed: () async {
+                                final ref = ProviderScope.containerOf(context);
+                                final auth = ref.read(authStateProvider);
+                                if (!auth.isAuthenticated) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text(
+                                              'Connectez-vous pour discuter')));
+                                  return;
+                                }
+                                try {
+                                  // Supposons qu'on a ownerUserId côté provider
+                                  final peerId = provider.ownerUserId ?? 0;
+                                  if (peerId == 0) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                            content: Text(
+                                                'Prestataire non joignable')));
+                                    return;
+                                  }
+                                  final conv = await ref
+                                      .read(chatServiceProvider)
+                                      .openOrCreate(
+                                          peerUserId: peerId,
+                                          providerId: provider.id);
+                                  if (context.mounted) {
+                                    GoRouter.of(context).go('/chat/${conv.id}');
+                                  }
+                                } catch (e) {
+                                  if (context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(content: Text('Erreur: $e')));
+                                  }
+                                }
+                              },
+                              icon: const Icon(Icons.chat_bubble_outline),
+                              label: const Text('Message'),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),

@@ -9,6 +9,8 @@ import '../services/session_storage.dart';
 import '../services/auth_service.dart';
 import '../services/notification_service.dart';
 import '../services/booking_service.dart';
+import '../services/chat_service.dart';
+import '../models/chat.dart';
 
 /// Provider pour la liste des prestataires (local cache optionnel)
 final providersProvider = Provider<List<ServiceProvider>>((ref) => const []);
@@ -157,6 +159,24 @@ class OwnerPendingCountNotifier extends StateNotifier<int> {
 
 final providerServiceProvider = Provider<ProviderService>(
     (ref) => ProviderService(ref.read(apiClientProvider)));
+
+/// Chat service
+final chatServiceProvider =
+    Provider<ChatService>((ref) => ChatService(ref.read(apiClientProvider)));
+
+/// Conversations list
+final chatConversationsProvider =
+    FutureProvider<List<ChatConversation>>((ref) async {
+  final svc = ref.read(chatServiceProvider);
+  return svc.listConversations();
+});
+
+/// Messages in a conversation
+final chatMessagesProvider =
+    FutureProvider.family<List<ChatMessage>, int>((ref, conversationId) async {
+  final svc = ref.read(chatServiceProvider);
+  return svc.listMessages(conversationId);
+});
 
 /// Providers distants (optionnel)
 final remoteProvidersFutureProvider =

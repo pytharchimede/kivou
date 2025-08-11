@@ -24,6 +24,10 @@ class HomeScreen extends ConsumerWidget {
         actions: [
           _BellButton(),
           IconButton(
+              onPressed: () => context.go('/chats'),
+              tooltip: 'Discussions',
+              icon: const Icon(Icons.chat_bubble_outline)),
+          IconButton(
               onPressed: () => context.go('/orders'),
               icon: const Icon(Icons.receipt_long)),
           const _ProfileWithBadgeButton(),
