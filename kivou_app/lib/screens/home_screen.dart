@@ -24,7 +24,14 @@ class HomeScreen extends ConsumerWidget {
         actions: [
           _BellButton(),
           IconButton(
-              onPressed: () => context.go('/chats'),
+              onPressed: () {
+                final auth = ref.read(authStateProvider);
+                if (!auth.isAuthenticated) {
+                  context.go('/auth');
+                } else {
+                  context.push('/chats');
+                }
+              },
               tooltip: 'Discussions',
               icon: const Icon(Icons.chat_bubble_outline)),
           IconButton(

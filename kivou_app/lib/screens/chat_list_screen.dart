@@ -9,16 +9,33 @@ class ChatListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final auth = ref.watch(authStateProvider);
+    if (!auth.isAuthenticated) {
+      // Rediriger proprement vers la page de connexion
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (context.mounted) context.go('/auth');
+      });
+      return const SizedBox.shrink();
+    }
     final convs = ref.watch(chatConversationsProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Discussions'),
       ),
       body: convs.when(
-        data: (list) => ListView.separated(
-          itemCount: list.length,
-          separatorBuilder: (_, __) => const Divider(height: 1),
-          itemBuilder: (context, i) => _ConversationTile(conv: list[i]),
+        data: (list) => RefreshIndicator(
+          onRefresh: () async {
+            ref.invalidate(chatConversationsProvider);
+            await ref
+                .read(chatConversationsProvider.future)
+                .catchError((_) => <ChatConversation>[]);
+          },
+          child: ListView.separated(
+            physics: const AlwaysScrollableScrollPhysics(),
+            itemCount: list.length,
+            separatorBuilder: (_, __) => const Divider(height: 1),
+            itemBuilder: (context, i) => _ConversationTile(conv: list[i]),
+          ),
         ),
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, st) => Center(child: Text('Erreur: $e')),
@@ -47,7 +64,7 @@ class _ConversationTile extends ConsumerWidget {
               child: Text('${conv.unreadCount}',
                   style: const TextStyle(fontSize: 12)))
           : null,
-      onTap: () => context.go('/chat/${conv.id}'),
+      onTap: () => context.push('/chat/${conv.id}'),
     );
   }
 }

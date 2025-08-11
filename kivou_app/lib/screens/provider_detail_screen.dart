@@ -196,6 +196,7 @@ class _ProviderDetailScaffold extends StatelessWidget {
                                       const SnackBar(
                                           content: Text(
                                               'Connectez-vous pour discuter')));
+                                  GoRouter.of(context).go('/auth');
                                   return;
                                 }
                                 try {
@@ -214,7 +215,8 @@ class _ProviderDetailScaffold extends StatelessWidget {
                                           peerUserId: peerId,
                                           providerId: provider.id);
                                   if (context.mounted) {
-                                    GoRouter.of(context).go('/chat/${conv.id}');
+                                    GoRouter.of(context)
+                                        .push('/chat/${conv.id}');
                                   }
                                 } catch (e) {
                                   if (context.mounted) {

@@ -37,7 +37,7 @@ MERGED from [com.google.maps.android:android-maps-utils:3.6.0] C:\Users\PC\.grad
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.13.1] C:\Users\PC\.gradle\caches\transforms-3\889ae3adf7a24645889ee22f4dad2cac\transformed\core-1.13.1\AndroidManifest.xml:28:18-86
 	android:label
-		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:6:9-34
+		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:6:9-30
 	android:icon
 		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:8:9-43
 	android:name

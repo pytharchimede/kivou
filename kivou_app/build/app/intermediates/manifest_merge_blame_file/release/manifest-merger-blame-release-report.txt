@@ -72,8 +72,8 @@
 46        android:extractNativeLibs="true"
 47        android:icon="@mipmap/ic_launcher"
 47-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:8:9-43
-48        android:label="kivou_app" >
-48-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:6:9-34
+48        android:label="KIVOU" >
+48-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:6:9-30
 49
 50        <!-- Google Maps API key -->
 51        <meta-data

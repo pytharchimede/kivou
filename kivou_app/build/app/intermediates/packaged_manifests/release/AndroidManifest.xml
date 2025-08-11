@@ -45,7 +45,7 @@
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:extractNativeLibs="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="kivou_app" >
+        android:label="KIVOU" >
 
         <!-- Google Maps API key -->
         <meta-data
