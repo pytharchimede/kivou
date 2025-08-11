@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:go_router/go_router.dart';
 import 'dart:io';
 import '../services/upload_service.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class ProviderRegistrationScreen extends ConsumerStatefulWidget {
   const ProviderRegistrationScreen({super.key});
@@ -18,18 +19,38 @@ class _ProviderRegistrationScreenState
   final _name = TextEditingController();
   final _email = TextEditingController();
   final _phone = TextEditingController();
-  final _cats = TextEditingController();
   final _price = TextEditingController(text: '100');
+  final _description = TextEditingController();
+  final _locationNote = TextEditingController();
   bool loading = false;
   File? _photo;
+  // Sélection de catégories prédéfinies
+  final List<String> _allCategories = const [
+    'Plomberie',
+    'Électricité',
+    'Ménage',
+    'Jardinage',
+    'Peinture',
+    'Menuiserie',
+    'Climatisation',
+    'Serrurerie',
+    'Déménagement',
+    'Informatique',
+  ];
+  List<String> _selectedCategories = [];
+  // Position sur la carte
+  double? _lat = 5.35; // Abidjan par défaut
+  double? _lng = -4.02;
+  GoogleMapController? _mapController;
 
   @override
   void dispose() {
     _name.dispose();
     _email.dispose();
     _phone.dispose();
-    _cats.dispose();
     _price.dispose();
+    _description.dispose();
+    _locationNote.dispose();
     super.dispose();
   }
 
@@ -84,10 +105,114 @@ class _ProviderRegistrationScreenState
                 controller: _phone,
                 decoration: const InputDecoration(labelText: 'Téléphone')),
             const SizedBox(height: 12),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text('Prestations',
+                  style: Theme.of(context).textTheme.titleMedium),
+            ),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                if (_selectedCategories.isEmpty)
+                  const Text('Sélectionnez une ou plusieurs catégories'),
+                ..._selectedCategories.map((c) => Chip(
+                      label: Text(c),
+                      onDeleted: () {
+                        setState(() => _selectedCategories.remove(c));
+                      },
+                    )),
+                OutlinedButton.icon(
+                  onPressed: _openCategoryPicker,
+                  icon: const Icon(Icons.playlist_add_check),
+                  label: const Text('Choisir les catégories'),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
             TextField(
-                controller: _cats,
-                decoration: const InputDecoration(
-                    labelText: 'Catégories (séparées par des virgules)')),
+              controller: _description,
+              minLines: 3,
+              maxLines: 5,
+              decoration: const InputDecoration(
+                labelText: 'Description du prestataire',
+                hintText: 'Décrivez vos prestations, votre expérience, etc.',
+              ),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _locationNote,
+              decoration: const InputDecoration(
+                labelText: 'Localisation (texte libre)',
+                hintText: 'Ex: Koumassi, près du marché – infos utiles',
+              ),
+            ),
+            const SizedBox(height: 12),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text('Position sur la carte',
+                  style: Theme.of(context).textTheme.titleMedium),
+            ),
+            const SizedBox(height: 8),
+            SizedBox(
+              height: 220,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: GoogleMap(
+                  initialCameraPosition: CameraPosition(
+                    target: LatLng(_lat ?? 5.35, _lng ?? -4.02),
+                    zoom: 12,
+                  ),
+                  onMapCreated: (c) => _mapController = c,
+                  myLocationButtonEnabled: false,
+                  onTap: (pos) {
+                    setState(() {
+                      _lat = pos.latitude;
+                      _lng = pos.longitude;
+                    });
+                  },
+                  markers: {
+                    if (_lat != null && _lng != null)
+                      Marker(
+                        markerId: const MarkerId('provider_pos'),
+                        position: LatLng(_lat!, _lng!),
+                        draggable: true,
+                        onDragEnd: (p) => setState(() {
+                          _lat = p.latitude;
+                          _lng = p.longitude;
+                        }),
+                      )
+                  },
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(
+                  child: Text('Lat: ${_lat?.toStringAsFixed(5) ?? '-'}'),
+                ),
+                Expanded(
+                  child: Text('Lng: ${_lng?.toStringAsFixed(5) ?? '-'}'),
+                ),
+                IconButton(
+                  tooltip: 'Centrer sur la position',
+                  onPressed: () {
+                    if (_mapController != null &&
+                        _lat != null &&
+                        _lng != null) {
+                      _mapController!.animateCamera(
+                        CameraUpdate.newLatLng(
+                          LatLng(_lat!, _lng!),
+                        ),
+                      );
+                    }
+                  },
+                  icon: const Icon(Icons.my_location),
+                )
+              ],
+            ),
             const SizedBox(height: 12),
             TextField(
                 controller: _price,
@@ -128,11 +253,20 @@ class _ProviderRegistrationScreenState
           bearerToken: token,
         );
       }
-      final cats = _cats.text
-          .split(',')
-          .map((e) => e.trim())
-          .where((e) => e.isNotEmpty)
-          .toList();
+      final cats = _selectedCategories;
+      if (cats.isEmpty) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text('Veuillez sélectionner au moins une catégorie')));
+        }
+        return;
+      }
+      // Construire la description finale (inclut la note de localisation si renseignée)
+      final desc =
+          (_description.text.trim().isEmpty ? '' : _description.text.trim()) +
+              (_locationNote.text.trim().isEmpty
+                  ? ''
+                  : '\nAdresse: ${_locationNote.text.trim()}');
       await svc.registerProvider(
         name: _name.text.trim(),
         email: _email.text.trim(),
@@ -140,6 +274,9 @@ class _ProviderRegistrationScreenState
         categories: cats,
         pricePerHour: double.tryParse(_price.text) ?? 100,
         photoUrl: uploadedUrl,
+        description: desc.isEmpty ? null : desc,
+        latitude: _lat,
+        longitude: _lng,
       );
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -152,6 +289,113 @@ class _ProviderRegistrationScreenState
           .showSnackBar(SnackBar(content: Text('Erreur: $e')));
     } finally {
       if (mounted) setState(() => loading = false);
+    }
+  }
+
+  Future<void> _openCategoryPicker() async {
+    final current = Set<String>.from(_selectedCategories);
+    final result = await showModalBottomSheet<List<String>>(
+      context: context,
+      isScrollControlled: true,
+      builder: (ctx) {
+        final controller = TextEditingController();
+        final all = List<String>.from(_allCategories);
+        List<String> filtered = List<String>.from(all);
+        return StatefulBuilder(builder: (ctx, setSt) {
+          void applyFilter(String q) {
+            setSt(() {
+              final query = q.toLowerCase().trim();
+              filtered = query.isEmpty
+                  ? List<String>.from(all)
+                  : all.where((c) => c.toLowerCase().contains(query)).toList();
+            });
+          }
+
+          return Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(ctx).viewInsets.bottom,
+            ),
+            child: SafeArea(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 8),
+                  Container(
+                    width: 64,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade400,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: TextField(
+                      controller: controller,
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.search),
+                        hintText: 'Rechercher une catégorie',
+                      ),
+                      onChanged: applyFilter,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Flexible(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: filtered.length,
+                      itemBuilder: (ctx, i) {
+                        final c = filtered[i];
+                        final checked = current.contains(c);
+                        return CheckboxListTile(
+                          value: checked,
+                          title: Text(c),
+                          onChanged: (v) {
+                            setSt(() {
+                              if (v == true) {
+                                current.add(c);
+                              } else {
+                                current.remove(c);
+                              }
+                            });
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: () => Navigator.pop(ctx, null),
+                            child: const Text('Annuler'),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: FilledButton.icon(
+                            icon: const Icon(Icons.check),
+                            onPressed: () =>
+                                Navigator.pop(ctx, current.toList()),
+                            label: const Text('Valider'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
+        });
+      },
+    );
+    if (result != null) {
+      setState(() => _selectedCategories = result);
     }
   }
 }
