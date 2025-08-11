@@ -20101,6 +20101,7 @@ kotlinx.coroutines.sync.SemaphoreKt$withPermit$1
 kotlinx.coroutines.sync.SemaphoreKt
 kotlinx.coroutines.sync.SemaphoreSegment
 kotlinx.coroutines.time.TimeKt
+net.jonhanson.flutter_native_splash.R
 org.intellij.lang.annotations.Flow
 org.intellij.lang.annotations.Identifier
 org.intellij.lang.annotations.JdkConstants$AdjustableOrientation

@@ -4,6 +4,19 @@
       jars="C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\flutter\release\libs.jar"
       resolved="__local_aars__:C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\flutter\release\libs.jar:unspecified"/>
   <library
+      name="C:\PROJETS MOBILE\prestataires\kivou_app\android@@:flutter_native_splash::release"
+      jars="C:\PROJETS MOBILE\prestataires\kivou_app\build\flutter_native_splash\.transforms\807568af6b97f732776f86c36aeceeb1\transformed\out\jars\classes.jar;C:\PROJETS MOBILE\prestataires\kivou_app\build\flutter_native_splash\.transforms\807568af6b97f732776f86c36aeceeb1\transformed\out\jars\libs\R.jar"
+      resolved="net.jonhanson.flutter_native_splash:flutter_native_splash:unspecified"
+      folder="C:\PROJETS MOBILE\prestataires\kivou_app\build\flutter_native_splash\.transforms\807568af6b97f732776f86c36aeceeb1\transformed\out"
+      manifest="AndroidManifest.xml"
+      resFolder="res"
+      assetsFolder="assets"
+      lintJar="lint.jar"
+      publicResources="public.txt"
+      symbolFile="R.txt"
+      externalAnnotations="annotations.zip"
+      proguardRules="proguard.txt"/>
+  <library
       name="C:\PROJETS MOBILE\prestataires\kivou_app\android@@:flutter_plugin_android_lifecycle::release"
       jars="C:\PROJETS MOBILE\prestataires\kivou_app\build\flutter_plugin_android_lifecycle\.transforms\e5f6fe2eff128caa6c450b24ffb74f01\transformed\out\jars\classes.jar;C:\PROJETS MOBILE\prestataires\kivou_app\build\flutter_plugin_android_lifecycle\.transforms\e5f6fe2eff128caa6c450b24ffb74f01\transformed\out\jars\libs\R.jar"
       resolved="io.flutter.plugins.flutter_plugin_android_lifecycle:flutter_plugin_android_lifecycle:unspecified"

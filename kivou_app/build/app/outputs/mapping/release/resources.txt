@@ -6,7 +6,7 @@ Marking dimen:browser_actions_context_menu_max_width:2131034112 reachable: refer
 Marking style:amu_ClusterIcon_TextAppearance:2131492875 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking drawable:amu_bubble_mask:2131099648 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking drawable:amu_bubble_shadow:2131099649 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking drawable:common_full_open_on_phone:2131099650 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking drawable:common_full_open_on_phone:2131099652 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking string:common_google_play_services_enable_button:2131427337 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking string:common_google_play_services_update_button:2131427347 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking string:common_google_play_services_install_button:2131427340 reachable: referenced from C:\PROJETS MOBILE\prestataires\kivou_app\build\app\intermediates\dex\release\minifyReleaseWithR8\classes.dex
@@ -799,6 +799,7 @@ fragmentManager
 $this$require
 execute
 transactionId
+flutter_native_splash
 input_method
 oldText
 defaultCreationExtras
@@ -2200,6 +2201,7 @@ Marking xml:flutter_image_picker_file_paths:2131623936 used because it matches s
 Marking attr:colorScheme:2130903057 used because it matches string pool constant color
 Marking color:androidx_core_ripple_material_light:2130968576 used because it matches string pool constant android
 Marking color:androidx_core_secondary_text_default_material_light:2130968577 used because it matches string pool constant android
+Marking drawable:android12splash:2131099650 used because it matches string pool constant android
 Marking id:androidx_window_activity_scope:2131165229 used because it matches string pool constant android
 Marking string:androidx_startup:2131427328 used because it matches string pool constant android
 Marking id:window:2131165298 used because it matches string pool constant window
@@ -2221,18 +2223,18 @@ Marking dimen:notification_small_icon_size_as_large:2131034132 used because it m
 Marking dimen:notification_subtext_size:2131034133 used because it matches string pool constant notification
 Marking dimen:notification_top_pad:2131034134 used because it matches string pool constant notification
 Marking dimen:notification_top_pad_large_text:2131034135 used because it matches string pool constant notification
-Marking drawable:notification_action_background:2131099678 used because it matches string pool constant notification
-Marking drawable:notification_bg:2131099679 used because it matches string pool constant notification
-Marking drawable:notification_bg_low:2131099680 used because it matches string pool constant notification
-Marking drawable:notification_bg_low_normal:2131099681 used because it matches string pool constant notification
-Marking drawable:notification_bg_low_pressed:2131099682 used because it matches string pool constant notification
-Marking drawable:notification_bg_normal:2131099683 used because it matches string pool constant notification
-Marking drawable:notification_bg_normal_pressed:2131099684 used because it matches string pool constant notification
-Marking drawable:notification_icon_background:2131099685 used because it matches string pool constant notification
-Marking drawable:notification_oversize_large_icon_bg:2131099686 used because it matches string pool constant notification
-Marking drawable:notification_template_icon_bg:2131099687 used because it matches string pool constant notification
-Marking drawable:notification_template_icon_low_bg:2131099688 used because it matches string pool constant notification
-Marking drawable:notification_tile_bg:2131099689 used because it matches string pool constant notification
+Marking drawable:notification_action_background:2131099680 used because it matches string pool constant notification
+Marking drawable:notification_bg:2131099681 used because it matches string pool constant notification
+Marking drawable:notification_bg_low:2131099682 used because it matches string pool constant notification
+Marking drawable:notification_bg_low_normal:2131099683 used because it matches string pool constant notification
+Marking drawable:notification_bg_low_pressed:2131099684 used because it matches string pool constant notification
+Marking drawable:notification_bg_normal:2131099685 used because it matches string pool constant notification
+Marking drawable:notification_bg_normal_pressed:2131099686 used because it matches string pool constant notification
+Marking drawable:notification_icon_background:2131099687 used because it matches string pool constant notification
+Marking drawable:notification_oversize_large_icon_bg:2131099688 used because it matches string pool constant notification
+Marking drawable:notification_template_icon_bg:2131099689 used because it matches string pool constant notification
+Marking drawable:notification_template_icon_low_bg:2131099690 used because it matches string pool constant notification
+Marking drawable:notification_tile_bg:2131099691 used because it matches string pool constant notification
 Marking id:notification_background:2131165261 used because it matches string pool constant notification
 Marking id:notification_main_column:2131165262 used because it matches string pool constant notification
 Marking id:notification_main_column_container:2131165263 used because it matches string pool constant notification
@@ -2419,6 +2421,8 @@ Marking id:tag_window_insets_animation_callback:2131165283 used because it match
 @dimen/notification_top_pad_large_text : reachable=true
 @drawable/amu_bubble_mask : reachable=true
 @drawable/amu_bubble_shadow : reachable=true
+@drawable/android12splash : reachable=true
+@drawable/background : reachable=false
 @drawable/common_full_open_on_phone : reachable=true
 @drawable/common_google_signin_btn_icon_dark : reachable=false
     @drawable/common_google_signin_btn_icon_disabled
@@ -2473,6 +2477,8 @@ Marking id:tag_window_insets_animation_callback:2131165283 used because it match
 @drawable/ic_call_decline : reachable=false
 @drawable/ic_call_decline_low : reachable=false
 @drawable/launch_background : reachable=false
+    @drawable/background
+    @drawable/splash
 @drawable/notification_action_background : reachable=true
     @color/androidx_core_ripple_material_light
     @dimen/compat_button_inset_horizontal_material
@@ -2498,6 +2504,7 @@ Marking id:tag_window_insets_animation_callback:2131165283 used because it match
 @drawable/notification_tile_bg : reachable=true
     @drawable/notify_panel_notification_icon_bg
 @drawable/notify_panel_notification_icon_bg : reachable=false
+@drawable/splash : reachable=false
 @id/accessibility_action_clickable_span : reachable=true
 @id/accessibility_custom_action_0 : reachable=true
 @id/accessibility_custom_action_1 : reachable=true
@@ -2688,6 +2695,7 @@ Marking id:tag_window_insets_animation_callback:2131165283 used because it match
 @string/status_bar_notification_info_overflow : reachable=true
 @style/LaunchTheme : reachable=true
     @drawable/launch_background
+    @drawable/android12splash
 @style/NormalTheme : reachable=true
 @style/TextAppearance_Compat_Notification : reachable=false
 @style/TextAppearance_Compat_Notification_Info : reachable=false
@@ -2753,19 +2761,20 @@ The root reachable resources are:
  dimen:notification_top_pad_large_text:2131034135
  drawable:amu_bubble_mask:2131099648
  drawable:amu_bubble_shadow:2131099649
- drawable:common_full_open_on_phone:2131099650
- drawable:notification_action_background:2131099678
- drawable:notification_bg:2131099679
- drawable:notification_bg_low:2131099680
- drawable:notification_bg_low_normal:2131099681
- drawable:notification_bg_low_pressed:2131099682
- drawable:notification_bg_normal:2131099683
- drawable:notification_bg_normal_pressed:2131099684
- drawable:notification_icon_background:2131099685
- drawable:notification_oversize_large_icon_bg:2131099686
- drawable:notification_template_icon_bg:2131099687
- drawable:notification_template_icon_low_bg:2131099688
- drawable:notification_tile_bg:2131099689
+ drawable:android12splash:2131099650
+ drawable:common_full_open_on_phone:2131099652
+ drawable:notification_action_background:2131099680
+ drawable:notification_bg:2131099681
+ drawable:notification_bg_low:2131099682
+ drawable:notification_bg_low_normal:2131099683
+ drawable:notification_bg_low_pressed:2131099684
+ drawable:notification_bg_normal:2131099685
+ drawable:notification_bg_normal_pressed:2131099686
+ drawable:notification_icon_background:2131099687
+ drawable:notification_oversize_large_icon_bg:2131099688
+ drawable:notification_template_icon_bg:2131099689
+ drawable:notification_template_icon_low_bg:2131099690
+ drawable:notification_tile_bg:2131099691
  id:accessibility_action_clickable_span:2131165184
  id:accessibility_custom_action_0:2131165185
  id:accessibility_custom_action_1:2131165186
@@ -2909,32 +2918,32 @@ Unused resources are:
  color:common_google_signin_btn_tint:2130968594
  dimen:compat_notification_large_icon_max_height:2131034119
  dimen:compat_notification_large_icon_max_width:2131034120
- drawable:common_google_signin_btn_icon_dark:2131099651
- drawable:common_google_signin_btn_icon_dark_focused:2131099652
- drawable:common_google_signin_btn_icon_dark_normal:2131099653
- drawable:common_google_signin_btn_icon_dark_normal_background:2131099654
- drawable:common_google_signin_btn_icon_disabled:2131099655
- drawable:common_google_signin_btn_icon_light:2131099656
- drawable:common_google_signin_btn_icon_light_focused:2131099657
- drawable:common_google_signin_btn_icon_light_normal:2131099658
- drawable:common_google_signin_btn_icon_light_normal_background:2131099659
- drawable:common_google_signin_btn_text_dark:2131099660
- drawable:common_google_signin_btn_text_dark_focused:2131099661
- drawable:common_google_signin_btn_text_dark_normal:2131099662
- drawable:common_google_signin_btn_text_dark_normal_background:2131099663
- drawable:common_google_signin_btn_text_disabled:2131099664
- drawable:common_google_signin_btn_text_light:2131099665
- drawable:common_google_signin_btn_text_light_focused:2131099666
- drawable:common_google_signin_btn_text_light_normal:2131099667
- drawable:common_google_signin_btn_text_light_normal_background:2131099668
- drawable:googleg_disabled_color_18:2131099669
- drawable:googleg_standard_color_18:2131099670
- drawable:ic_call_answer:2131099671
- drawable:ic_call_answer_low:2131099672
- drawable:ic_call_answer_video:2131099673
- drawable:ic_call_answer_video_low:2131099674
- drawable:ic_call_decline:2131099675
- drawable:ic_call_decline_low:2131099676
+ drawable:common_google_signin_btn_icon_dark:2131099653
+ drawable:common_google_signin_btn_icon_dark_focused:2131099654
+ drawable:common_google_signin_btn_icon_dark_normal:2131099655
+ drawable:common_google_signin_btn_icon_dark_normal_background:2131099656
+ drawable:common_google_signin_btn_icon_disabled:2131099657
+ drawable:common_google_signin_btn_icon_light:2131099658
+ drawable:common_google_signin_btn_icon_light_focused:2131099659
+ drawable:common_google_signin_btn_icon_light_normal:2131099660
+ drawable:common_google_signin_btn_icon_light_normal_background:2131099661
+ drawable:common_google_signin_btn_text_dark:2131099662
+ drawable:common_google_signin_btn_text_dark_focused:2131099663
+ drawable:common_google_signin_btn_text_dark_normal:2131099664
+ drawable:common_google_signin_btn_text_dark_normal_background:2131099665
+ drawable:common_google_signin_btn_text_disabled:2131099666
+ drawable:common_google_signin_btn_text_light:2131099667
+ drawable:common_google_signin_btn_text_light_focused:2131099668
+ drawable:common_google_signin_btn_text_light_normal:2131099669
+ drawable:common_google_signin_btn_text_light_normal_background:2131099670
+ drawable:googleg_disabled_color_18:2131099671
+ drawable:googleg_standard_color_18:2131099672
+ drawable:ic_call_answer:2131099673
+ drawable:ic_call_answer_low:2131099674
+ drawable:ic_call_answer_video:2131099675
+ drawable:ic_call_answer_video_low:2131099676
+ drawable:ic_call_decline:2131099677
+ drawable:ic_call_decline_low:2131099678
  id:adjacent:2131165222
  id:adjust_height:2131165223
  id:adjust_width:2131165224

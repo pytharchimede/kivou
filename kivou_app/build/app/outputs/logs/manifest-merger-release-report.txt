@@ -48,6 +48,7 @@ ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\Android
 INJECTED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:1:1-52:12
 INJECTED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:1:1-52:12
 INJECTED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:1:1-52:12
+MERGED from [:flutter_native_splash] C:\PROJETS MOBILE\prestataires\kivou_app\build\flutter_native_splash\intermediates\merged_manifest\release\AndroidManifest.xml:2:1-7:12
 MERGED from [:google_maps_flutter_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\google_maps_flutter_android\intermediates\merged_manifest\release\AndroidManifest.xml:2:1-7:12
 MERGED from [:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:2:1-34:12
 MERGED from [:flutter_plugin_android_lifecycle] C:\PROJETS MOBILE\prestataires\kivou_app\build\flutter_plugin_android_lifecycle\intermediates\merged_manifest\release\AndroidManifest.xml:2:1-7:12
@@ -178,6 +179,8 @@ uses-sdk
 INJECTED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml
 INJECTED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml
+MERGED from [:flutter_native_splash] C:\PROJETS MOBILE\prestataires\kivou_app\build\flutter_native_splash\intermediates\merged_manifest\release\AndroidManifest.xml:5:5-44
+MERGED from [:flutter_native_splash] C:\PROJETS MOBILE\prestataires\kivou_app\build\flutter_native_splash\intermediates\merged_manifest\release\AndroidManifest.xml:5:5-44
 MERGED from [:google_maps_flutter_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\google_maps_flutter_android\intermediates\merged_manifest\release\AndroidManifest.xml:5:5-44
 MERGED from [:google_maps_flutter_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\google_maps_flutter_android\intermediates\merged_manifest\release\AndroidManifest.xml:5:5-44
 MERGED from [:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:6:5-44

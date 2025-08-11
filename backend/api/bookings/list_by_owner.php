@@ -10,7 +10,7 @@ $ownerId = (int)$claims['sub'];
 
 $pdo = db();
 $st = $pdo->prepare('SELECT b.id,b.user_id,b.provider_id,b.service_category,b.service_description,b.scheduled_at,b.duration,b.total_price,b.status,b.created_at,
-                            u.name AS user_name, u.phone AS user_phone,
+                            u.name AS user_name, u.phone AS user_phone, u.avatar_url AS user_avatar_url,
                             sp.name AS provider_name
                      FROM bookings b
                      JOIN service_providers sp ON sp.id=b.provider_id
@@ -34,6 +34,7 @@ $data = array_map(function ($r) {
         'user_name' => $r['user_name'] ?? null,
         'user_phone' => $r['user_phone'] ?? null,
         'provider_name' => $r['provider_name'] ?? null,
+        'user_avatar_url' => $r['user_avatar_url'] ?? null,
     ];
 }, $rows);
 json_ok($data);

@@ -20,46 +20,147 @@ final ordersFutureProvider =
   return <dynamic>[];
 });
 
+final ownerOrdersFutureProvider =
+    FutureProvider.autoDispose<List<dynamic>>((ref) async {
+  final auth = ref.watch(authStateProvider);
+  final api = ref.read(apiClientProvider);
+  final svc = BookingService(api);
+  if (auth.isAuthenticated) {
+    return await svc.listByOwner();
+  }
+  return <dynamic>[];
+});
+
 class OrdersScreen extends ConsumerWidget {
   const OrdersScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final future = ref.watch(ordersFutureProvider);
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Mes commandes'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded),
-          tooltip: 'Accueil',
-          onPressed: () => context.go('/home'),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Commandes'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new_rounded),
+            tooltip: 'Accueil',
+            onPressed: () => context.go('/home'),
+          ),
+          bottom: const TabBar(
+            tabs: [
+              Tab(text: 'Demandeur'),
+              Tab(text: 'Prestataire'),
+            ],
+          ),
+        ),
+        body: const TabBarView(
+          children: [
+            _RequesterOrdersTab(),
+            _OwnerOrdersTab(),
+          ],
         ),
       ),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          ref.invalidate(ordersFutureProvider);
-          try {
-            await ref.read(ordersFutureProvider.future);
-          } catch (_) {}
+    );
+  }
+}
+
+class _RequesterOrdersTab extends ConsumerWidget {
+  const _RequesterOrdersTab();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final future = ref.watch(ordersFutureProvider);
+    return RefreshIndicator(
+      onRefresh: () async {
+        ref.invalidate(ordersFutureProvider);
+        try {
+          await ref.read(ordersFutureProvider.future);
+        } catch (_) {}
+      },
+      child: future.when(
+        data: (bookings) {
+          final now = DateTime.now();
+          final items = bookings.cast<Map<String, dynamic>>();
+          final upcoming = items.where((b) {
+            final dt =
+                _BookingCard._parseDate((b['scheduled_at'] ?? '').toString());
+            return dt == null || dt.isAfter(now);
+          }).toList();
+          final past = items.where((b) {
+            final dt =
+                _BookingCard._parseDate((b['scheduled_at'] ?? '').toString());
+            return dt != null && dt.isBefore(now);
+          }).toList();
+          if (items.isEmpty) {
+            return ListView(children: const [
+              SizedBox(height: 120),
+              Center(child: Text('Aucune commande')),
+            ]);
+          }
+          return ListView(
+            padding: const EdgeInsets.all(12),
+            children: [
+              if (upcoming.isNotEmpty) ...[
+                _SectionHeader(title: 'À venir'),
+                const SizedBox(height: 8),
+                ...List.generate(
+                    upcoming.length,
+                    (i) => Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: _BookingCard(booking: upcoming[i]),
+                        )),
+              ],
+              if (past.isNotEmpty) ...[
+                const SizedBox(height: 8),
+                _SectionHeader(title: 'Passées'),
+                const SizedBox(height: 8),
+                ...List.generate(
+                    past.length,
+                    (i) => Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: _BookingCard(booking: past[i]),
+                        )),
+              ],
+            ],
+          );
         },
-        child: future.when(
-          data: (bookings) => bookings.isEmpty
-              ? ListView(children: const [
-                  SizedBox(height: 120),
-                  Center(child: Text('Aucune commande')),
-                ])
-              : ListView.separated(
-                  padding: const EdgeInsets.all(12),
-                  itemCount: bookings.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: 12),
-                  itemBuilder: (context, i) {
-                    final b = bookings[i] as Map<String, dynamic>;
-                    return _BookingCard(booking: b);
-                  },
-                ),
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (e, st) => Center(child: Text('Erreur: $e')),
-        ),
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (e, st) => Center(child: Text('Erreur: $e')),
+      ),
+    );
+  }
+}
+
+class _OwnerOrdersTab extends ConsumerWidget {
+  const _OwnerOrdersTab();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final future = ref.watch(ownerOrdersFutureProvider);
+    return RefreshIndicator(
+      onRefresh: () async {
+        ref.invalidate(ownerOrdersFutureProvider);
+        try {
+          await ref.read(ownerOrdersFutureProvider.future);
+        } catch (_) {}
+      },
+      child: future.when(
+        data: (bookings) => bookings.isEmpty
+            ? ListView(children: const [
+                SizedBox(height: 120),
+                Center(child: Text('Aucune commande à traiter')),
+              ])
+            : ListView.separated(
+                padding: const EdgeInsets.all(12),
+                itemCount: bookings.length,
+                separatorBuilder: (_, __) => const SizedBox(height: 12),
+                itemBuilder: (context, i) {
+                  final b = bookings[i] as Map<String, dynamic>;
+                  return _OwnerBookingCard(booking: b);
+                },
+              ),
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (e, st) => Center(child: Text('Erreur: $e')),
       ),
     );
   }
@@ -71,7 +172,6 @@ class _BookingCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final auth = ref.watch(authStateProvider);
     final theme = Theme.of(context);
     final df = DateFormat('EEE d MMM yyyy • HH:mm', 'fr');
 
@@ -86,8 +186,12 @@ class _BookingCard extends ConsumerWidget {
     final DateTime? scheduledAt = _parseDate(scheduledAtStr);
     final DateTime? createdAt = _parseDate(createdAtStr);
 
-    final avatarUrl = (auth.user?['avatar_url'] ?? '').toString();
-    final requesterName = (auth.user?['name'] ?? 'Moi').toString();
+    // Affiche le prestataire (nom + photo) côté demandeur
+    final provider = booking['provider'] is Map<String, dynamic>
+        ? booking['provider'] as Map<String, dynamic>
+        : null;
+    final avatarUrl = (provider?['photo_url'] ?? '').toString();
+    final displayName = (provider?['name'] ?? 'Prestataire').toString();
 
     final st = _StatusStyle.from(status, theme);
     final gradient = LinearGradient(
@@ -120,7 +224,7 @@ class _BookingCard extends ConsumerWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _Avatar(name: requesterName, url: avatarUrl),
+                _Avatar(name: displayName, url: avatarUrl),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
@@ -463,6 +567,218 @@ class _Avatar extends StatelessWidget {
             child: const Icon(Icons.person, size: 10),
           ),
         )
+      ],
+    );
+  }
+}
+
+class _OwnerBookingCard extends ConsumerWidget {
+  final Map<String, dynamic> booking;
+  const _OwnerBookingCard({required this.booking});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final df = DateFormat('EEE d MMM yyyy • HH:mm', 'fr');
+
+    final service = (booking['service_category'] ?? 'Service').toString();
+    final desc = (booking['service_description'] ?? '').toString();
+    final status = (booking['status'] ?? 'pending').toString();
+    final scheduledAtStr = (booking['scheduled_at'] ?? '').toString();
+    final duration = _BookingCard._toDouble(booking['duration']);
+    final total = _BookingCard._toDouble(booking['total_price']);
+    final DateTime? scheduledAt = _BookingCard._parseDate(scheduledAtStr);
+
+    final requesterName = (booking['user_name'] ?? 'Demandeur').toString();
+    final requesterAvatar = (booking['user_avatar_url'] ?? '').toString();
+
+    final st = _StatusStyle.from(status, theme);
+    final gradient = LinearGradient(
+      colors: [
+        theme.colorScheme.primary.withOpacity(0.08),
+        theme.colorScheme.secondary.withOpacity(0.06)
+      ],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    );
+
+    return Container(
+      decoration: BoxDecoration(
+        gradient: gradient,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: theme.dividerColor.withOpacity(0.2)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.03),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
+          )
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _Avatar(name: requesterName, url: requesterAvatar),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              requesterName,
+                              style: theme.textTheme.titleMedium
+                                  ?.copyWith(fontWeight: FontWeight.w700),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          _StatusPill(
+                              text: st.label,
+                              color: st.bg,
+                              textColor: st.fg,
+                              icon: st.icon),
+                        ],
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        service,
+                        style: theme.textTheme.bodyMedium
+                            ?.copyWith(fontWeight: FontWeight.w600),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      if (desc.isNotEmpty) ...[
+                        const SizedBox(height: 6),
+                        Text(
+                          desc,
+                          style: theme.textTheme.bodyMedium,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            _InfoRow(
+              icon: Icons.calendar_month_outlined,
+              label: 'Date/heure',
+              value:
+                  scheduledAt != null ? df.format(scheduledAt) : scheduledAtStr,
+            ),
+            _InfoRow(
+              icon: Icons.timer_outlined,
+              label: 'Durée',
+              value:
+                  duration != null ? _BookingCard._formatHours(duration) : '-',
+            ),
+            _InfoRow(
+              icon: Icons.payments_outlined,
+              label: 'Montant',
+              value: total != null ? _BookingCard._formatMoney(total) : '-',
+            ),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton.icon(
+                  onPressed: () => _showOwnerDetails(context),
+                  icon: const Icon(Icons.receipt_long_outlined),
+                  label: const Text('Détails'),
+                ),
+                const SizedBox(width: 8),
+                if (status == 'pending') ...[
+                  OutlinedButton.icon(
+                    onPressed: () => _updateStatus(ref, context, 'cancelled'),
+                    icon: const Icon(Icons.close_rounded),
+                    label: const Text('Refuser'),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.red.shade700,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  FilledButton.icon(
+                    onPressed: () => _updateStatus(ref, context, 'confirmed'),
+                    icon: const Icon(Icons.check_rounded),
+                    label: const Text('Valider'),
+                  ),
+                ] else if (status == 'confirmed') ...[
+                  FilledButton.icon(
+                    onPressed: null,
+                    icon: const Icon(Icons.verified_outlined),
+                    label: const Text('Confirmée'),
+                  ),
+                ] else if (status == 'cancelled') ...[
+                  OutlinedButton.icon(
+                    onPressed: null,
+                    icon: const Icon(Icons.block),
+                    label: const Text('Refusée'),
+                  ),
+                ] else if (status == 'completed') ...[
+                  OutlinedButton.icon(
+                    onPressed: null,
+                    icon: const Icon(Icons.check_circle_outline),
+                    label: const Text('Terminée'),
+                  ),
+                ],
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showOwnerDetails(BuildContext context) {
+    _BookingCard(booking: booking)._showDetails(context);
+  }
+
+  Future<void> _updateStatus(
+      WidgetRef ref, BuildContext context, String status) async {
+    try {
+      final api = ref.read(apiClientProvider);
+      await BookingService(api).updateStatus(
+          bookingId: int.tryParse(booking['id']?.toString() ?? '') ?? 0,
+          status: status);
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+                'Commande ${status == 'confirmed' ? 'confirmée' : 'refusée'}')));
+      }
+      ref.invalidate(ownerOrdersFutureProvider);
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Erreur: $e')));
+      }
+    }
+  }
+}
+
+class _SectionHeader extends StatelessWidget {
+  final String title;
+  const _SectionHeader({required this.title});
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Row(
+      children: [
+        Icon(Icons.segment, size: 18, color: theme.colorScheme.primary),
+        const SizedBox(width: 6),
+        Text(title,
+            style: theme.textTheme.titleSmall
+                ?.copyWith(fontWeight: FontWeight.w700)),
       ],
     );
   }
