@@ -94,7 +94,12 @@ function require_auth()
     $hdr = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
     if (!preg_match('/^Bearer\s+(.*)$/i', $hdr, $m)) json_error('UNAUTHORIZED', 'Missing bearer token', 401);
     try {
-        return \Kivou\Support\Jwt::verify($m[1], $JWT_SECRET);
+        $claims = \Kivou\Support\Jwt::verify($m[1], $JWT_SECRET);
+        // Normalise: certains tokens portent l'id utilisateur dans 'sub'
+        if (!isset($claims['id']) && isset($claims['sub'])) {
+            $claims['id'] = $claims['sub'];
+        }
+        return $claims;
     } catch (\Throwable $e) {
         json_error('UNAUTHORIZED', $e->getMessage(), 401);
     }

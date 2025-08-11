@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS chat_messages (
 
 -- Useful indexes
 CREATE INDEX idx_chat_conv_last_at ON chat_conversations(last_at);
+CREATE INDEX idx_chat_conv_pair_lookup ON chat_conversations(user_a_id, user_b_id, provider_id);
 CREATE INDEX idx_chat_msg_conv_created ON chat_messages(conversation_id, created_at);
 CREATE INDEX idx_chat_msg_to_unread ON chat_messages(to_user_id, read_at);
 
