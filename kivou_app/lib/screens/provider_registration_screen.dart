@@ -6,6 +6,9 @@ import 'package:go_router/go_router.dart';
 import 'dart:io';
 import '../services/upload_service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import '../services/category_service.dart';
 
 class ProviderRegistrationScreen extends ConsumerStatefulWidget {
   const ProviderRegistrationScreen({super.key});
@@ -25,18 +28,8 @@ class _ProviderRegistrationScreenState
   bool loading = false;
   File? _photo;
   // Sélection de catégories prédéfinies
-  final List<String> _allCategories = const [
-    'Plomberie',
-    'Électricité',
-    'Ménage',
-    'Jardinage',
-    'Peinture',
-    'Menuiserie',
-    'Climatisation',
-    'Serrurerie',
-    'Déménagement',
-    'Informatique',
-  ];
+  List<String> _allCategories = const [];
+  bool _loadingCategories = true;
   List<String> _selectedCategories = [];
   // Position sur la carte
   double? _lat = 5.35; // Abidjan par défaut
@@ -52,6 +45,47 @@ class _ProviderRegistrationScreenState
     _description.dispose();
     _locationNote.dispose();
     super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _loadCategories();
+  }
+
+  Future<void> _loadCategories() async {
+    if (!_loadingCategories) return;
+    try {
+      final api = ref.read(apiClientProvider);
+      final svc = CategoryService(api);
+      final names = await svc.listNames();
+      if (mounted) {
+        setState(() {
+          _allCategories = names.isEmpty
+              ? const [
+                  'Plomberie',
+                  'Électricité',
+                  'Ménage',
+                  'Jardinage',
+                  'Peinture',
+                  'Menuiserie',
+                  'Climatisation',
+                  'Serrurerie',
+                  'Déménagement',
+                  'Informatique',
+                  'Coiffure'
+                ]
+              : names;
+          _loadingCategories = false;
+        });
+      }
+    } catch (_) {
+      if (mounted) {
+        setState(() {
+          _loadingCategories = false;
+        });
+      }
+    }
   }
 
   @override
@@ -111,6 +145,11 @@ class _ProviderRegistrationScreenState
                   style: Theme.of(context).textTheme.titleMedium),
             ),
             const SizedBox(height: 8),
+            if (_loadingCategories)
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 4),
+                child: LinearProgressIndicator(minHeight: 2),
+              ),
             Wrap(
               spacing: 8,
               runSpacing: 8,
@@ -141,12 +180,21 @@ class _ProviderRegistrationScreenState
               ),
             ),
             const SizedBox(height: 12),
-            TextField(
+            _PlacesAutocompleteField(
               controller: _locationNote,
-              decoration: const InputDecoration(
-                labelText: 'Localisation (texte libre)',
-                hintText: 'Ex: Koumassi, près du marché – infos utiles',
-              ),
+              onPlaceSelected: (loc) {
+                if (loc != null) {
+                  setState(() {
+                    _lat = loc.lat;
+                    _lng = loc.lng;
+                  });
+                  _mapController?.animateCamera(
+                    CameraUpdate.newLatLng(
+                      LatLng(_lat!, _lng!),
+                    ),
+                  );
+                }
+              },
             ),
             const SizedBox(height: 12),
             Align(
@@ -397,5 +445,144 @@ class _ProviderRegistrationScreenState
     if (result != null) {
       setState(() => _selectedCategories = result);
     }
+  }
+}
+
+class _PlacesAutocompleteField extends StatefulWidget {
+  final TextEditingController controller;
+  final void Function(_PlaceLoc?) onPlaceSelected;
+  const _PlacesAutocompleteField({
+    required this.controller,
+    required this.onPlaceSelected,
+  });
+  @override
+  State<_PlacesAutocompleteField> createState() =>
+      _PlacesAutocompleteFieldState();
+}
+
+class _PlaceLoc {
+  final double lat;
+  final double lng;
+  final String description;
+  _PlaceLoc(this.lat, this.lng, this.description);
+}
+
+class _PlacesAutocompleteFieldState extends State<_PlacesAutocompleteField> {
+  String _apiKey = '';
+  List<Map<String, String>> _predictions = [];
+  bool _loading = false;
+  http.Client _client = http.Client();
+
+  @override
+  void initState() {
+    super.initState();
+    _apiKey =
+        const String.fromEnvironment('GOOGLE_MAPS_API_KEY', defaultValue: '');
+  }
+
+  Future<void> _onChanged(String value) async {
+    if (value.trim().isEmpty || _apiKey.isEmpty) {
+      setState(() => _predictions = []);
+      return;
+    }
+    setState(() => _loading = true);
+    try {
+      final uri = Uri.https(
+          'maps.googleapis.com', '/maps/api/place/autocomplete/json', {
+        'input': value,
+        'key': _apiKey,
+        'language': 'fr',
+        'components': 'country:ci',
+      });
+      final resp = await _client.get(uri);
+      if (resp.statusCode == 200) {
+        final data = json.decode(resp.body) as Map<String, dynamic>;
+        final preds = (data['predictions'] as List<dynamic>?) ?? [];
+        setState(() {
+          _predictions = preds
+              .map((e) => {
+                    'place_id': (e['place_id'] ?? '').toString(),
+                    'description': (e['description'] ?? '').toString(),
+                  })
+              .where((m) => (m['place_id']!.isNotEmpty))
+              .toList();
+        });
+      } else {
+        setState(() => _predictions = []);
+      }
+    } catch (_) {
+      setState(() => _predictions = []);
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
+  }
+
+  Future<void> _select(Map<String, String> p) async {
+    widget.controller.text = p['description'] ?? '';
+    setState(() => _predictions = []);
+    if (_apiKey.isEmpty) {
+      widget.onPlaceSelected(null);
+      return;
+    }
+    try {
+      final placeId = p['place_id']!;
+      final uri =
+          Uri.https('maps.googleapis.com', '/maps/api/place/details/json', {
+        'place_id': placeId,
+        'key': _apiKey,
+        'language': 'fr',
+        'fields': 'geometry,formatted_address,name',
+      });
+      final resp = await _client.get(uri);
+      if (resp.statusCode == 200) {
+        final data = json.decode(resp.body) as Map<String, dynamic>;
+        final result = data['result'] as Map<String, dynamic>?;
+        final geo = (result?['geometry'] as Map<String, dynamic>?) ?? {};
+        final loc = (geo['location'] as Map<String, dynamic>?) ?? {};
+        final lat = (loc['lat'] as num?)?.toDouble();
+        final lng = (loc['lng'] as num?)?.toDouble();
+        if (lat != null && lng != null) {
+          widget
+              .onPlaceSelected(_PlaceLoc(lat, lng, p['description'] ?? 'Lieu'));
+          return;
+        }
+      }
+      widget.onPlaceSelected(null);
+    } catch (_) {
+      widget.onPlaceSelected(null);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextField(
+          controller: widget.controller,
+          decoration: InputDecoration(
+            labelText: 'Localisation',
+            hintText: 'Rechercher un lieu (Google Places)',
+            suffixIcon: _loading
+                ? const Padding(
+                    padding: EdgeInsets.all(12),
+                    child: SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator(strokeWidth: 2)),
+                  )
+                : const Icon(Icons.place_outlined),
+          ),
+          onChanged: _onChanged,
+        ),
+        ..._predictions.map((p) => ListTile(
+              dense: true,
+              contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+              leading: const Icon(Icons.location_on_outlined, size: 18),
+              title: Text(p['description'] ?? ''),
+              onTap: () => _select(p),
+            )),
+      ],
+    );
   }
 }

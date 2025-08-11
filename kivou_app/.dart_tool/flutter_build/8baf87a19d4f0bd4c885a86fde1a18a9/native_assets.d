@@ -1,1 +1,0 @@
- C:\\PROJETS\ MOBILE\\prestataires\\kivou_app\\.dart_tool\\flutter_build\\8baf87a19d4f0bd4c885a86fde1a18a9\\native_assets.yaml: 

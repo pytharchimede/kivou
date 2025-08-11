@@ -159,6 +159,9 @@ class _ProviderDetailScaffold extends StatelessWidget {
                           .toList(),
                     ),
                   const SizedBox(height: 16),
+                  Text('À propos',
+                      style: Theme.of(context).textTheme.titleMedium),
+                  const SizedBox(height: 6),
                   Text(
                     provider.description.isEmpty
                         ? 'Pas de description.'
