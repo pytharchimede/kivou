@@ -20,6 +20,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
   TimeOfDay time = const TimeOfDay(hour: 9, minute: 0);
   double duration = 2.0;
   bool _submitting = false;
+  final TextEditingController _detailsCtrl = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +67,19 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
             onChanged: (v) => setState(() => service = v ?? service),
           ),
           const SizedBox(height: 16),
-          const Text('2) Options / date / heure'),
+          const Text('2) Détails de la commande (optionnel)'),
+          const SizedBox(height: 8),
+          TextField(
+            controller: _detailsCtrl,
+            maxLines: 3,
+            decoration: const InputDecoration(
+              hintText:
+                  'Expliquez brièvement votre besoin (ex: nombre de pièces, disponibilité, précisions…)',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          const SizedBox(height: 16),
+          const Text('3) Options / date / heure'),
           Row(children: [
             Expanded(child: Text('Date: ${DateFormat.yMd().format(date)}')),
             TextButton(onPressed: _pickDate, child: const Text('Modifier')),
@@ -101,7 +114,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                     width: 20,
                     child: CircularProgressIndicator(strokeWidth: 2),
                   )
-                : const Text('3) Confirmer (sans paiement)'),
+                : const Text('4) Confirmer (sans paiement)'),
           ),
         ],
       ),
@@ -141,7 +154,9 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
       userId: 0, // ignored if token present
       providerId: int.tryParse(widget.providerId) ?? 0,
       serviceCategory: service,
-      description: service,
+      description: (_detailsCtrl.text.trim().isNotEmpty)
+          ? _detailsCtrl.text.trim()
+          : service,
       scheduledAt: at,
       duration: duration,
       totalPrice: total,

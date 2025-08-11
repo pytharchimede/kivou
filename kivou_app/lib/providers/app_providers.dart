@@ -8,6 +8,7 @@ import '../services/mappers.dart';
 import '../services/session_storage.dart';
 import '../services/auth_service.dart';
 import '../services/notification_service.dart';
+import '../services/booking_service.dart';
 
 /// Provider pour la liste des prestataires (local cache optionnel)
 final providersProvider = Provider<List<ServiceProvider>>((ref) => const []);
@@ -125,6 +126,33 @@ class NotificationsNotifier extends StateNotifier<List<Map<String, dynamic>>> {
   }
 
   void clear() => state = const [];
+}
+
+/// Compteur des commandes en attente (côté propriétaire de prestataire)
+final ownerPendingCountProvider =
+    StateNotifierProvider<OwnerPendingCountNotifier, int>(
+        (ref) => OwnerPendingCountNotifier(ref));
+
+class OwnerPendingCountNotifier extends StateNotifier<int> {
+  final Ref ref;
+  OwnerPendingCountNotifier(this.ref) : super(0);
+
+  Future<void> refresh() async {
+    try {
+      final list =
+          await BookingService(ref.read(apiClientProvider)).listByOwner();
+      final pending = list
+          .where((e) => (e is Map<String, dynamic>)
+              ? ((e['status'] ?? 'pending') == 'pending')
+              : false)
+          .length;
+      state = pending;
+    } catch (_) {
+      // silent fail
+    }
+  }
+
+  void clear() => state = 0;
 }
 
 final providerServiceProvider = Provider<ProviderService>(

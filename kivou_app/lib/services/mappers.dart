@@ -1,21 +1,26 @@
 import 'package:kivou_app/models/service_provider.dart';
 
-// Normalise une URL d'image: gère http->https, chemins relatifs avec ou sans '/'
+// Normalise une URL d'image: gère http->https, backslashes, espaces, et chemins relatifs (uploads)
 String normalizeImageUrl(String? u) {
   if (u == null || u.isEmpty) return '';
-  final s = u.trim();
+  String s = u.trim().replaceAll('\\', '/');
   if (s.startsWith('http://fidest.ci')) {
-    return s.replaceFirst('http://', 'https://');
+    s = s.replaceFirst('http://', 'https://');
   }
-  if (s.startsWith('http://') || s.startsWith('https://')) return s;
-  if (s.startsWith('/')) return 'https://fidest.ci$s';
-  // Cas: 'kivou/backend/uploads/...' ou 'uploads/...'
-  if (s.startsWith('kivou/')) return 'https://fidest.ci/$s';
-  if (s.startsWith('backend/uploads') || s.startsWith('uploads/')) {
-    return 'https://fidest.ci/kivou/$s'
-        .replaceFirst('kivou/backend', 'kivou/backend');
+  if (s.startsWith('http://') || s.startsWith('https://')) {
+    return s.replaceAll(' ', '%20');
   }
-  return s;
+  if (s.startsWith('/')) {
+    return ('https://fidest.ci' + s).replaceAll(' ', '%20');
+  }
+  // Cas relatifs fréquents
+  if (s.startsWith('kivou/')) s = '/' + s;
+  if (s.startsWith('backend/')) s = '/kivou/' + s;
+  if (s.startsWith('uploads/')) s = '/kivou/backend/' + s;
+  if (!s.startsWith('/') && s.contains('uploads')) {
+    s = '/kivou/backend/' + s;
+  }
+  return ('https://fidest.ci' + s).replaceAll(' ', '%20');
 }
 
 ServiceProvider providerFromApi(Map<String, dynamic> j) {

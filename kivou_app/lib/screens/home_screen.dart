@@ -22,15 +22,15 @@ class HomeScreen extends ConsumerWidget {
           IconButton(
               onPressed: () => context.go('/orders'),
               icon: const Icon(Icons.receipt_long)),
-          IconButton(
-              onPressed: () => context.go('/profile'),
-              icon: const Icon(Icons.person)),
+          const _ProfileWithBadgeButton(),
         ],
       ),
       body: RefreshIndicator(
         onRefresh: () async {
           // Invalider et recharger
           ref.invalidate(remoteProvidersFutureProvider);
+          // Rafraîchir aussi le compteur des commandes en attente
+          await ref.read(ownerPendingCountProvider.notifier).refresh();
           try {
             await ref.read(remoteProvidersFutureProvider.future);
           } catch (_) {}
@@ -132,6 +132,44 @@ class HomeScreen extends ConsumerWidget {
         label: const Text('Filtres'),
         icon: const Icon(Icons.filter_list),
       ),
+    );
+  }
+}
+
+class _ProfileWithBadgeButton extends ConsumerWidget {
+  const _ProfileWithBadgeButton();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final count = ref.watch(ownerPendingCountProvider);
+    // Charger au premier affichage (best effort)
+    ref.read(ownerPendingCountProvider.notifier).refresh();
+    return Stack(
+      children: [
+        IconButton(
+          onPressed: () => context.go('/profile'),
+          icon: const Icon(Icons.person),
+          tooltip: 'Profil',
+        ),
+        if (count > 0)
+          Positioned(
+            right: 6,
+            top: 6,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+              decoration: BoxDecoration(
+                color: Colors.redAccent,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              constraints: const BoxConstraints(minWidth: 18),
+              child: Text(
+                count > 99 ? '99+' : '$count',
+                style: const TextStyle(color: Colors.white, fontSize: 10),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+      ],
     );
   }
 }

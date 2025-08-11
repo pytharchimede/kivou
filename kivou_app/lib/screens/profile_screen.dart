@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../providers/app_providers.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import '../services/upload_service.dart';
+import '../providers/app_providers.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -49,12 +49,7 @@ class ProfileScreen extends ConsumerWidget {
                     onTap: () => context.go('/orders'),
                   ),
                   const SizedBox(height: 12),
-                  _ActionCard(
-                    icon: Icons.inbox_outlined,
-                    title: 'Commandes reçues (prestataire)',
-                    subtitle: 'Accepter ou refuser les demandes',
-                    onTap: () => context.go('/owner-orders'),
-                  ),
+                  _OwnerOrdersAction(),
                   const SizedBox(height: 12),
                   _ActionCard(
                     icon: Icons.work_outline_rounded,
@@ -238,6 +233,39 @@ class _LoggedOutCard extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _OwnerOrdersAction extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final pending = ref.watch(ownerPendingCountProvider);
+    return Stack(
+      children: [
+        _ActionCard(
+          icon: Icons.inbox_outlined,
+          title: 'Commandes reçues (prestataire)',
+          subtitle: 'Accepter ou refuser les demandes',
+          onTap: () => context.go('/owner-orders'),
+        ),
+        if (pending > 0)
+          Positioned(
+            right: 16,
+            top: 8,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              decoration: BoxDecoration(
+                color: Colors.redAccent,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Text(
+                pending > 99 ? '99+' : '$pending',
+                style: const TextStyle(color: Colors.white, fontSize: 11),
+              ),
+            ),
+          ),
+      ],
     );
   }
 }

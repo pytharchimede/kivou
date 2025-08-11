@@ -20,6 +20,9 @@ class _OwnerOrdersScreenState extends ConsumerState<OwnerOrdersScreen> {
     super.initState();
     _svc = BookingService(ref.read(apiClientProvider));
     _future = _svc.listByOwner();
+    // Synchroniser le badge au premier affichage
+    Future.microtask(
+        () => ref.read(ownerPendingCountProvider.notifier).refresh());
   }
 
   Future<void> _refresh() async {
@@ -27,6 +30,8 @@ class _OwnerOrdersScreenState extends ConsumerState<OwnerOrdersScreen> {
       _future = _svc.listByOwner();
     });
     await _future;
+    // Mettre à jour le badge global
+    await ref.read(ownerPendingCountProvider.notifier).refresh();
   }
 
   @override
