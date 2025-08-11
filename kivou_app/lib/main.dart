@@ -7,6 +7,7 @@ import 'screens/home_screen.dart';
 import 'screens/provider_detail_screen.dart';
 import 'screens/booking_screen.dart';
 import 'screens/orders_screen.dart';
+import 'screens/owner_orders_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/auth_screen.dart';
 import 'screens/provider_registration_screen.dart';
@@ -82,6 +83,11 @@ final GoRouter _router = GoRouter(
       path: '/become-provider',
       name: 'become-provider',
       builder: (context, state) => const ProviderRegistrationScreen(),
+    ),
+    GoRoute(
+      path: '/owner-orders',
+      name: 'owner-orders',
+      builder: (context, state) => const OwnerOrdersScreen(),
     ),
   ],
 );

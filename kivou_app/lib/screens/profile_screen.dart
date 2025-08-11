@@ -50,6 +50,13 @@ class ProfileScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: 12),
                   _ActionCard(
+                    icon: Icons.inbox_outlined,
+                    title: 'Commandes reçues (prestataire)',
+                    subtitle: 'Accepter ou refuser les demandes',
+                    onTap: () => context.go('/owner-orders'),
+                  ),
+                  const SizedBox(height: 12),
+                  _ActionCard(
                     icon: Icons.work_outline_rounded,
                     title: 'Devenir prestataire',
                     subtitle: 'Créez votre fiche et recevez des clients',

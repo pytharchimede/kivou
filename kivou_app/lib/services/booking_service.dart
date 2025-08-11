@@ -28,4 +28,18 @@ class BookingService {
   Future<List<dynamic>> listByUser(int userId) {
     return _api.getList('/api/bookings/list_by_user.php', {'user_id': userId});
   }
+
+  Future<List<dynamic>> listByOwner() {
+    return _api.getList('/api/bookings/list_by_owner.php', {});
+  }
+
+  Future<void> updateStatus({
+    required int bookingId,
+    required String status, // 'confirmed' ou 'cancelled'
+  }) async {
+    await _api.postJson('/api/bookings/update_status.php', {
+      'booking_id': bookingId,
+      'status': status,
+    });
+  }
 }
