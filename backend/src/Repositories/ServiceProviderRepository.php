@@ -64,4 +64,13 @@ class ServiceProviderRepository
         $st->execute([$owner, $name, $email, $phone, $photo, $desc, $cats, 0, 0, $price, $lat, $lng, $gallery, $days, $start, $end, $avail]);
         return (int)$this->pdo->lastInsertId();
     }
+
+    public function findById(int $id): ?ServiceProvider
+    {
+        $st = $this->pdo->prepare('SELECT id,owner_user_id,name,email,phone,photo_url,description,categories,rating,reviews_count,price_per_hour,latitude,longitude,gallery,available_days,working_start,working_end,is_available FROM service_providers WHERE id=? LIMIT 1');
+        $st->execute([$id]);
+        $row = $st->fetch();
+        if (!$row) return null;
+        return ServiceProvider::fromRow($row);
+    }
 }

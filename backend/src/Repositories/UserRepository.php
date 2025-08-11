@@ -44,4 +44,13 @@ class UserRepository
         $u->avatarUrl = null;
         return $u;
     }
+
+    public function findById(int $id): ?User
+    {
+        $st = $this->pdo->prepare('SELECT id, email, name, phone, avatar_url FROM users WHERE id=? LIMIT 1');
+        $st->execute([$id]);
+        $row = $st->fetch();
+        if (!$row) return null;
+        return User::fromRow($row);
+    }
 }

@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geolocator/geolocator.dart';
+import 'dart:math' as math;
+import 'dart:ui' as ui;
+import 'package:http/http.dart' as http;
 import '../providers/app_providers.dart';
 import '../widgets/provider_card.dart';
 import '../widgets/service_chip.dart';
@@ -346,13 +350,76 @@ class _FiltersContent extends ConsumerWidget {
   }
 }
 
-class _KoumassiMap extends ConsumerWidget {
+class _KoumassiMap extends ConsumerStatefulWidget {
   _KoumassiMap();
 
   static const LatLng _koumassiCenter = LatLng(5.309, -4.012);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_KoumassiMap> createState() => _KoumassiMapState();
+}
+
+class _KoumassiMapState extends ConsumerState<_KoumassiMap> {
+  GoogleMapController? _controller;
+  LatLng? _userLatLng;
+  // bool _locLoading = false;
+  double _radiusKm = 10;
+  final Map<int, BitmapDescriptor> _iconCache = {};
+  final Set<int> _iconLoading = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _initLocation();
+  }
+
+  Future<void> _initLocation() async {
+    // setState(() => _locLoading = true);
+    try {
+      LocationPermission perm = await Geolocator.checkPermission();
+      if (perm == LocationPermission.denied) {
+        perm = await Geolocator.requestPermission();
+      }
+      if (perm == LocationPermission.deniedForever) {
+        // fallback Koumassi
+        _userLatLng = _KoumassiMap._koumassiCenter;
+      } else {
+        final pos = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.high);
+        _userLatLng = LatLng(pos.latitude, pos.longitude);
+      }
+      if (mounted && _controller != null && _userLatLng != null) {
+        await _controller!.animateCamera(CameraUpdate.newCameraPosition(
+            CameraPosition(target: _userLatLng!, zoom: 13.5)));
+      }
+    } catch (_) {
+      _userLatLng = _KoumassiMap._koumassiCenter;
+    } finally {}
+  }
+
+  bool _withinRadius(double lat, double lng) {
+    if (_userLatLng == null) return true;
+    final d =
+        _haversine(_userLatLng!.latitude, _userLatLng!.longitude, lat, lng);
+    return d <= _radiusKm;
+  }
+
+  static double _haversine(double lat1, double lon1, double lat2, double lon2) {
+    const R = 6371.0; // km
+    final dLat = _deg2rad(lat2 - lat1);
+    final dLon = _deg2rad(lon2 - lon1);
+    final a = (math.sin(dLat / 2) * math.sin(dLat / 2)) +
+        math.cos(_deg2rad(lat1)) *
+            math.cos(_deg2rad(lat2)) *
+            (math.sin(dLon / 2) * math.sin(dLon / 2));
+    final c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a));
+    return R * c;
+  }
+
+  static double _deg2rad(double deg) => deg * 3.1415926535 / 180.0;
+
+  @override
+  Widget build(BuildContext context) {
     final providers = ref.watch(remoteProvidersFutureProvider);
     final theme = Theme.of(context);
 
@@ -361,13 +428,30 @@ class _KoumassiMap extends ConsumerWidget {
       data: (list) {
         markers = list
             .where((p) => p.latitude != 0 && p.longitude != 0)
-            .map((p) => Marker(
-                  markerId: MarkerId('p-${p.id}'),
-                  position: LatLng(p.latitude, p.longitude),
-                  infoWindow: InfoWindow(title: p.name),
-                  onTap: () => context.go('/provider/${p.id}'),
-                ))
-            .toSet();
+            .where((p) => _withinRadius(p.latitude, p.longitude))
+            .map((p) {
+          final pid = int.tryParse(p.id) ?? p.id.hashCode;
+          final icon = _iconCache[pid];
+          if (icon == null && !_iconLoading.contains(pid)) {
+            _iconLoading.add(pid);
+            _buildMarkerIcon(p.photoUrl, p.name).then((bmp) {
+              _iconCache[pid] = bmp;
+              _iconLoading.remove(pid);
+              if (mounted) setState(() {});
+            }).catchError((_) {
+              _iconLoading.remove(pid);
+            });
+          }
+          return Marker(
+            markerId: MarkerId('p-${p.id}'),
+            position: LatLng(p.latitude, p.longitude),
+            infoWindow: InfoWindow(title: p.name),
+            icon: icon ??
+                BitmapDescriptor.defaultMarkerWithHue(
+                    BitmapDescriptor.hueAzure),
+            onTap: () => context.go('/provider/${p.id}'),
+          );
+        }).toSet();
       },
       loading: () {},
       error: (_, __) {},
@@ -376,18 +460,19 @@ class _KoumassiMap extends ConsumerWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(16),
       child: SizedBox(
-        height: 180,
+        height: 220,
         child: Stack(
           children: [
             Positioned.fill(
               child: GoogleMap(
                 initialCameraPosition: const CameraPosition(
-                  target: _koumassiCenter,
+                  target: _KoumassiMap._koumassiCenter,
                   zoom: 13.0,
                 ),
+                onMapCreated: (c) => _controller = c,
                 markers: markers,
                 zoomControlsEnabled: false,
-                myLocationEnabled: false,
+                myLocationEnabled: true,
                 myLocationButtonEnabled: false,
                 compassEnabled: false,
                 mapToolbarEnabled: false,
@@ -396,21 +481,184 @@ class _KoumassiMap extends ConsumerWidget {
             Positioned(
               right: 8,
               top: 8,
-              child: FilledButton.icon(
-                style: ButtonStyle(
-                  backgroundColor: WidgetStatePropertyAll(
-                    theme.colorScheme.primary.withOpacity(0.95),
+              child: Column(
+                children: [
+                  FilledButton.icon(
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll(
+                        theme.colorScheme.primary.withOpacity(0.95),
+                      ),
+                    ),
+                    onPressed: () => FilterSheet.show(context,
+                        child: const _FiltersContent()),
+                    icon: const Icon(Icons.tune),
+                    label: const Text('Filtres'),
                   ),
-                ),
-                onPressed: () =>
-                    FilterSheet.show(context, child: const _FiltersContent()),
-                icon: const Icon(Icons.tune),
-                label: const Text('Filtres'),
+                  const SizedBox(height: 8),
+                  FilledButton.icon(
+                    onPressed: _initLocation,
+                    icon: const Icon(Icons.my_location),
+                    label: const Text('Moi'),
+                  ),
+                ],
               ),
             ),
+            if (_userLatLng != null)
+              Positioned(
+                left: 8,
+                bottom: 8,
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surface.withOpacity(0.9),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.radar, size: 16),
+                      const SizedBox(width: 6),
+                      Text('Rayon ${_radiusKm.toStringAsFixed(0)} km'),
+                      Slider(
+                        value: _radiusKm,
+                        min: 1,
+                        max: 20,
+                        divisions: 19,
+                        label: '${_radiusKm.toStringAsFixed(0)} km',
+                        onChanged: (v) => setState(() => _radiusKm = v),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
           ],
         ),
       ),
     );
+  }
+
+  Future<BitmapDescriptor> _buildMarkerIcon(
+      String photoUrl, String name) async {
+    const int width = 160; // px
+    const int height = 180; // px total
+    final recorder = ui.PictureRecorder();
+    final canvas = ui.Canvas(recorder);
+    final paint = ui.Paint();
+
+    // Transparent bg
+    paint.color = const ui.Color(0x00000000);
+    canvas.drawRect(
+        ui.Rect.fromLTWH(0, 0, width.toDouble(), height.toDouble()), paint);
+
+    // Circle image area
+    const double circleSize = 112;
+    final double cx = width / 2;
+    final double cy = circleSize / 2 + 8;
+    final circleRect = ui.Rect.fromCenter(
+        center: ui.Offset(cx, cy), width: circleSize, height: circleSize);
+
+    // Shadow
+    paint.color = const ui.Color(0x33000000);
+    canvas.drawCircle(ui.Offset(cx, cy + 2), circleSize / 2, paint);
+
+    // Load image
+    ui.Image? img;
+    try {
+      if (photoUrl.isNotEmpty) {
+        final resp = await http.get(Uri.parse(photoUrl));
+        if (resp.statusCode == 200) {
+          final codec = await ui.instantiateImageCodec(resp.bodyBytes,
+              targetWidth: circleSize.toInt(),
+              targetHeight: circleSize.toInt());
+          final fi = await codec.getNextFrame();
+          img = fi.image;
+        }
+      }
+    } catch (_) {}
+
+    // Clip circle and draw
+    final clipPath = ui.Path()..addOval(circleRect);
+    canvas.save();
+    canvas.clipPath(clipPath);
+    if (img != null) {
+      final src =
+          ui.Rect.fromLTWH(0, 0, img.width.toDouble(), img.height.toDouble());
+      final dst = circleRect;
+      canvas.drawImageRect(img, src, dst, ui.Paint());
+    } else {
+      // Placeholder color
+      paint.color = const ui.Color(0xFFBBDEFB);
+      canvas.drawRect(circleRect, paint);
+      final initials = _initials(name);
+      final tp =
+          _textPainter(initials, 40, const ui.Color(0xFF0D47A1), bold: true);
+      tp.layout(maxWidth: circleRect.width);
+      tp.paint(canvas, ui.Offset(cx - tp.width / 2, cy - tp.height / 2));
+    }
+    canvas.restore();
+
+    // White border
+    paint
+      ..style = ui.PaintingStyle.stroke
+      ..strokeWidth = 4
+      ..color = const ui.Color(0xFFFFFFFF);
+    canvas.drawOval(circleRect, paint);
+
+    // Label background below
+    final label = name.trim().isEmpty ? 'Prestataire' : name.trim();
+    const double pad = 8;
+    final tpName = _textPainter(label, 16, const ui.Color(0xFF0D47A1),
+        bold: true, maxLines: 1, ellipsis: '…');
+    tpName.layout(maxWidth: width - 16);
+    final labelW = tpName.width + pad * 2;
+    final labelH = tpName.height + pad;
+    final rr = ui.RRect.fromRectAndRadius(
+      ui.Rect.fromCenter(
+          center: ui.Offset(cx, circleRect.bottom + 24),
+          width: labelW,
+          height: labelH),
+      const ui.Radius.circular(14),
+    );
+    paint
+      ..style = ui.PaintingStyle.fill
+      ..color = const ui.Color(0xFFFFFFFF).withOpacity(0.95);
+    canvas.drawRRect(rr, paint);
+    tpName.paint(
+        canvas, ui.Offset(rr.left + pad, rr.center.dy - tpName.height / 2));
+
+    final picture = recorder.endRecording();
+    final imgOut = await picture.toImage(width, height);
+    final byteData = await imgOut.toByteData(format: ui.ImageByteFormat.png);
+    final bytes = byteData!.buffer.asUint8List();
+    return BitmapDescriptor.fromBytes(bytes);
+  }
+
+  static TextPainter _textPainter(String text, double size, ui.Color color,
+      {bool bold = false, int? maxLines, String? ellipsis}) {
+    final tp = TextPainter(
+      text: TextSpan(
+        text: text,
+        style: TextStyle(
+          color: color,
+          fontSize: size,
+          fontWeight: bold ? FontWeight.w700 : FontWeight.w400,
+        ),
+      ),
+      textDirection: TextDirection.ltr,
+      maxLines: maxLines,
+      ellipsis: ellipsis,
+    );
+    return tp;
+  }
+
+  static String _initials(String name) {
+    final parts =
+        name.trim().split(RegExp(r'\s+')).where((e) => e.isNotEmpty).toList();
+    if (parts.isEmpty) return 'U';
+    if (parts.length == 1)
+      return parts.first
+          .substring(0, math.min(2, parts.first.length))
+          .toUpperCase();
+    return (parts[0][0] + parts[1][0]).toUpperCase();
   }
 }

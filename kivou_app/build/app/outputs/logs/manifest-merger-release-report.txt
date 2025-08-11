@@ -1,7 +1,7 @@
 -- Merging decision tree log ---
 application
-INJECTED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:3:5-38:19
-INJECTED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:3:5-38:19
+INJECTED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:5:5-40:19
+INJECTED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:5:5-40:19
 MERGED from [:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:8:5-32:19
 MERGED from [:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:8:5-32:19
 MERGED from [:geolocator_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\geolocator_android\intermediates\merged_manifest\release\AndroidManifest.xml:7:5-13:19
@@ -37,17 +37,17 @@ MERGED from [com.google.maps.android:android-maps-utils:3.6.0] C:\Users\PC\.grad
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.13.1] C:\Users\PC\.gradle\caches\transforms-3\889ae3adf7a24645889ee22f4dad2cac\transformed\core-1.13.1\AndroidManifest.xml:28:18-86
 	android:label
-		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:4:9-34
+		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:6:9-34
 	android:icon
-		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:6:9-43
+		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:8:9-43
 	android:name
 		INJECTED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml
-		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:5:9-42
+		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:7:9-42
 manifest
-ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:1:1-50:12
-INJECTED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:1:1-50:12
-INJECTED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:1:1-50:12
-INJECTED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:1:1-50:12
+ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:1:1-52:12
+INJECTED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:1:1-52:12
+INJECTED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:1:1-52:12
+INJECTED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:1:1-52:12
 MERGED from [:google_maps_flutter_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\google_maps_flutter_android\intermediates\merged_manifest\release\AndroidManifest.xml:2:1-7:12
 MERGED from [:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:2:1-34:12
 MERGED from [:flutter_plugin_android_lifecycle] C:\PROJETS MOBILE\prestataires\kivou_app\build\flutter_plugin_android_lifecycle\intermediates\merged_manifest\release\AndroidManifest.xml:2:1-7:12
@@ -106,66 +106,74 @@ MERGED from [com.google.android.gms:play-services-maps:19.2.0] C:\Users\PC\.grad
 MERGED from [com.google.android.gms:play-services-maps:19.2.0] C:\Users\PC\.gradle\caches\transforms-3\eda746ae5d0ab057451c90834029836a\transformed\jetified-play-services-maps-19.2.0\AndroidManifest.xml:21:5-66
 	android:name
 		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:2:22-64
+uses-permission#android.permission.ACCESS_COARSE_LOCATION
+ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:3:5-81
+	android:name
+		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:3:22-78
+uses-permission#android.permission.ACCESS_FINE_LOCATION
+ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:4:5-79
+	android:name
+		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:4:22-76
 queries
-ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:44:5-49:15
+ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:46:5-51:15
 MERGED from [com.google.android.gms:play-services-maps:19.2.0] C:\Users\PC\.gradle\caches\transforms-3\eda746ae5d0ab057451c90834029836a\transformed\jetified-play-services-maps-19.2.0\AndroidManifest.xml:27:5-30:15
 MERGED from [com.google.android.gms:play-services-maps:19.2.0] C:\Users\PC\.gradle\caches\transforms-3\eda746ae5d0ab057451c90834029836a\transformed\jetified-play-services-maps-19.2.0\AndroidManifest.xml:27:5-30:15
 intent#action:name:android.intent.action.PROCESS_TEXT+data:mimeType:text/plain
-ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:45:9-48:18
+ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:47:9-50:18
 action#android.intent.action.PROCESS_TEXT
-ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:46:13-72
+ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:48:13-72
 	android:name
-		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:46:21-70
+		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:48:21-70
 data
-ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:47:13-50
+ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:49:13-50
 	android:mimeType
-		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:47:19-48
+		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:49:19-48
 meta-data#com.google.android.geo.API_KEY
-ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:8:9-10:59
+ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:10:9-12:59
 	android:value
-		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:10:13-56
+		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:12:13-56
 	android:name
-		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:9:13-58
+		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:11:13-58
 activity#com.example.kivou_app.MainActivity
-ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:11:9-32:20
+ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:13:9-34:20
 	android:launchMode
-		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:14:13-43
+		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:16:13-43
 	android:hardwareAccelerated
-		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:18:13-47
+		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:20:13-47
 	android:windowSoftInputMode
-		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:19:13-55
+		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:21:13-55
 	android:exported
-		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:13:13-36
-	android:configChanges
-		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:17:13-163
-	android:theme
-		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:16:13-47
-	android:taskAffinity
 		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:15:13-36
+	android:configChanges
+		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:19:13-163
+	android:theme
+		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:18:13-47
+	android:taskAffinity
+		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:17:13-36
 	android:name
-		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:12:13-41
+		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:14:13-41
 meta-data#io.flutter.embedding.android.NormalTheme
-ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:24:13-27:17
+ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:26:13-29:17
 	android:resource
-		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:26:15-52
+		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:28:15-52
 	android:name
-		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:25:15-70
+		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:27:15-70
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:28:13-31:29
+ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:30:13-33:29
 action#android.intent.action.MAIN
-ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:29:17-68
+ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:31:17-68
 	android:name
-		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:29:25-66
+		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:31:25-66
 category#android.intent.category.LAUNCHER
-ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:30:17-76
+ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:32:17-76
 	android:name
-		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:30:27-74
+		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:32:27-74
 meta-data#flutterEmbedding
-ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:35:9-37:33
+ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:37:9-39:33
 	android:value
-		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:37:13-30
+		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:39:13-30
 	android:name
-		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:36:13-44
+		ADDED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:38:13-44
 uses-sdk
 INJECTED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml
