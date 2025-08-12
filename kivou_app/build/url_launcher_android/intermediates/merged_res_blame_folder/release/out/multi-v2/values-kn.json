@@ -4,7 +4,7 @@
             "outputFile": "io.flutter.plugins.urllauncher.url_launcher_android-merged_res-3:/values-kn/values-kn.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\PC\\.gradle\\caches\\transforms-3\\889ae3adf7a24645889ee22f4dad2cac\\transformed\\core-1.13.1\\res\\values-kn\\values-kn.xml",
+                    "source": "C:\\Users\\PC\\.gradle\\caches\\transforms-3\\aa22c63495c28790c26c73c3df49f039\\transformed\\core-1.13.1\\res\\values-kn\\values-kn.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9",
                         "startColumns": "4,4,4,4,4,4,4,4",
@@ -21,7 +21,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\PC\\.gradle\\caches\\transforms-3\\7f6d20225ac1174a3efad96609161b97\\transformed\\browser-1.8.0\\res\\values-kn\\values-kn.xml",
+                    "source": "C:\\Users\\PC\\.gradle\\caches\\transforms-3\\3ac4080bce4d53a338366b536cf4dd84\\transformed\\browser-1.8.0\\res\\values-kn\\values-kn.xml",
                     "from": {
                         "startLines": "2,3,4,5",
                         "startColumns": "4,4,4,4",
@@ -43,7 +43,7 @@
             "outputFile": "io.flutter.plugins.urllauncher.url_launcher_android-mergeReleaseResources-1:/values-kn/values-kn.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\PC\\.gradle\\caches\\transforms-3\\889ae3adf7a24645889ee22f4dad2cac\\transformed\\core-1.13.1\\res\\values-kn\\values-kn.xml",
+                    "source": "C:\\Users\\PC\\.gradle\\caches\\transforms-3\\aa22c63495c28790c26c73c3df49f039\\transformed\\core-1.13.1\\res\\values-kn\\values-kn.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9",
                         "startColumns": "4,4,4,4,4,4,4,4",
@@ -60,7 +60,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\PC\\.gradle\\caches\\transforms-3\\7f6d20225ac1174a3efad96609161b97\\transformed\\browser-1.8.0\\res\\values-kn\\values-kn.xml",
+                    "source": "C:\\Users\\PC\\.gradle\\caches\\transforms-3\\3ac4080bce4d53a338366b536cf4dd84\\transformed\\browser-1.8.0\\res\\values-kn\\values-kn.xml",
                     "from": {
                         "startLines": "2,3,4,5",
                         "startColumns": "4,4,4,4",
