@@ -42,8 +42,10 @@ class _AuthScreenState extends ConsumerState<AuthScreen>
   Widget build(BuildContext context) {
     final auth = ref.watch(authStateProvider);
     if (auth.isAuthenticated) {
-      // If already logged, go home/profile
-      Future.microtask(() => context.go('/home'));
+      // Navigue après le frame pour éviter l'usage de BuildContext après un gap async
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) context.go('/home');
+      });
     }
     return Scaffold(
       appBar: AppBar(
@@ -79,7 +81,10 @@ class _AuthScreenState extends ConsumerState<AuthScreen>
     setState(() => loading = true);
     try {
       await ref.read(authStateProvider.notifier).login(email, pass);
-      if (mounted) context.go('/home');
+      if (mounted) {
+        // Navigation immédiate après succès
+        context.go('/home');
+      }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context)
@@ -97,7 +102,9 @@ class _AuthScreenState extends ConsumerState<AuthScreen>
       await ref
           .read(authStateProvider.notifier)
           .register(email, pass, name, phone: phone.isEmpty ? null : phone);
-      if (mounted) context.go('/home');
+      if (mounted) {
+        context.go('/home');
+      }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context)

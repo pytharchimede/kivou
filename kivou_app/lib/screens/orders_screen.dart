@@ -196,8 +196,8 @@ class _BookingCard extends ConsumerWidget {
     final st = _StatusStyle.from(status, theme);
     final gradient = LinearGradient(
       colors: [
-        theme.colorScheme.primary.withOpacity(0.08),
-        theme.colorScheme.secondary.withOpacity(0.06)
+        theme.colorScheme.primary.withValues(alpha: 0.08),
+        theme.colorScheme.secondary.withValues(alpha: 0.06)
       ],
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
@@ -207,10 +207,10 @@ class _BookingCard extends ConsumerWidget {
       decoration: BoxDecoration(
         gradient: gradient,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: theme.dividerColor.withOpacity(0.2)),
+        border: Border.all(color: theme.dividerColor.withValues(alpha: 0.2)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: Colors.black.withValues(alpha: 0.03),
             blurRadius: 12,
             offset: const Offset(0, 6),
           )
@@ -440,16 +440,16 @@ class _StatusStyle {
   static _StatusStyle from(String status, ThemeData theme) {
     switch (status) {
       case 'confirmed':
-        return _StatusStyle('Confirmée', Colors.green.withOpacity(0.12),
+        return _StatusStyle('Confirmée', Colors.green.withValues(alpha: 0.12),
             Colors.green.shade700, Icons.verified_outlined);
       case 'cancelled':
-        return _StatusStyle('Annulée', Colors.red.withOpacity(0.12),
+        return _StatusStyle('Annulée', Colors.red.withValues(alpha: 0.12),
             Colors.red.shade700, Icons.cancel_outlined);
       case 'completed':
-        return _StatusStyle('Terminée', Colors.blue.withOpacity(0.12),
+        return _StatusStyle('Terminée', Colors.blue.withValues(alpha: 0.12),
             Colors.blue.shade700, Icons.check_circle_outline);
       default:
-        return _StatusStyle('En attente', Colors.amber.withOpacity(0.16),
+        return _StatusStyle('En attente', Colors.amber.withValues(alpha: 0.16),
             Colors.orange.shade700, Icons.hourglass_bottom_rounded);
     }
   }
@@ -502,11 +502,13 @@ class _InfoRow extends StatelessWidget {
       child: Row(
         children: [
           Icon(icon,
-              size: 18, color: theme.colorScheme.primary.withOpacity(0.9)),
+              size: 18,
+              color: theme.colorScheme.primary.withValues(alpha: 0.9)),
           const SizedBox(width: 8),
           Text(label,
               style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.textTheme.bodySmall?.color?.withOpacity(0.8))),
+                  color: theme.textTheme.bodySmall?.color
+                      ?.withValues(alpha: 0.8))),
           const SizedBox(width: 6),
           Expanded(
             child: Text(
@@ -529,7 +531,7 @@ class _Avatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = Theme.of(context).colorScheme.primary.withOpacity(0.12);
+    final bg = Theme.of(context).colorScheme.primary.withValues(alpha: 0.12);
     final initials = name.trim().isEmpty
         ? 'U'
         : name
@@ -561,7 +563,8 @@ class _Avatar extends StatelessWidget {
               color: Colors.white,
               shape: BoxShape.circle,
               boxShadow: [
-                BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 6)
+                BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.08), blurRadius: 6)
               ],
             ),
             child: const Icon(Icons.person, size: 10),
@@ -595,8 +598,8 @@ class _OwnerBookingCard extends ConsumerWidget {
     final st = _StatusStyle.from(status, theme);
     final gradient = LinearGradient(
       colors: [
-        theme.colorScheme.primary.withOpacity(0.08),
-        theme.colorScheme.secondary.withOpacity(0.06)
+        theme.colorScheme.primary.withValues(alpha: 0.08),
+        theme.colorScheme.secondary.withValues(alpha: 0.06)
       ],
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
@@ -606,10 +609,10 @@ class _OwnerBookingCard extends ConsumerWidget {
       decoration: BoxDecoration(
         gradient: gradient,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: theme.dividerColor.withOpacity(0.2)),
+        border: Border.all(color: theme.dividerColor.withValues(alpha: 0.2)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: Colors.black.withValues(alpha: 0.03),
             blurRadius: 12,
             offset: const Offset(0, 6),
           )

@@ -20,9 +20,14 @@ final apiClientProvider = Provider<ApiClient>((ref) {
   final client = ApiClient();
   // Déconnexion automatique si 401/TOKEN_EXPIRED/INVALID_TOKEN
   client.setOnUnauthorized((code, msg) {
-    // Évite les boucles: on nettoie la session puis on laisse la navigation/guards rediriger
-    // Ne pas await ici (callback sync), on déclenche en arrière-plan
     ref.read(authStateProvider.notifier).logout();
+  });
+  // Applique immédiatement le token si déjà présent
+  final auth = ref.read(authStateProvider);
+  client.setBearerToken(auth.token);
+  // Et met à jour le token à chaque changement d'auth
+  ref.listen<AuthState>(authStateProvider, (prev, next) {
+    client.setBearerToken(next.token);
   });
   return client;
 });
@@ -176,6 +181,8 @@ final chatServiceProvider =
 /// Conversations list
 final chatConversationsProvider =
     FutureProvider<List<ChatConversation>>((ref) async {
+  final auth = ref.watch(authStateProvider);
+  if (!auth.isAuthenticated) return const <ChatConversation>[];
   final svc = ref.read(chatServiceProvider);
   return svc.listConversations();
 });
@@ -183,6 +190,8 @@ final chatConversationsProvider =
 /// Messages in a conversation
 final chatMessagesProvider =
     FutureProvider.family<List<ChatMessage>, int>((ref, conversationId) async {
+  final auth = ref.watch(authStateProvider);
+  if (!auth.isAuthenticated) return const <ChatMessage>[];
   final svc = ref.read(chatServiceProvider);
   return svc.listMessages(conversationId);
 });

@@ -535,7 +535,7 @@ class _KoumassiMapState extends ConsumerState<_KoumassiMap> {
                   FilledButton.icon(
                     style: ButtonStyle(
                       backgroundColor: WidgetStatePropertyAll(
-                        theme.colorScheme.primary.withOpacity(0.95),
+                        theme.colorScheme.primary.withValues(alpha: 0.95),
                       ),
                     ),
                     onPressed: () => FilterSheet.show(context,
@@ -560,7 +560,7 @@ class _KoumassiMapState extends ConsumerState<_KoumassiMap> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.surface.withOpacity(0.9),
+                    color: theme.colorScheme.surface.withValues(alpha: 0.9),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Row(
@@ -670,7 +670,7 @@ class _KoumassiMapState extends ConsumerState<_KoumassiMap> {
     );
     paint
       ..style = ui.PaintingStyle.fill
-      ..color = const ui.Color(0xFFFFFFFF).withOpacity(0.95);
+      ..color = const ui.Color(0xFFFFFFFF).withValues(alpha: 0.95);
     canvas.drawRRect(rr, paint);
     tpName.paint(
         canvas, ui.Offset(rr.left + pad, rr.center.dy - tpName.height / 2));
@@ -679,7 +679,7 @@ class _KoumassiMapState extends ConsumerState<_KoumassiMap> {
     final imgOut = await picture.toImage(width, height);
     final byteData = await imgOut.toByteData(format: ui.ImageByteFormat.png);
     final bytes = byteData!.buffer.asUint8List();
-    return BitmapDescriptor.fromBytes(bytes);
+    return BitmapDescriptor.bytes(bytes);
   }
 
   static TextPainter _textPainter(String text, double size, ui.Color color,
@@ -704,10 +704,11 @@ class _KoumassiMapState extends ConsumerState<_KoumassiMap> {
     final parts =
         name.trim().split(RegExp(r'\s+')).where((e) => e.isNotEmpty).toList();
     if (parts.isEmpty) return 'U';
-    if (parts.length == 1)
+    if (parts.length == 1) {
       return parts.first
           .substring(0, math.min(2, parts.first.length))
           .toUpperCase();
+    }
     return (parts[0][0] + parts[1][0]).toUpperCase();
   }
 }

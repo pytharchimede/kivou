@@ -106,7 +106,8 @@ class _ProfileHeader extends ConsumerWidget {
             children: [
               CircleAvatar(
                 radius: 36,
-                backgroundColor: theme.colorScheme.primary.withOpacity(.15),
+                backgroundColor:
+                    theme.colorScheme.primary.withValues(alpha: .15),
                 backgroundImage:
                     avatarUrl.isNotEmpty ? NetworkImage(avatarUrl) : null,
                 child: avatarUrl.isEmpty
@@ -172,8 +173,8 @@ class _ProfileHeader extends ConsumerWidget {
                       ? (user!['email']?.toString() ?? '')
                       : 'Connectez-vous pour profiter de tous les services',
                   style: theme.textTheme.bodyMedium?.copyWith(
-                      color:
-                          theme.colorScheme.onPrimaryContainer.withOpacity(.8)),
+                      color: theme.colorScheme.onPrimaryContainer
+                          .withValues(alpha: .8)),
                 ),
               ],
             ),
@@ -299,7 +300,7 @@ class _ActionCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.primary.withOpacity(.1),
+                  color: theme.colorScheme.primary.withValues(alpha: .1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(icon, color: theme.colorScheme.primary),

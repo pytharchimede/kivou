@@ -22,9 +22,12 @@ class RatingStars extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         ...List.generate(5, (i) {
-          if (i < full) return Icon(Icons.star, color: c, size: size);
-          if (i == full && hasHalf)
+          if (i < full) {
+            return Icon(Icons.star, color: c, size: size);
+          }
+          if (i == full && hasHalf) {
             return Icon(Icons.star_half, color: c, size: size);
+          }
           return Icon(Icons.star_border, color: c, size: size);
         }),
         if (count != null) ...[

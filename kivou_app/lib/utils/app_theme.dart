@@ -21,11 +21,9 @@ class AppTheme {
         primary: primaryBlue,
         secondary: coralAccent,
         surface: offWhite,
-        background: offWhite,
         onPrimary: Colors.white,
         onSecondary: Colors.white,
         onSurface: softGray,
-        onBackground: softGray,
       ),
 
       // Configuration de l'AppBar
@@ -44,7 +42,7 @@ class AppTheme {
       // Configuration des cartes
       cardTheme: CardTheme(
         elevation: 4,
-        shadowColor: primaryBlue.withOpacity(0.1),
+        shadowColor: primaryBlue.withValues(alpha: 0.1),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
@@ -57,7 +55,7 @@ class AppTheme {
           backgroundColor: primaryBlue,
           foregroundColor: Colors.white,
           elevation: 4,
-          shadowColor: primaryBlue.withOpacity(0.3),
+          shadowColor: primaryBlue.withValues(alpha: 0.3),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
