@@ -1,0 +1,9 @@
+{
+  "type": "service_account",
+  "project_id": "coralys-27476",
+  "private_key_id": "CHANGE_ME",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nCHANGE_ME\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-xxx@coralys-27476.iam.gserviceaccount.com",
+  "client_id": "CHANGE_ME",
+  "token_uri": "https://oauth2.googleapis.com/token"
+}

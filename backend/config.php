@@ -14,6 +14,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 require_once __DIR__ . '/src/Support/Autoload.php';
 \Kivou\Support\Autoload::register();
 
+// Optional local overrides (for environment variables like FIREBASE_SA_PATH)
+$__local = __DIR__ . '/config.local.php';
+if (file_exists($__local)) {
+    require_once $__local;
+}
+
 // Global handlers to always return JSON for unexpected errors
 set_exception_handler(function (Throwable $e) {
     // Avoid double-sending if Response already exited

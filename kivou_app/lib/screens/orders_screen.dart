@@ -32,12 +32,14 @@ final ownerOrdersFutureProvider =
 });
 
 class OrdersScreen extends ConsumerWidget {
-  const OrdersScreen({super.key});
+  final int initialIndex; // 0 = Demandeur, 1 = Prestataire
+  const OrdersScreen({super.key, this.initialIndex = 0});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return DefaultTabController(
       length: 2,
+      initialIndex: initialIndex,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Commandes'),

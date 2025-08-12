@@ -40,6 +40,16 @@ try {
         : 'Votre commande #' . $bookingId . ' a été refusée.';
     $stN = $pdo->prepare('INSERT INTO notifications (user_id, provider_id, title, body) VALUES (?,?,?,?)');
     $stN->execute([(int)$bk['user_id'], (int)$bk['provider_id'], $title, $bodyMsg]);
+
+    // Push vers le client si FCM configuré
+    $push = new \Kivou\Services\PushService();
+    if ($push->isConfigured()) {
+        $push->sendToUser((int)$bk['user_id'], $title, $bodyMsg, [
+            'type' => 'booking',
+            'action' => $newStatus,
+            'booking_id' => $bookingId,
+        ]);
+    }
 } catch (Throwable $e) { /* ignore */
 }
 

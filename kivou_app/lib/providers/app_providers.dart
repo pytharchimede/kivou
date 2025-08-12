@@ -12,6 +12,7 @@ import '../services/booking_service.dart';
 import '../services/chat_service.dart';
 import 'dart:async';
 import '../models/chat.dart';
+import '../services/push_service.dart';
 
 /// Provider pour la liste des prestataires (local cache optionnel)
 final providersProvider = Provider<List<ServiceProvider>>((ref) => const []);
@@ -75,6 +76,10 @@ class AuthController extends StateNotifier<AuthState> {
     await ref.read(sessionStorageProvider).saveSession(token, user);
     ref.read(apiClientProvider).setBearerToken(token);
     state = AuthState(user: user, token: token);
+    // Enregistrer le token FCM après login
+    try {
+      await ref.read(pushServiceProvider).registerFcmToken();
+    } catch (_) {}
   }
 
   Future<void> register(String email, String password, String name,
@@ -86,6 +91,9 @@ class AuthController extends StateNotifier<AuthState> {
     await ref.read(sessionStorageProvider).saveSession(token, user);
     ref.read(apiClientProvider).setBearerToken(token);
     state = AuthState(user: user, token: token);
+    try {
+      await ref.read(pushServiceProvider).registerFcmToken();
+    } catch (_) {}
   }
 
   Future<void> logout() async {

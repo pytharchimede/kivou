@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "644324175531",
+    "project_id": "coralys-27476",
+    "storage_bucket": "coralys-27476.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:644324175531:android:bf5d87a0198ebff9cd51ee",
+        "android_client_info": {
+          "package_name": "com.example.kivou_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "644324175531-tpbf4onh2jda516rt53vt4i5l0549mg3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAb9tMy1lHob3B58EnZ7IoscoYOOku56kI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "644324175531-tpbf4onh2jda516rt53vt4i5l0549mg3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

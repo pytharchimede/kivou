@@ -1,5 +1,9 @@
 # Secrets et env locaux
 kivou_app/env/
+# Ignore tout dans backend/env sauf fichiers d’exemple et protections
+backend/env/*
+!backend/env/.htaccess
+!backend/env/firebase_sa.sample.json
 
 # Artefacts Flutter / Dart
 kivou_app/.dart_tool/

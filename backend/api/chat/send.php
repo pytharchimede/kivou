@@ -27,6 +27,25 @@ $msg = db()->prepare('SELECT id, conversation_id, from_user_id, to_user_id, body
 $msg->execute([':id' => $id]);
 $m = $msg->fetch(PDO::FETCH_ASSOC);
 
+// Push notification au destinataire si FCM configuré
+try {
+    $pdo = db();
+    $stFrom = $pdo->prepare('SELECT name FROM users WHERE id=?');
+    $stFrom->execute([$userId]);
+    $fromUser = $stFrom->fetch();
+    $senderName = $fromUser && !empty($fromUser['name']) ? $fromUser['name'] : 'Nouveau message';
+    $title = $senderName;
+    $bodyPush = (string)$body['body'];
+    $push = new \Kivou\Services\PushService();
+    if ($push->isConfigured()) {
+        $push->sendToUser((int)$to, $title, $bodyPush, [
+            'type' => 'chat',
+            'conversation_id' => (int)$m['conversation_id'],
+        ]);
+    }
+} catch (\Throwable $e) { /* ignore push errors */
+}
+
 json_ok([
     'id' => (int)$m['id'],
     'conversation_id' => (int)$m['conversation_id'],

@@ -41,6 +41,17 @@ try {
     $title = 'Nouvelle commande';
     $bodyMsg = 'Vous avez une nouvelle commande prévue le ' . $body['scheduled_at'];
     $stN->execute([$ownerUserId, (int)$body['provider_id'], $title, $bodyMsg]);
+
+    // Push à l'owner si FCM configuré
+    if (!empty($ownerUserId)) {
+        $push = new \Kivou\Services\PushService();
+        if ($push->isConfigured()) {
+            $push->sendToUser((int)$ownerUserId, $title, $bodyMsg, [
+                'type' => 'booking',
+                'action' => 'created',
+            ]);
+        }
+    }
 } catch (Throwable $e) { /* ignore notification errors */
 }
 
