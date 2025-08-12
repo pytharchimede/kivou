@@ -5,9 +5,10 @@ $userId = (int)($claims['id'] ?? 0);
 
 // Récupère toutes les conversations où l'utilisateur est A ou B, joint le peer et retourne le compteur d'UNREAD côté courant
 $sql = "
-        SELECT c.id,
+    SELECT c.id,
                      c.user_a_id, c.user_b_id,
                      c.provider_id,
+             c.pinned_ad_id, c.pinned_text, c.pinned_image_url, c.pinned_at,
                      c.last_message,
                      c.last_at,
                      CASE WHEN c.user_a_id = :uid THEN c.unread_a ELSE c.unread_b END AS unread_count,
@@ -47,6 +48,10 @@ foreach ($rows as $r) {
         'peer_user_id' => (int)$r['peer_user_id'],
         'peer_name' => $r['peer_name'] ?? 'Utilisateur',
         'peer_avatar_url' => (string)($r['peer_avatar_url'] ?? ''),
+        'pinned_ad_id' => isset($r['pinned_ad_id']) ? (int)$r['pinned_ad_id'] : null,
+        'pinned_text' => isset($r['pinned_text']) ? (string)$r['pinned_text'] : null,
+        'pinned_image_url' => isset($r['pinned_image_url']) ? (string)$r['pinned_image_url'] : null,
+        'pinned_at' => isset($r['pinned_at']) && $r['pinned_at'] ? date('c', strtotime($r['pinned_at'])) : null,
         'last_message' => (string)($r['last_message'] ?? ''),
         'last_at' => $r['last_at'] ? date('c', strtotime($r['last_at'])) : null,
         'unread_count' => (int)$r['unread_count'],

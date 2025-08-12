@@ -966,6 +966,32 @@ library {
 }
 library {
   maven_library {
+    groupId: "io.github.webrtc-sdk"
+    artifactId: "android"
+    version: "125.6422.03"
+  }
+  digests {
+    sha256: "l4\267@\333\023\350\270\232W\347\230]\233I\213\373g\242\225\222\347\271\305\343\016?\231\325\3178\001"
+  }
+  repo_index {
+    value: 1
+  }
+}
+library {
+  maven_library {
+    groupId: "com.github.davidliu"
+    artifactId: "audioswitch"
+    version: "89582c47c9a04c62f90aa5e57251af4800a62c9a"
+  }
+  digests {
+    sha256: "\245\3423\257\277\306\tT@\037O\236:\027\r\336\313\3159s\217\377\273\353\347\030e\354T\200\024C"
+  }
+  repo_index {
+    value: 13
+  }
+}
+library {
+  maven_library {
     groupId: "com.google.android.gms"
     artifactId: "play-services-location"
     version: "21.2.0"
@@ -1066,7 +1092,7 @@ library {
 }
 library {
   digests {
-    sha256: "\236\310\201\210|\265\346\315o\303\3450\'\361\":\377\364\024J\v\360\332P\236R\313\200\234.\204u"
+    sha256: "\332\177^>z\375\016\022\343\033\253\312%\303\r\320\370\243\221\345\247t\300N\254\200M3\335\025T\302"
   }
 }
 library_dependencies {
@@ -1639,7 +1665,12 @@ library_dependencies {
   library_dep_index: 45
 }
 library_dependencies {
-  library_index: 80
+  library_index: 81
+  library_dep_index: 4
+  library_dep_index: 6
+}
+library_dependencies {
+  library_index: 82
   library_dep_index: 54
   library_dep_index: 2
   library_dep_index: 25
@@ -1648,7 +1679,7 @@ library_dependencies {
   library_dep_index: 21
 }
 library_dependencies {
-  library_index: 81
+  library_index: 83
   library_dep_index: 3
   library_dep_index: 39
   library_dep_index: 54
@@ -1656,11 +1687,11 @@ library_dependencies {
   library_dep_index: 25
 }
 library_dependencies {
-  library_index: 83
+  library_index: 85
   library_dep_index: 4
 }
 library_dependencies {
-  library_index: 84
+  library_index: 86
   library_dep_index: 4
   library_dep_index: 12
   library_dep_index: 3
@@ -1672,9 +1703,9 @@ library_dependencies {
 module_dependencies {
   module_name: "base"
   dependency_index: 9
-  dependency_index: 85
-  dependency_index: 86
   dependency_index: 87
+  dependency_index: 88
+  dependency_index: 89
   dependency_index: 0
   dependency_index: 65
   dependency_index: 4
@@ -1689,11 +1720,14 @@ module_dependencies {
   dependency_index: 78
   dependency_index: 80
   dependency_index: 81
+  dependency_index: 8
   dependency_index: 82
   dependency_index: 83
-  dependency_index: 40
   dependency_index: 84
-  dependency_index: 88
+  dependency_index: 85
+  dependency_index: 40
+  dependency_index: 86
+  dependency_index: 90
 }
 repositories {
   maven_repo {
@@ -1738,6 +1772,31 @@ repositories {
 repositories {
   maven_repo {
     url: "https://repo.maven.apache.org/maven2/"
+  }
+}
+repositories {
+  maven_repo {
+    url: "https://dl.google.com/dl/android/maven2/"
+  }
+}
+repositories {
+  maven_repo {
+    url: "https://repo.maven.apache.org/maven2/"
+  }
+}
+repositories {
+  maven_repo {
+    url: "https://dl.google.com/dl/android/maven2/"
+  }
+}
+repositories {
+  maven_repo {
+    url: "https://repo.maven.apache.org/maven2/"
+  }
+}
+repositories {
+  maven_repo {
+    url: "https://jitpack.io"
   }
 }
 repositories {

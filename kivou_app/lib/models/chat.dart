@@ -15,6 +15,11 @@ class ChatConversation {
   final String clientAvatarUrl;
   final int? clientUserId; // pour savoir si l'utilisateur courant est le client
   final int? providerOwnerUserId; // propriétaire (utilisateur) du prestataire
+  // Pinned ad (Annonce épinglée)
+  final int? pinnedAdId;
+  final String? pinnedText;
+  final String? pinnedImageUrl;
+  final DateTime? pinnedAt;
 
   ChatConversation({
     required this.id,
@@ -32,6 +37,10 @@ class ChatConversation {
     this.clientAvatarUrl = '',
     this.clientUserId,
     this.providerOwnerUserId,
+    this.pinnedAdId,
+    this.pinnedText,
+    this.pinnedImageUrl,
+    this.pinnedAt,
   });
 
   factory ChatConversation.fromApi(Map<String, dynamic> j) {
@@ -53,6 +62,13 @@ class ChatConversation {
       clientUserId: int.tryParse(j['client_user_id']?.toString() ?? ''),
       providerOwnerUserId:
           int.tryParse(j['provider_owner_user_id']?.toString() ?? ''),
+      pinnedAdId: int.tryParse(j['pinned_ad_id']?.toString() ?? ''),
+      pinnedText: j['pinned_text']?.toString(),
+      pinnedImageUrl: j['pinned_image_url']?.toString(),
+      pinnedAt: (j['pinned_at'] == null ||
+              (j['pinned_at']?.toString().isEmpty ?? true))
+          ? null
+          : DateTime.tryParse(j['pinned_at']?.toString() ?? ''),
     );
   }
 }
@@ -68,6 +84,7 @@ class ChatMessage {
   final double? lng;
   final DateTime createdAt;
   final DateTime? readAt;
+  final bool isPinned;
 
   ChatMessage({
     required this.id,
@@ -80,6 +97,7 @@ class ChatMessage {
     this.lng,
     required this.createdAt,
     this.readAt,
+    this.isPinned = false,
   });
 
   bool isMine(int myUserId) => fromUserId == myUserId;
@@ -104,6 +122,9 @@ class ChatMessage {
           (j['read_at'] == null || (j['read_at']?.toString().isEmpty ?? true))
               ? null
               : DateTime.tryParse(j['read_at']?.toString() ?? ''),
+      isPinned: (j['is_pinned'] == true) ||
+          j['is_pinned'] == 1 ||
+          (j['is_pinned']?.toString() == '1'),
     );
   }
 }

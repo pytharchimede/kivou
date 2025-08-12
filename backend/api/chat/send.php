@@ -25,7 +25,8 @@ if ($conv['user_a_id'] != $userId && $conv['user_b_id'] != $userId) json_error('
 
 $to = ($conv['user_a_id'] == $userId) ? (int)$conv['user_b_id'] : (int)$conv['user_a_id'];
 
-$ins = db()->prepare('INSERT INTO chat_messages(conversation_id, from_user_id, to_user_id, body, attachment_url, lat, lng) VALUES (:c, :f, :t, :b, :a, :lat, :lng)');
+$isPinned = isset($body['is_pinned']) ? ((int)$body['is_pinned'] ? 1 : 0) : 0;
+$ins = db()->prepare('INSERT INTO chat_messages(conversation_id, from_user_id, to_user_id, body, attachment_url, lat, lng, is_pinned) VALUES (:c, :f, :t, :b, :a, :lat, :lng, :p)');
 $ins->bindValue(':c', $convId, PDO::PARAM_INT);
 $ins->bindValue(':f', $userId, PDO::PARAM_INT);
 $ins->bindValue(':t', $to, PDO::PARAM_INT);
@@ -38,11 +39,12 @@ if ($lat === null) {
     $ins->bindValue(':lat', $lat);
     $ins->bindValue(':lng', $lng);
 }
+$ins->bindValue(':p', $isPinned, PDO::PARAM_INT);
 $ins->execute();
 $id = (int)db()->lastInsertId();
 // Le trigger met à jour last_message/last_at et unread_*
 
-$msg = db()->prepare('SELECT id, conversation_id, from_user_id, to_user_id, body, attachment_url, lat, lng, created_at FROM chat_messages WHERE id = :id');
+$msg = db()->prepare('SELECT id, conversation_id, from_user_id, to_user_id, body, attachment_url, lat, lng, is_pinned, created_at FROM chat_messages WHERE id = :id');
 $msg->execute([':id' => $id]);
 $m = $msg->fetch(PDO::FETCH_ASSOC);
 
@@ -74,5 +76,6 @@ json_ok([
     'attachment_url' => $m['attachment_url'],
     'lat' => isset($m['lat']) ? (float)$m['lat'] : null,
     'lng' => isset($m['lng']) ? (float)$m['lng'] : null,
+    'is_pinned' => (int)$m['is_pinned'] === 1,
     'created_at' => date('c', strtotime($m['created_at'])),
 ]);

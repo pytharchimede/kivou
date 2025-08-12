@@ -1,0 +1,13 @@
+{
+  "name": "kivou-signaling",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Simple WebSocket signaling server for KIVOU WebRTC",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js 8081"
+  },
+  "dependencies": {
+    "ws": "^8.18.0"
+  }
+}

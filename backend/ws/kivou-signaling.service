@@ -1,0 +1,15 @@
+# /etc/systemd/system/kivou-signaling.service
+[Unit]
+Description=KIVOU WebRTC signaling server
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/var/www/kivou/backend/ws
+ExecStart=/usr/bin/node server.js 8081
+Restart=always
+User=www-data
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target

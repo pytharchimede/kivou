@@ -7,6 +7,8 @@ import 'providers/app_providers.dart';
 
 import 'screens/splash_screen.dart';
 import 'screens/home_screen.dart';
+import 'screens/ads_feed_screen.dart';
+import 'screens/ad_compose_screen.dart';
 import 'screens/provider_detail_screen.dart';
 import 'screens/booking_screen.dart';
 import 'screens/orders_screen.dart';
@@ -123,7 +125,17 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/home',
       name: 'home',
+      builder: (context, state) => const AdsFeedScreen(),
+    ),
+    GoRoute(
+      path: '/home-providers',
+      name: 'home-providers',
       builder: (context, state) => const HomeScreen(),
+    ),
+    GoRoute(
+      path: '/ad-compose',
+      name: 'ad-compose',
+      builder: (context, state) => const AdComposeScreen(),
     ),
     GoRoute(
       path: '/provider/:id',

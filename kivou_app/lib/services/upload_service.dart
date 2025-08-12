@@ -64,4 +64,26 @@ class UploadService {
     }
     return match.group(1)!;
   }
+
+  Future<String> uploadAdImage(
+    File file, {
+    String? bearerToken,
+  }) async {
+    final uri = Uri.parse('$baseUrl/api/ads/upload_image.php');
+    final req = http.MultipartRequest('POST', uri);
+    if (bearerToken != null && bearerToken.isNotEmpty) {
+      req.headers['Authorization'] = 'Bearer $bearerToken';
+    }
+    req.files.add(await http.MultipartFile.fromPath('file', file.path));
+    final streamed = await req.send();
+    final res = await http.Response.fromStream(streamed);
+    if (res.statusCode >= 400 || !res.body.contains('"ok":true')) {
+      throw Exception('Upload ad image failed: ${res.statusCode} ${res.body}');
+    }
+    final match = RegExp('"url"\s*:\s*"([^"]+)"').firstMatch(res.body);
+    if (match == null) {
+      throw Exception('Upload ad image parse error: ${res.body}');
+    }
+    return match.group(1)!;
+  }
 }

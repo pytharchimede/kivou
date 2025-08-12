@@ -21,491 +21,507 @@
 15    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 15-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:6:5-77
 15-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:6:22-74
-16    <!--
-17         Required to query activities that can process text, see:
-18         https://developer.android.com/training/package-visibility and
-19         https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
-20
-21         In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin.
-22    -->
-23    <queries>
-23-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:48:5-53:15
-24        <intent>
-24-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:49:9-52:18
-25            <action android:name="android.intent.action.PROCESS_TEXT" />
-25-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:50:13-72
-25-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:50:21-70
-26
-27            <data android:mimeType="text/plain" />
-27-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:51:13-50
-27-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:51:19-48
-28        </intent>
-29        <!-- Needs to be explicitly declared on Android R+ -->
-30        <package android:name="com.google.android.apps.maps" />
-30-->[com.google.android.gms:play-services-maps:19.2.0] C:\Users\PC\.gradle\caches\transforms-3\768613c31806c783e22d1bf46030a19e\transformed\jetified-play-services-maps-19.2.0\AndroidManifest.xml:29:7-61
-30-->[com.google.android.gms:play-services-maps:19.2.0] C:\Users\PC\.gradle\caches\transforms-3\768613c31806c783e22d1bf46030a19e\transformed\jetified-play-services-maps-19.2.0\AndroidManifest.xml:29:16-59
-31    </queries>
-32
-33    <uses-permission android:name="android.permission.WAKE_LOCK" />
-33-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:8:5-68
-33-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:8:22-65
-34    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-34-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:9:5-79
-34-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:9:22-76
-35    <uses-permission android:name="android.permission.VIBRATE" />
-35-->[:flutter_local_notifications] C:\PROJETS MOBILE\prestataires\kivou_app\build\flutter_local_notifications\intermediates\merged_manifest\release\AndroidManifest.xml:7:5-66
-35-->[:flutter_local_notifications] C:\PROJETS MOBILE\prestataires\kivou_app\build\flutter_local_notifications\intermediates\merged_manifest\release\AndroidManifest.xml:7:22-63
+16    <!-- WebRTC permissions -->
+17    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+17-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:8:5-71
+17-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:8:22-68
+18    <uses-permission android:name="android.permission.CAMERA" />
+18-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:9:5-65
+18-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:9:22-62
+19    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+19-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:10:5-80
+19-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:10:22-77
+20    <!--
+21         Required to query activities that can process text, see:
+22         https://developer.android.com/training/package-visibility and
+23         https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
+24
+25         In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin.
+26    -->
+27    <queries>
+27-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:52:5-57:15
+28        <intent>
+28-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:53:9-56:18
+29            <action android:name="android.intent.action.PROCESS_TEXT" />
+29-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:54:13-72
+29-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:54:21-70
+30
+31            <data android:mimeType="text/plain" />
+31-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:55:13-50
+31-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:55:19-48
+32        </intent>
+33        <!-- Needs to be explicitly declared on Android R+ -->
+34        <package android:name="com.google.android.apps.maps" />
+34-->[com.google.android.gms:play-services-maps:19.2.0] C:\Users\PC\.gradle\caches\transforms-3\768613c31806c783e22d1bf46030a19e\transformed\jetified-play-services-maps-19.2.0\AndroidManifest.xml:29:7-61
+34-->[com.google.android.gms:play-services-maps:19.2.0] C:\Users\PC\.gradle\caches\transforms-3\768613c31806c783e22d1bf46030a19e\transformed\jetified-play-services-maps-19.2.0\AndroidManifest.xml:29:16-59
+35    </queries>
 36
-37    <uses-feature
-37-->[com.google.android.gms:play-services-maps:19.2.0] C:\Users\PC\.gradle\caches\transforms-3\768613c31806c783e22d1bf46030a19e\transformed\jetified-play-services-maps-19.2.0\AndroidManifest.xml:22:5-24:33
-38        android:glEsVersion="0x00020000"
-38-->[com.google.android.gms:play-services-maps:19.2.0] C:\Users\PC\.gradle\caches\transforms-3\768613c31806c783e22d1bf46030a19e\transformed\jetified-play-services-maps-19.2.0\AndroidManifest.xml:23:8-40
-39        android:required="true" /> <!-- Required by older versions of Google Play services to create IID tokens -->
-39-->[com.google.android.gms:play-services-maps:19.2.0] C:\Users\PC\.gradle\caches\transforms-3\768613c31806c783e22d1bf46030a19e\transformed\jetified-play-services-maps-19.2.0\AndroidManifest.xml:24:8-31
-40    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-40-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:26:5-82
-40-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:26:22-79
-41
-42    <permission
-42-->[androidx.core:core:1.13.1] C:\Users\PC\.gradle\caches\transforms-3\aa22c63495c28790c26c73c3df49f039\transformed\core-1.13.1\AndroidManifest.xml:22:5-24:47
-43        android:name="com.example.kivou_app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
-43-->[androidx.core:core:1.13.1] C:\Users\PC\.gradle\caches\transforms-3\aa22c63495c28790c26c73c3df49f039\transformed\core-1.13.1\AndroidManifest.xml:23:9-81
-44        android:protectionLevel="signature" />
-44-->[androidx.core:core:1.13.1] C:\Users\PC\.gradle\caches\transforms-3\aa22c63495c28790c26c73c3df49f039\transformed\core-1.13.1\AndroidManifest.xml:24:9-44
+37    <uses-permission android:name="android.permission.WAKE_LOCK" />
+37-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:8:5-68
+37-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:8:22-65
+38    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+38-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:9:5-79
+38-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:9:22-76
+39    <uses-permission android:name="android.permission.VIBRATE" />
+39-->[:flutter_local_notifications] C:\PROJETS MOBILE\prestataires\kivou_app\build\flutter_local_notifications\intermediates\merged_manifest\release\AndroidManifest.xml:7:5-66
+39-->[:flutter_local_notifications] C:\PROJETS MOBILE\prestataires\kivou_app\build\flutter_local_notifications\intermediates\merged_manifest\release\AndroidManifest.xml:7:22-63
+40
+41    <uses-feature
+41-->[com.google.android.gms:play-services-maps:19.2.0] C:\Users\PC\.gradle\caches\transforms-3\768613c31806c783e22d1bf46030a19e\transformed\jetified-play-services-maps-19.2.0\AndroidManifest.xml:22:5-24:33
+42        android:glEsVersion="0x00020000"
+42-->[com.google.android.gms:play-services-maps:19.2.0] C:\Users\PC\.gradle\caches\transforms-3\768613c31806c783e22d1bf46030a19e\transformed\jetified-play-services-maps-19.2.0\AndroidManifest.xml:23:8-40
+43        android:required="true" /> <!-- Required by older versions of Google Play services to create IID tokens -->
+43-->[com.google.android.gms:play-services-maps:19.2.0] C:\Users\PC\.gradle\caches\transforms-3\768613c31806c783e22d1bf46030a19e\transformed\jetified-play-services-maps-19.2.0\AndroidManifest.xml:24:8-31
+44    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+44-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:26:5-82
+44-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:26:22-79
 45
-46    <uses-permission android:name="com.example.kivou_app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
-46-->[androidx.core:core:1.13.1] C:\Users\PC\.gradle\caches\transforms-3\aa22c63495c28790c26c73c3df49f039\transformed\core-1.13.1\AndroidManifest.xml:26:5-97
-46-->[androidx.core:core:1.13.1] C:\Users\PC\.gradle\caches\transforms-3\aa22c63495c28790c26c73c3df49f039\transformed\core-1.13.1\AndroidManifest.xml:26:22-94
-47
-48    <application
-49        android:name="android.app.Application"
-49-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:9:9-42
-50        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-50-->[androidx.core:core:1.13.1] C:\Users\PC\.gradle\caches\transforms-3\aa22c63495c28790c26c73c3df49f039\transformed\core-1.13.1\AndroidManifest.xml:28:18-86
-51        android:extractNativeLibs="true"
-52        android:icon="@mipmap/ic_launcher"
-52-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:10:9-43
-53        android:label="KIVOU" >
-53-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:8:9-30
+46    <permission
+46-->[androidx.core:core:1.13.1] C:\Users\PC\.gradle\caches\transforms-3\aa22c63495c28790c26c73c3df49f039\transformed\core-1.13.1\AndroidManifest.xml:22:5-24:47
+47        android:name="com.example.kivou_app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+47-->[androidx.core:core:1.13.1] C:\Users\PC\.gradle\caches\transforms-3\aa22c63495c28790c26c73c3df49f039\transformed\core-1.13.1\AndroidManifest.xml:23:9-81
+48        android:protectionLevel="signature" />
+48-->[androidx.core:core:1.13.1] C:\Users\PC\.gradle\caches\transforms-3\aa22c63495c28790c26c73c3df49f039\transformed\core-1.13.1\AndroidManifest.xml:24:9-44
+49
+50    <uses-permission android:name="com.example.kivou_app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+50-->[androidx.core:core:1.13.1] C:\Users\PC\.gradle\caches\transforms-3\aa22c63495c28790c26c73c3df49f039\transformed\core-1.13.1\AndroidManifest.xml:26:5-97
+50-->[androidx.core:core:1.13.1] C:\Users\PC\.gradle\caches\transforms-3\aa22c63495c28790c26c73c3df49f039\transformed\core-1.13.1\AndroidManifest.xml:26:22-94
+51    <uses-permission
+51-->[com.github.davidliu:audioswitch:89582c47c9a04c62f90aa5e57251af4800a62c9a] C:\Users\PC\.gradle\caches\transforms-3\909f3658d6eb786587328ea5eac58406\transformed\jetified-audioswitch-89582c47c9a04c62f90aa5e57251af4800a62c9a\AndroidManifest.xml:9:5-11:38
+52        android:name="android.permission.BLUETOOTH"
+52-->[com.github.davidliu:audioswitch:89582c47c9a04c62f90aa5e57251af4800a62c9a] C:\Users\PC\.gradle\caches\transforms-3\909f3658d6eb786587328ea5eac58406\transformed\jetified-audioswitch-89582c47c9a04c62f90aa5e57251af4800a62c9a\AndroidManifest.xml:10:9-52
+53        android:maxSdkVersion="30" />
+53-->[com.github.davidliu:audioswitch:89582c47c9a04c62f90aa5e57251af4800a62c9a] C:\Users\PC\.gradle\caches\transforms-3\909f3658d6eb786587328ea5eac58406\transformed\jetified-audioswitch-89582c47c9a04c62f90aa5e57251af4800a62c9a\AndroidManifest.xml:11:9-35
 54
-55        <!-- Google Maps API key -->
-56        <meta-data
-56-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:12:9-14:59
-57            android:name="com.google.android.geo.API_KEY"
-57-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:13:13-58
-58            android:value="@string/google_maps_api_key" />
-58-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:14:13-56
-59
-60        <activity
-60-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:15:9-36:20
-61            android:name="com.example.kivou_app.MainActivity"
-61-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:16:13-41
-62            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
-62-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:21:13-163
-63            android:exported="true"
-63-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:17:13-36
-64            android:hardwareAccelerated="true"
-64-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:22:13-47
-65            android:launchMode="singleTop"
-65-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:18:13-43
-66            android:taskAffinity=""
-66-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:19:13-36
-67            android:theme="@style/LaunchTheme"
-67-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:20:13-47
-68            android:windowSoftInputMode="adjustResize" >
-68-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:23:13-55
-69
-70            <!--
-71                 Specifies an Android theme to apply to this Activity as soon as
-72                 the Android process has started. This theme is visible to the user
-73                 while the Flutter UI initializes. After that, this theme continues
-74                 to determine the Window background behind the Flutter UI.
-75            -->
-76            <meta-data
-76-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:28:13-31:17
-77                android:name="io.flutter.embedding.android.NormalTheme"
-77-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:29:15-70
-78                android:resource="@style/NormalTheme" />
-78-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:30:15-52
-79
-80            <intent-filter>
-80-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:32:13-35:29
-81                <action android:name="android.intent.action.MAIN" />
-81-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:33:17-68
-81-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:33:25-66
-82
-83                <category android:name="android.intent.category.LAUNCHER" />
-83-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:34:17-76
-83-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:34:27-74
-84            </intent-filter>
-85        </activity>
-86        <!--
-87             Don't delete the meta-data below.
-88             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
-89        -->
-90        <meta-data
-90-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:39:9-41:33
-91            android:name="flutterEmbedding"
-91-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:40:13-44
-92            android:value="2" />
-92-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:41:13-30
-93
-94        <service
-94-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:14:9-17:72
-95            android:name="io.flutter.plugins.firebase.messaging.FlutterFirebaseMessagingBackgroundService"
-95-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:15:13-107
-96            android:exported="false"
-96-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:16:13-37
-97            android:permission="android.permission.BIND_JOB_SERVICE" />
-97-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:17:13-69
-98        <service
-98-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:18:9-24:19
-99            android:name="io.flutter.plugins.firebase.messaging.FlutterFirebaseMessagingService"
-99-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:19:13-97
-100            android:exported="false" >
-100-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:20:13-37
-101            <intent-filter>
-101-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:21:13-23:29
-102                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-102-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:22:17-78
-102-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:22:25-75
-103            </intent-filter>
-104        </service>
-105
-106        <receiver
-106-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:26:9-33:20
-107            android:name="io.flutter.plugins.firebase.messaging.FlutterFirebaseMessagingReceiver"
-107-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:27:13-98
-108            android:exported="true"
-108-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:28:13-36
-109            android:permission="com.google.android.c2dm.permission.SEND" >
-109-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:29:13-73
-110            <intent-filter>
-110-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:30:13-32:29
-111                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-111-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:31:17-81
-111-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:31:25-78
-112            </intent-filter>
-113        </receiver>
-114
-115        <service
-115-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:35:9-39:19
-116            android:name="com.google.firebase.components.ComponentDiscoveryService"
-116-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:35:18-89
-117            android:directBootAware="true"
-117-->[com.google.firebase:firebase-common:20.4.3] C:\Users\PC\.gradle\caches\transforms-3\d48d4a41aebf8a611a105d66279d96a7\transformed\jetified-firebase-common-20.4.3\AndroidManifest.xml:32:13-43
-118            android:exported="false" >
-118-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:56:13-37
-119            <meta-data
-119-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:36:13-38:85
-120                android:name="com.google.firebase.components:io.flutter.plugins.firebase.messaging.FlutterFirebaseAppRegistrar"
-120-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:37:17-128
-121                android:value="com.google.firebase.components.ComponentRegistrar" />
-121-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:38:17-82
-122            <meta-data
-122-->[:firebase_core] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_core\intermediates\merged_manifest\release\AndroidManifest.xml:9:13-11:85
-123                android:name="com.google.firebase.components:io.flutter.plugins.firebase.core.FlutterFirebaseCoreRegistrar"
-123-->[:firebase_core] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_core\intermediates\merged_manifest\release\AndroidManifest.xml:10:17-124
-124                android:value="com.google.firebase.components.ComponentRegistrar" />
-124-->[:firebase_core] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_core\intermediates\merged_manifest\release\AndroidManifest.xml:11:17-82
-125            <meta-data
-125-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:57:13-59:85
-126                android:name="com.google.firebase.components:com.google.firebase.messaging.FirebaseMessagingKtxRegistrar"
-126-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:58:17-122
-127                android:value="com.google.firebase.components.ComponentRegistrar" />
-127-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:59:17-82
-128            <meta-data
-128-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:60:13-62:85
-129                android:name="com.google.firebase.components:com.google.firebase.messaging.FirebaseMessagingRegistrar"
-129-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:61:17-119
-130                android:value="com.google.firebase.components.ComponentRegistrar" />
-130-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:62:17-82
-131            <meta-data
-131-->[com.google.firebase:firebase-iid:21.1.0] C:\Users\PC\.gradle\caches\transforms-3\3c551a8d1c0eb1644b40c4a29a813503\transformed\jetified-firebase-iid-21.1.0\AndroidManifest.xml:32:13-34:85
-132                android:name="com.google.firebase.components:com.google.firebase.iid.Registrar"
-132-->[com.google.firebase:firebase-iid:21.1.0] C:\Users\PC\.gradle\caches\transforms-3\3c551a8d1c0eb1644b40c4a29a813503\transformed\jetified-firebase-iid-21.1.0\AndroidManifest.xml:33:17-96
-133                android:value="com.google.firebase.components.ComponentRegistrar" />
-133-->[com.google.firebase:firebase-iid:21.1.0] C:\Users\PC\.gradle\caches\transforms-3\3c551a8d1c0eb1644b40c4a29a813503\transformed\jetified-firebase-iid-21.1.0\AndroidManifest.xml:34:17-82
-134            <meta-data
-134-->[com.google.firebase:firebase-installations:17.2.0] C:\Users\PC\.gradle\caches\transforms-3\35cfad57438253bbb0b5480c55d29002\transformed\jetified-firebase-installations-17.2.0\AndroidManifest.xml:15:13-17:85
-135                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsKtxRegistrar"
-135-->[com.google.firebase:firebase-installations:17.2.0] C:\Users\PC\.gradle\caches\transforms-3\35cfad57438253bbb0b5480c55d29002\transformed\jetified-firebase-installations-17.2.0\AndroidManifest.xml:16:17-130
-136                android:value="com.google.firebase.components.ComponentRegistrar" />
-136-->[com.google.firebase:firebase-installations:17.2.0] C:\Users\PC\.gradle\caches\transforms-3\35cfad57438253bbb0b5480c55d29002\transformed\jetified-firebase-installations-17.2.0\AndroidManifest.xml:17:17-82
-137            <meta-data
-137-->[com.google.firebase:firebase-installations:17.2.0] C:\Users\PC\.gradle\caches\transforms-3\35cfad57438253bbb0b5480c55d29002\transformed\jetified-firebase-installations-17.2.0\AndroidManifest.xml:18:13-20:85
-138                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsRegistrar"
-138-->[com.google.firebase:firebase-installations:17.2.0] C:\Users\PC\.gradle\caches\transforms-3\35cfad57438253bbb0b5480c55d29002\transformed\jetified-firebase-installations-17.2.0\AndroidManifest.xml:19:17-127
-139                android:value="com.google.firebase.components.ComponentRegistrar" />
-139-->[com.google.firebase:firebase-installations:17.2.0] C:\Users\PC\.gradle\caches\transforms-3\35cfad57438253bbb0b5480c55d29002\transformed\jetified-firebase-installations-17.2.0\AndroidManifest.xml:20:17-82
-140            <meta-data
-140-->[com.google.firebase:firebase-common-ktx:20.4.3] C:\Users\PC\.gradle\caches\transforms-3\21e97b42cc8a58024fd20c505c5ff5c5\transformed\jetified-firebase-common-ktx-20.4.3\AndroidManifest.xml:12:13-14:85
-141                android:name="com.google.firebase.components:com.google.firebase.ktx.FirebaseCommonLegacyRegistrar"
-141-->[com.google.firebase:firebase-common-ktx:20.4.3] C:\Users\PC\.gradle\caches\transforms-3\21e97b42cc8a58024fd20c505c5ff5c5\transformed\jetified-firebase-common-ktx-20.4.3\AndroidManifest.xml:13:17-116
-142                android:value="com.google.firebase.components.ComponentRegistrar" />
-142-->[com.google.firebase:firebase-common-ktx:20.4.3] C:\Users\PC\.gradle\caches\transforms-3\21e97b42cc8a58024fd20c505c5ff5c5\transformed\jetified-firebase-common-ktx-20.4.3\AndroidManifest.xml:14:17-82
-143            <meta-data
-143-->[com.google.firebase:firebase-common:20.4.3] C:\Users\PC\.gradle\caches\transforms-3\d48d4a41aebf8a611a105d66279d96a7\transformed\jetified-firebase-common-20.4.3\AndroidManifest.xml:35:13-37:85
-144                android:name="com.google.firebase.components:com.google.firebase.FirebaseCommonKtxRegistrar"
-144-->[com.google.firebase:firebase-common:20.4.3] C:\Users\PC\.gradle\caches\transforms-3\d48d4a41aebf8a611a105d66279d96a7\transformed\jetified-firebase-common-20.4.3\AndroidManifest.xml:36:17-109
-145                android:value="com.google.firebase.components.ComponentRegistrar" />
-145-->[com.google.firebase:firebase-common:20.4.3] C:\Users\PC\.gradle\caches\transforms-3\d48d4a41aebf8a611a105d66279d96a7\transformed\jetified-firebase-common-20.4.3\AndroidManifest.xml:37:17-82
-146            <meta-data
-146-->[com.google.firebase:firebase-datatransport:18.1.7] C:\Users\PC\.gradle\caches\transforms-3\c00161afbd14fab07eca1b465eb36d6d\transformed\jetified-firebase-datatransport-18.1.7\AndroidManifest.xml:27:13-29:85
-147                android:name="com.google.firebase.components:com.google.firebase.datatransport.TransportRegistrar"
-147-->[com.google.firebase:firebase-datatransport:18.1.7] C:\Users\PC\.gradle\caches\transforms-3\c00161afbd14fab07eca1b465eb36d6d\transformed\jetified-firebase-datatransport-18.1.7\AndroidManifest.xml:28:17-115
-148                android:value="com.google.firebase.components.ComponentRegistrar" />
-148-->[com.google.firebase:firebase-datatransport:18.1.7] C:\Users\PC\.gradle\caches\transforms-3\c00161afbd14fab07eca1b465eb36d6d\transformed\jetified-firebase-datatransport-18.1.7\AndroidManifest.xml:29:17-82
-149        </service>
-150
-151        <provider
-151-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:41:9-45:38
-152            android:name="io.flutter.plugins.firebase.messaging.FlutterFirebaseMessagingInitProvider"
-152-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:42:13-102
-153            android:authorities="com.example.kivou_app.flutterfirebasemessaginginitprovider"
-153-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:43:13-88
-154            android:exported="false"
-154-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:44:13-37
-155            android:initOrder="99" />
-155-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:45:13-35
-156        <provider
-156-->[:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:9:9-17:20
-157            android:name="io.flutter.plugins.imagepicker.ImagePickerFileProvider"
-157-->[:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:10:13-82
-158            android:authorities="com.example.kivou_app.flutter.image_provider"
-158-->[:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:11:13-74
-159            android:exported="false"
-159-->[:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:12:13-37
-160            android:grantUriPermissions="true" >
-160-->[:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:13:13-47
-161            <meta-data
-161-->[:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:14:13-16:75
-162                android:name="android.support.FILE_PROVIDER_PATHS"
-162-->[:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:15:17-67
-163                android:resource="@xml/flutter_image_picker_file_paths" />
-163-->[:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:16:17-72
-164        </provider> <!-- Trigger Google Play services to install the backported photo picker module. -->
-165        <service
-165-->[:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:19:9-31:19
-166            android:name="com.google.android.gms.metadata.ModuleDependencies"
-166-->[:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:20:13-78
-167            android:enabled="false"
-167-->[:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:21:13-36
-168            android:exported="false" >
-168-->[:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:22:13-37
-169            <intent-filter>
-169-->[:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:24:13-26:29
-170                <action android:name="com.google.android.gms.metadata.MODULE_DEPENDENCIES" />
-170-->[:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:25:17-94
-170-->[:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:25:25-91
-171            </intent-filter>
-172
-173            <meta-data
-173-->[:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:28:13-30:36
-174                android:name="photopicker_activity:0:required"
-174-->[:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:29:17-63
-175                android:value="" />
-175-->[:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:30:17-33
-176        </service>
-177        <service
-177-->[:geolocator_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\geolocator_android\intermediates\merged_manifest\release\AndroidManifest.xml:8:9-12:56
-178            android:name="com.baseflow.geolocator.GeolocatorLocationService"
-178-->[:geolocator_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\geolocator_android\intermediates\merged_manifest\release\AndroidManifest.xml:9:13-77
-179            android:enabled="true"
-179-->[:geolocator_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\geolocator_android\intermediates\merged_manifest\release\AndroidManifest.xml:10:13-35
-180            android:exported="false"
-180-->[:geolocator_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\geolocator_android\intermediates\merged_manifest\release\AndroidManifest.xml:11:13-37
-181            android:foregroundServiceType="location" />
-181-->[:geolocator_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\geolocator_android\intermediates\merged_manifest\release\AndroidManifest.xml:12:13-53
-182
-183        <activity
-183-->[:url_launcher_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\url_launcher_android\intermediates\merged_manifest\release\AndroidManifest.xml:8:9-11:74
-184            android:name="io.flutter.plugins.urllauncher.WebViewActivity"
-184-->[:url_launcher_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\url_launcher_android\intermediates\merged_manifest\release\AndroidManifest.xml:9:13-74
-185            android:exported="false"
-185-->[:url_launcher_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\url_launcher_android\intermediates\merged_manifest\release\AndroidManifest.xml:10:13-37
-186            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" /> <!-- Needs to be explicitly declared on P+ -->
-186-->[:url_launcher_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\url_launcher_android\intermediates\merged_manifest\release\AndroidManifest.xml:11:13-71
-187        <uses-library
-187-->[com.google.android.gms:play-services-maps:19.2.0] C:\Users\PC\.gradle\caches\transforms-3\768613c31806c783e22d1bf46030a19e\transformed\jetified-play-services-maps-19.2.0\AndroidManifest.xml:33:7-86
-188            android:name="org.apache.http.legacy"
-188-->[com.google.android.gms:play-services-maps:19.2.0] C:\Users\PC\.gradle\caches\transforms-3\768613c31806c783e22d1bf46030a19e\transformed\jetified-play-services-maps-19.2.0\AndroidManifest.xml:33:21-58
-189            android:required="false" />
-189-->[com.google.android.gms:play-services-maps:19.2.0] C:\Users\PC\.gradle\caches\transforms-3\768613c31806c783e22d1bf46030a19e\transformed\jetified-play-services-maps-19.2.0\AndroidManifest.xml:33:59-83
-190
-191        <receiver
-191-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:29:9-40:20
-192            android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver"
-192-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:30:13-78
-193            android:exported="true"
-193-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:31:13-36
-194            android:permission="com.google.android.c2dm.permission.SEND" >
-194-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:32:13-73
-195            <intent-filter>
-195-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:30:13-32:29
-196                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-196-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:31:17-81
-196-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:31:25-78
-197            </intent-filter>
-198
-199            <meta-data
-199-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:37:13-39:40
-200                android:name="com.google.android.gms.cloudmessaging.FINISHED_AFTER_HANDLED"
-200-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:38:17-92
-201                android:value="true" />
-201-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:39:17-37
-202        </receiver>
-203        <!--
-204             FirebaseMessagingService performs security checks at runtime,
-205             but set to not exported to explicitly avoid allowing another app to call it.
-206        -->
-207        <service
-207-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:46:9-53:19
-208            android:name="com.google.firebase.messaging.FirebaseMessagingService"
-208-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:47:13-82
-209            android:directBootAware="true"
-209-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:48:13-43
-210            android:exported="false" >
-210-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:49:13-37
-211            <intent-filter android:priority="-500" >
-211-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:21:13-23:29
-212                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-212-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:22:17-78
-212-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:22:25-75
-213            </intent-filter>
-214        </service>
-215
-216        <activity
-216-->[com.google.android.gms:play-services-base:18.5.0] C:\Users\PC\.gradle\caches\transforms-3\062109e6cd01d1fd1488e8464324b2dd\transformed\jetified-play-services-base-18.5.0\AndroidManifest.xml:5:9-173
-217            android:name="com.google.android.gms.common.api.GoogleApiActivity"
-217-->[com.google.android.gms:play-services-base:18.5.0] C:\Users\PC\.gradle\caches\transforms-3\062109e6cd01d1fd1488e8464324b2dd\transformed\jetified-play-services-base-18.5.0\AndroidManifest.xml:5:19-85
-218            android:exported="false"
-218-->[com.google.android.gms:play-services-base:18.5.0] C:\Users\PC\.gradle\caches\transforms-3\062109e6cd01d1fd1488e8464324b2dd\transformed\jetified-play-services-base-18.5.0\AndroidManifest.xml:5:146-170
-219            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-219-->[com.google.android.gms:play-services-base:18.5.0] C:\Users\PC\.gradle\caches\transforms-3\062109e6cd01d1fd1488e8464324b2dd\transformed\jetified-play-services-base-18.5.0\AndroidManifest.xml:5:86-145
-220
-221        <provider
-221-->[com.google.firebase:firebase-common:20.4.3] C:\Users\PC\.gradle\caches\transforms-3\d48d4a41aebf8a611a105d66279d96a7\transformed\jetified-firebase-common-20.4.3\AndroidManifest.xml:23:9-28:39
-222            android:name="com.google.firebase.provider.FirebaseInitProvider"
-222-->[com.google.firebase:firebase-common:20.4.3] C:\Users\PC\.gradle\caches\transforms-3\d48d4a41aebf8a611a105d66279d96a7\transformed\jetified-firebase-common-20.4.3\AndroidManifest.xml:24:13-77
-223            android:authorities="com.example.kivou_app.firebaseinitprovider"
-223-->[com.google.firebase:firebase-common:20.4.3] C:\Users\PC\.gradle\caches\transforms-3\d48d4a41aebf8a611a105d66279d96a7\transformed\jetified-firebase-common-20.4.3\AndroidManifest.xml:25:13-72
-224            android:directBootAware="true"
-224-->[com.google.firebase:firebase-common:20.4.3] C:\Users\PC\.gradle\caches\transforms-3\d48d4a41aebf8a611a105d66279d96a7\transformed\jetified-firebase-common-20.4.3\AndroidManifest.xml:26:13-43
+55    <application
+56        android:name="android.app.Application"
+56-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:13:9-42
+57        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+57-->[androidx.core:core:1.13.1] C:\Users\PC\.gradle\caches\transforms-3\aa22c63495c28790c26c73c3df49f039\transformed\core-1.13.1\AndroidManifest.xml:28:18-86
+58        android:extractNativeLibs="true"
+59        android:icon="@mipmap/ic_launcher"
+59-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:14:9-43
+60        android:label="KIVOU" >
+60-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:12:9-30
+61
+62        <!-- Google Maps API key -->
+63        <meta-data
+63-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:16:9-18:59
+64            android:name="com.google.android.geo.API_KEY"
+64-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:17:13-58
+65            android:value="@string/google_maps_api_key" />
+65-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:18:13-56
+66
+67        <activity
+67-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:19:9-40:20
+68            android:name="com.example.kivou_app.MainActivity"
+68-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:20:13-41
+69            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+69-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:25:13-163
+70            android:exported="true"
+70-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:21:13-36
+71            android:hardwareAccelerated="true"
+71-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:26:13-47
+72            android:launchMode="singleTop"
+72-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:22:13-43
+73            android:taskAffinity=""
+73-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:23:13-36
+74            android:theme="@style/LaunchTheme"
+74-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:24:13-47
+75            android:windowSoftInputMode="adjustResize" >
+75-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:27:13-55
+76
+77            <!--
+78                 Specifies an Android theme to apply to this Activity as soon as
+79                 the Android process has started. This theme is visible to the user
+80                 while the Flutter UI initializes. After that, this theme continues
+81                 to determine the Window background behind the Flutter UI.
+82            -->
+83            <meta-data
+83-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:32:13-35:17
+84                android:name="io.flutter.embedding.android.NormalTheme"
+84-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:33:15-70
+85                android:resource="@style/NormalTheme" />
+85-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:34:15-52
+86
+87            <intent-filter>
+87-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:36:13-39:29
+88                <action android:name="android.intent.action.MAIN" />
+88-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:37:17-68
+88-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:37:25-66
+89
+90                <category android:name="android.intent.category.LAUNCHER" />
+90-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:38:17-76
+90-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:38:27-74
+91            </intent-filter>
+92        </activity>
+93        <!--
+94             Don't delete the meta-data below.
+95             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
+96        -->
+97        <meta-data
+97-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:43:9-45:33
+98            android:name="flutterEmbedding"
+98-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:44:13-44
+99            android:value="2" />
+99-->C:\PROJETS MOBILE\prestataires\kivou_app\android\app\src\main\AndroidManifest.xml:45:13-30
+100
+101        <service
+101-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:14:9-17:72
+102            android:name="io.flutter.plugins.firebase.messaging.FlutterFirebaseMessagingBackgroundService"
+102-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:15:13-107
+103            android:exported="false"
+103-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:16:13-37
+104            android:permission="android.permission.BIND_JOB_SERVICE" />
+104-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:17:13-69
+105        <service
+105-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:18:9-24:19
+106            android:name="io.flutter.plugins.firebase.messaging.FlutterFirebaseMessagingService"
+106-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:19:13-97
+107            android:exported="false" >
+107-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:20:13-37
+108            <intent-filter>
+108-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:21:13-23:29
+109                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+109-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:22:17-78
+109-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:22:25-75
+110            </intent-filter>
+111        </service>
+112
+113        <receiver
+113-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:26:9-33:20
+114            android:name="io.flutter.plugins.firebase.messaging.FlutterFirebaseMessagingReceiver"
+114-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:27:13-98
+115            android:exported="true"
+115-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:28:13-36
+116            android:permission="com.google.android.c2dm.permission.SEND" >
+116-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:29:13-73
+117            <intent-filter>
+117-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:30:13-32:29
+118                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+118-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:31:17-81
+118-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:31:25-78
+119            </intent-filter>
+120        </receiver>
+121
+122        <service
+122-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:35:9-39:19
+123            android:name="com.google.firebase.components.ComponentDiscoveryService"
+123-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:35:18-89
+124            android:directBootAware="true"
+124-->[com.google.firebase:firebase-common:20.4.3] C:\Users\PC\.gradle\caches\transforms-3\d48d4a41aebf8a611a105d66279d96a7\transformed\jetified-firebase-common-20.4.3\AndroidManifest.xml:32:13-43
+125            android:exported="false" >
+125-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:56:13-37
+126            <meta-data
+126-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:36:13-38:85
+127                android:name="com.google.firebase.components:io.flutter.plugins.firebase.messaging.FlutterFirebaseAppRegistrar"
+127-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:37:17-128
+128                android:value="com.google.firebase.components.ComponentRegistrar" />
+128-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:38:17-82
+129            <meta-data
+129-->[:firebase_core] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_core\intermediates\merged_manifest\release\AndroidManifest.xml:9:13-11:85
+130                android:name="com.google.firebase.components:io.flutter.plugins.firebase.core.FlutterFirebaseCoreRegistrar"
+130-->[:firebase_core] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_core\intermediates\merged_manifest\release\AndroidManifest.xml:10:17-124
+131                android:value="com.google.firebase.components.ComponentRegistrar" />
+131-->[:firebase_core] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_core\intermediates\merged_manifest\release\AndroidManifest.xml:11:17-82
+132            <meta-data
+132-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:57:13-59:85
+133                android:name="com.google.firebase.components:com.google.firebase.messaging.FirebaseMessagingKtxRegistrar"
+133-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:58:17-122
+134                android:value="com.google.firebase.components.ComponentRegistrar" />
+134-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:59:17-82
+135            <meta-data
+135-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:60:13-62:85
+136                android:name="com.google.firebase.components:com.google.firebase.messaging.FirebaseMessagingRegistrar"
+136-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:61:17-119
+137                android:value="com.google.firebase.components.ComponentRegistrar" />
+137-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:62:17-82
+138            <meta-data
+138-->[com.google.firebase:firebase-iid:21.1.0] C:\Users\PC\.gradle\caches\transforms-3\3c551a8d1c0eb1644b40c4a29a813503\transformed\jetified-firebase-iid-21.1.0\AndroidManifest.xml:32:13-34:85
+139                android:name="com.google.firebase.components:com.google.firebase.iid.Registrar"
+139-->[com.google.firebase:firebase-iid:21.1.0] C:\Users\PC\.gradle\caches\transforms-3\3c551a8d1c0eb1644b40c4a29a813503\transformed\jetified-firebase-iid-21.1.0\AndroidManifest.xml:33:17-96
+140                android:value="com.google.firebase.components.ComponentRegistrar" />
+140-->[com.google.firebase:firebase-iid:21.1.0] C:\Users\PC\.gradle\caches\transforms-3\3c551a8d1c0eb1644b40c4a29a813503\transformed\jetified-firebase-iid-21.1.0\AndroidManifest.xml:34:17-82
+141            <meta-data
+141-->[com.google.firebase:firebase-installations:17.2.0] C:\Users\PC\.gradle\caches\transforms-3\35cfad57438253bbb0b5480c55d29002\transformed\jetified-firebase-installations-17.2.0\AndroidManifest.xml:15:13-17:85
+142                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsKtxRegistrar"
+142-->[com.google.firebase:firebase-installations:17.2.0] C:\Users\PC\.gradle\caches\transforms-3\35cfad57438253bbb0b5480c55d29002\transformed\jetified-firebase-installations-17.2.0\AndroidManifest.xml:16:17-130
+143                android:value="com.google.firebase.components.ComponentRegistrar" />
+143-->[com.google.firebase:firebase-installations:17.2.0] C:\Users\PC\.gradle\caches\transforms-3\35cfad57438253bbb0b5480c55d29002\transformed\jetified-firebase-installations-17.2.0\AndroidManifest.xml:17:17-82
+144            <meta-data
+144-->[com.google.firebase:firebase-installations:17.2.0] C:\Users\PC\.gradle\caches\transforms-3\35cfad57438253bbb0b5480c55d29002\transformed\jetified-firebase-installations-17.2.0\AndroidManifest.xml:18:13-20:85
+145                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsRegistrar"
+145-->[com.google.firebase:firebase-installations:17.2.0] C:\Users\PC\.gradle\caches\transforms-3\35cfad57438253bbb0b5480c55d29002\transformed\jetified-firebase-installations-17.2.0\AndroidManifest.xml:19:17-127
+146                android:value="com.google.firebase.components.ComponentRegistrar" />
+146-->[com.google.firebase:firebase-installations:17.2.0] C:\Users\PC\.gradle\caches\transforms-3\35cfad57438253bbb0b5480c55d29002\transformed\jetified-firebase-installations-17.2.0\AndroidManifest.xml:20:17-82
+147            <meta-data
+147-->[com.google.firebase:firebase-common-ktx:20.4.3] C:\Users\PC\.gradle\caches\transforms-3\21e97b42cc8a58024fd20c505c5ff5c5\transformed\jetified-firebase-common-ktx-20.4.3\AndroidManifest.xml:12:13-14:85
+148                android:name="com.google.firebase.components:com.google.firebase.ktx.FirebaseCommonLegacyRegistrar"
+148-->[com.google.firebase:firebase-common-ktx:20.4.3] C:\Users\PC\.gradle\caches\transforms-3\21e97b42cc8a58024fd20c505c5ff5c5\transformed\jetified-firebase-common-ktx-20.4.3\AndroidManifest.xml:13:17-116
+149                android:value="com.google.firebase.components.ComponentRegistrar" />
+149-->[com.google.firebase:firebase-common-ktx:20.4.3] C:\Users\PC\.gradle\caches\transforms-3\21e97b42cc8a58024fd20c505c5ff5c5\transformed\jetified-firebase-common-ktx-20.4.3\AndroidManifest.xml:14:17-82
+150            <meta-data
+150-->[com.google.firebase:firebase-common:20.4.3] C:\Users\PC\.gradle\caches\transforms-3\d48d4a41aebf8a611a105d66279d96a7\transformed\jetified-firebase-common-20.4.3\AndroidManifest.xml:35:13-37:85
+151                android:name="com.google.firebase.components:com.google.firebase.FirebaseCommonKtxRegistrar"
+151-->[com.google.firebase:firebase-common:20.4.3] C:\Users\PC\.gradle\caches\transforms-3\d48d4a41aebf8a611a105d66279d96a7\transformed\jetified-firebase-common-20.4.3\AndroidManifest.xml:36:17-109
+152                android:value="com.google.firebase.components.ComponentRegistrar" />
+152-->[com.google.firebase:firebase-common:20.4.3] C:\Users\PC\.gradle\caches\transforms-3\d48d4a41aebf8a611a105d66279d96a7\transformed\jetified-firebase-common-20.4.3\AndroidManifest.xml:37:17-82
+153            <meta-data
+153-->[com.google.firebase:firebase-datatransport:18.1.7] C:\Users\PC\.gradle\caches\transforms-3\c00161afbd14fab07eca1b465eb36d6d\transformed\jetified-firebase-datatransport-18.1.7\AndroidManifest.xml:27:13-29:85
+154                android:name="com.google.firebase.components:com.google.firebase.datatransport.TransportRegistrar"
+154-->[com.google.firebase:firebase-datatransport:18.1.7] C:\Users\PC\.gradle\caches\transforms-3\c00161afbd14fab07eca1b465eb36d6d\transformed\jetified-firebase-datatransport-18.1.7\AndroidManifest.xml:28:17-115
+155                android:value="com.google.firebase.components.ComponentRegistrar" />
+155-->[com.google.firebase:firebase-datatransport:18.1.7] C:\Users\PC\.gradle\caches\transforms-3\c00161afbd14fab07eca1b465eb36d6d\transformed\jetified-firebase-datatransport-18.1.7\AndroidManifest.xml:29:17-82
+156        </service>
+157
+158        <provider
+158-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:41:9-45:38
+159            android:name="io.flutter.plugins.firebase.messaging.FlutterFirebaseMessagingInitProvider"
+159-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:42:13-102
+160            android:authorities="com.example.kivou_app.flutterfirebasemessaginginitprovider"
+160-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:43:13-88
+161            android:exported="false"
+161-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:44:13-37
+162            android:initOrder="99" />
+162-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:45:13-35
+163        <provider
+163-->[:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:9:9-17:20
+164            android:name="io.flutter.plugins.imagepicker.ImagePickerFileProvider"
+164-->[:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:10:13-82
+165            android:authorities="com.example.kivou_app.flutter.image_provider"
+165-->[:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:11:13-74
+166            android:exported="false"
+166-->[:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:12:13-37
+167            android:grantUriPermissions="true" >
+167-->[:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:13:13-47
+168            <meta-data
+168-->[:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:14:13-16:75
+169                android:name="android.support.FILE_PROVIDER_PATHS"
+169-->[:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:15:17-67
+170                android:resource="@xml/flutter_image_picker_file_paths" />
+170-->[:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:16:17-72
+171        </provider> <!-- Trigger Google Play services to install the backported photo picker module. -->
+172        <service
+172-->[:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:19:9-31:19
+173            android:name="com.google.android.gms.metadata.ModuleDependencies"
+173-->[:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:20:13-78
+174            android:enabled="false"
+174-->[:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:21:13-36
+175            android:exported="false" >
+175-->[:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:22:13-37
+176            <intent-filter>
+176-->[:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:24:13-26:29
+177                <action android:name="com.google.android.gms.metadata.MODULE_DEPENDENCIES" />
+177-->[:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:25:17-94
+177-->[:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:25:25-91
+178            </intent-filter>
+179
+180            <meta-data
+180-->[:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:28:13-30:36
+181                android:name="photopicker_activity:0:required"
+181-->[:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:29:17-63
+182                android:value="" />
+182-->[:image_picker_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:30:17-33
+183        </service>
+184        <service
+184-->[:geolocator_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\geolocator_android\intermediates\merged_manifest\release\AndroidManifest.xml:8:9-12:56
+185            android:name="com.baseflow.geolocator.GeolocatorLocationService"
+185-->[:geolocator_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\geolocator_android\intermediates\merged_manifest\release\AndroidManifest.xml:9:13-77
+186            android:enabled="true"
+186-->[:geolocator_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\geolocator_android\intermediates\merged_manifest\release\AndroidManifest.xml:10:13-35
+187            android:exported="false"
+187-->[:geolocator_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\geolocator_android\intermediates\merged_manifest\release\AndroidManifest.xml:11:13-37
+188            android:foregroundServiceType="location" />
+188-->[:geolocator_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\geolocator_android\intermediates\merged_manifest\release\AndroidManifest.xml:12:13-53
+189
+190        <activity
+190-->[:url_launcher_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\url_launcher_android\intermediates\merged_manifest\release\AndroidManifest.xml:8:9-11:74
+191            android:name="io.flutter.plugins.urllauncher.WebViewActivity"
+191-->[:url_launcher_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\url_launcher_android\intermediates\merged_manifest\release\AndroidManifest.xml:9:13-74
+192            android:exported="false"
+192-->[:url_launcher_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\url_launcher_android\intermediates\merged_manifest\release\AndroidManifest.xml:10:13-37
+193            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" /> <!-- Needs to be explicitly declared on P+ -->
+193-->[:url_launcher_android] C:\PROJETS MOBILE\prestataires\kivou_app\build\url_launcher_android\intermediates\merged_manifest\release\AndroidManifest.xml:11:13-71
+194        <uses-library
+194-->[com.google.android.gms:play-services-maps:19.2.0] C:\Users\PC\.gradle\caches\transforms-3\768613c31806c783e22d1bf46030a19e\transformed\jetified-play-services-maps-19.2.0\AndroidManifest.xml:33:7-86
+195            android:name="org.apache.http.legacy"
+195-->[com.google.android.gms:play-services-maps:19.2.0] C:\Users\PC\.gradle\caches\transforms-3\768613c31806c783e22d1bf46030a19e\transformed\jetified-play-services-maps-19.2.0\AndroidManifest.xml:33:21-58
+196            android:required="false" />
+196-->[com.google.android.gms:play-services-maps:19.2.0] C:\Users\PC\.gradle\caches\transforms-3\768613c31806c783e22d1bf46030a19e\transformed\jetified-play-services-maps-19.2.0\AndroidManifest.xml:33:59-83
+197
+198        <receiver
+198-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:29:9-40:20
+199            android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver"
+199-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:30:13-78
+200            android:exported="true"
+200-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:31:13-36
+201            android:permission="com.google.android.c2dm.permission.SEND" >
+201-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:32:13-73
+202            <intent-filter>
+202-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:30:13-32:29
+203                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+203-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:31:17-81
+203-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:31:25-78
+204            </intent-filter>
+205
+206            <meta-data
+206-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:37:13-39:40
+207                android:name="com.google.android.gms.cloudmessaging.FINISHED_AFTER_HANDLED"
+207-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:38:17-92
+208                android:value="true" />
+208-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:39:17-37
+209        </receiver>
+210        <!--
+211             FirebaseMessagingService performs security checks at runtime,
+212             but set to not exported to explicitly avoid allowing another app to call it.
+213        -->
+214        <service
+214-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:46:9-53:19
+215            android:name="com.google.firebase.messaging.FirebaseMessagingService"
+215-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:47:13-82
+216            android:directBootAware="true"
+216-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:48:13-43
+217            android:exported="false" >
+217-->[com.google.firebase:firebase-messaging:23.4.1] C:\Users\PC\.gradle\caches\transforms-3\6eff56fd12a7d1f6f383b3db2bec8b57\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:49:13-37
+218            <intent-filter android:priority="-500" >
+218-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:21:13-23:29
+219                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+219-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:22:17-78
+219-->[:firebase_messaging] C:\PROJETS MOBILE\prestataires\kivou_app\build\firebase_messaging\intermediates\merged_manifest\release\AndroidManifest.xml:22:25-75
+220            </intent-filter>
+221        </service>
+222
+223        <activity
+223-->[com.google.android.gms:play-services-base:18.5.0] C:\Users\PC\.gradle\caches\transforms-3\062109e6cd01d1fd1488e8464324b2dd\transformed\jetified-play-services-base-18.5.0\AndroidManifest.xml:5:9-173
+224            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+224-->[com.google.android.gms:play-services-base:18.5.0] C:\Users\PC\.gradle\caches\transforms-3\062109e6cd01d1fd1488e8464324b2dd\transformed\jetified-play-services-base-18.5.0\AndroidManifest.xml:5:19-85
 225            android:exported="false"
-225-->[com.google.firebase:firebase-common:20.4.3] C:\Users\PC\.gradle\caches\transforms-3\d48d4a41aebf8a611a105d66279d96a7\transformed\jetified-firebase-common-20.4.3\AndroidManifest.xml:27:13-37
-226            android:initOrder="100" />
-226-->[com.google.firebase:firebase-common:20.4.3] C:\Users\PC\.gradle\caches\transforms-3\d48d4a41aebf8a611a105d66279d96a7\transformed\jetified-firebase-common-20.4.3\AndroidManifest.xml:28:13-36
+225-->[com.google.android.gms:play-services-base:18.5.0] C:\Users\PC\.gradle\caches\transforms-3\062109e6cd01d1fd1488e8464324b2dd\transformed\jetified-play-services-base-18.5.0\AndroidManifest.xml:5:146-170
+226            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+226-->[com.google.android.gms:play-services-base:18.5.0] C:\Users\PC\.gradle\caches\transforms-3\062109e6cd01d1fd1488e8464324b2dd\transformed\jetified-play-services-base-18.5.0\AndroidManifest.xml:5:86-145
 227
-228        <uses-library
-228-->[androidx.window:window:1.2.0] C:\Users\PC\.gradle\caches\transforms-3\b3b0d74e6c26363551665a4548c08c59\transformed\jetified-window-1.2.0\AndroidManifest.xml:23:9-25:40
-229            android:name="androidx.window.extensions"
-229-->[androidx.window:window:1.2.0] C:\Users\PC\.gradle\caches\transforms-3\b3b0d74e6c26363551665a4548c08c59\transformed\jetified-window-1.2.0\AndroidManifest.xml:24:13-54
-230            android:required="false" />
-230-->[androidx.window:window:1.2.0] C:\Users\PC\.gradle\caches\transforms-3\b3b0d74e6c26363551665a4548c08c59\transformed\jetified-window-1.2.0\AndroidManifest.xml:25:13-37
-231        <uses-library
-231-->[androidx.window:window:1.2.0] C:\Users\PC\.gradle\caches\transforms-3\b3b0d74e6c26363551665a4548c08c59\transformed\jetified-window-1.2.0\AndroidManifest.xml:26:9-28:40
-232            android:name="androidx.window.sidecar"
-232-->[androidx.window:window:1.2.0] C:\Users\PC\.gradle\caches\transforms-3\b3b0d74e6c26363551665a4548c08c59\transformed\jetified-window-1.2.0\AndroidManifest.xml:27:13-51
-233            android:required="false" />
-233-->[androidx.window:window:1.2.0] C:\Users\PC\.gradle\caches\transforms-3\b3b0d74e6c26363551665a4548c08c59\transformed\jetified-window-1.2.0\AndroidManifest.xml:28:13-37
+228        <provider
+228-->[com.google.firebase:firebase-common:20.4.3] C:\Users\PC\.gradle\caches\transforms-3\d48d4a41aebf8a611a105d66279d96a7\transformed\jetified-firebase-common-20.4.3\AndroidManifest.xml:23:9-28:39
+229            android:name="com.google.firebase.provider.FirebaseInitProvider"
+229-->[com.google.firebase:firebase-common:20.4.3] C:\Users\PC\.gradle\caches\transforms-3\d48d4a41aebf8a611a105d66279d96a7\transformed\jetified-firebase-common-20.4.3\AndroidManifest.xml:24:13-77
+230            android:authorities="com.example.kivou_app.firebaseinitprovider"
+230-->[com.google.firebase:firebase-common:20.4.3] C:\Users\PC\.gradle\caches\transforms-3\d48d4a41aebf8a611a105d66279d96a7\transformed\jetified-firebase-common-20.4.3\AndroidManifest.xml:25:13-72
+231            android:directBootAware="true"
+231-->[com.google.firebase:firebase-common:20.4.3] C:\Users\PC\.gradle\caches\transforms-3\d48d4a41aebf8a611a105d66279d96a7\transformed\jetified-firebase-common-20.4.3\AndroidManifest.xml:26:13-43
+232            android:exported="false"
+232-->[com.google.firebase:firebase-common:20.4.3] C:\Users\PC\.gradle\caches\transforms-3\d48d4a41aebf8a611a105d66279d96a7\transformed\jetified-firebase-common-20.4.3\AndroidManifest.xml:27:13-37
+233            android:initOrder="100" />
+233-->[com.google.firebase:firebase-common:20.4.3] C:\Users\PC\.gradle\caches\transforms-3\d48d4a41aebf8a611a105d66279d96a7\transformed\jetified-firebase-common-20.4.3\AndroidManifest.xml:28:13-36
 234
-235        <provider
-235-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\PC\.gradle\caches\transforms-3\d61034987a380331e668e2fddcbf8be3\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:24:9-32:20
-236            android:name="androidx.startup.InitializationProvider"
-236-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\PC\.gradle\caches\transforms-3\d61034987a380331e668e2fddcbf8be3\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:25:13-67
-237            android:authorities="com.example.kivou_app.androidx-startup"
-237-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\PC\.gradle\caches\transforms-3\d61034987a380331e668e2fddcbf8be3\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:26:13-68
-238            android:exported="false" >
-238-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\PC\.gradle\caches\transforms-3\d61034987a380331e668e2fddcbf8be3\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:27:13-37
-239            <meta-data
-239-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\PC\.gradle\caches\transforms-3\d61034987a380331e668e2fddcbf8be3\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:29:13-31:52
-240                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-240-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\PC\.gradle\caches\transforms-3\d61034987a380331e668e2fddcbf8be3\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:30:17-78
-241                android:value="androidx.startup" />
-241-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\PC\.gradle\caches\transforms-3\d61034987a380331e668e2fddcbf8be3\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:31:17-49
-242            <meta-data
-242-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:29:13-31:52
-243                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
-243-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:30:17-85
-244                android:value="androidx.startup" />
-244-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:31:17-49
-245        </provider>
-246
-247        <meta-data
-247-->[com.google.android.gms:play-services-basement:18.4.0] C:\Users\PC\.gradle\caches\transforms-3\3cb131a1f595d3a7b21c27febe325127\transformed\jetified-play-services-basement-18.4.0\AndroidManifest.xml:6:9-122
-248            android:name="com.google.android.gms.version"
-248-->[com.google.android.gms:play-services-basement:18.4.0] C:\Users\PC\.gradle\caches\transforms-3\3cb131a1f595d3a7b21c27febe325127\transformed\jetified-play-services-basement-18.4.0\AndroidManifest.xml:6:20-65
-249            android:value="@integer/google_play_services_version" />
-249-->[com.google.android.gms:play-services-basement:18.4.0] C:\Users\PC\.gradle\caches\transforms-3\3cb131a1f595d3a7b21c27febe325127\transformed\jetified-play-services-basement-18.4.0\AndroidManifest.xml:6:66-119
-250
-251        <receiver
-251-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:34:9-52:20
-252            android:name="androidx.profileinstaller.ProfileInstallReceiver"
-252-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:35:13-76
-253            android:directBootAware="false"
-253-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:36:13-44
-254            android:enabled="true"
-254-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:37:13-35
-255            android:exported="true"
-255-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:38:13-36
-256            android:permission="android.permission.DUMP" >
-256-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:39:13-57
-257            <intent-filter>
-257-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:40:13-42:29
-258                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
-258-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:41:17-91
-258-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:41:25-88
-259            </intent-filter>
-260            <intent-filter>
-260-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:43:13-45:29
-261                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
-261-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:44:17-85
-261-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:44:25-82
-262            </intent-filter>
-263            <intent-filter>
-263-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:46:13-48:29
-264                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
-264-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:47:17-88
-264-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:47:25-85
-265            </intent-filter>
-266            <intent-filter>
-266-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:49:13-51:29
-267                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
-267-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:50:17-95
-267-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:50:25-92
-268            </intent-filter>
-269        </receiver>
-270
-271        <service
-271-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\PC\.gradle\caches\transforms-3\6f7b1fd58158de72ca75490c3cd4cec1\transformed\jetified-transport-backend-cct-3.1.8\AndroidManifest.xml:28:9-34:19
-272            android:name="com.google.android.datatransport.runtime.backends.TransportBackendDiscovery"
-272-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\PC\.gradle\caches\transforms-3\6f7b1fd58158de72ca75490c3cd4cec1\transformed\jetified-transport-backend-cct-3.1.8\AndroidManifest.xml:29:13-103
-273            android:exported="false" >
-273-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\PC\.gradle\caches\transforms-3\6f7b1fd58158de72ca75490c3cd4cec1\transformed\jetified-transport-backend-cct-3.1.8\AndroidManifest.xml:30:13-37
-274            <meta-data
-274-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\PC\.gradle\caches\transforms-3\6f7b1fd58158de72ca75490c3cd4cec1\transformed\jetified-transport-backend-cct-3.1.8\AndroidManifest.xml:31:13-33:39
-275                android:name="backend:com.google.android.datatransport.cct.CctBackendFactory"
-275-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\PC\.gradle\caches\transforms-3\6f7b1fd58158de72ca75490c3cd4cec1\transformed\jetified-transport-backend-cct-3.1.8\AndroidManifest.xml:32:17-94
-276                android:value="cct" />
-276-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\PC\.gradle\caches\transforms-3\6f7b1fd58158de72ca75490c3cd4cec1\transformed\jetified-transport-backend-cct-3.1.8\AndroidManifest.xml:33:17-36
-277        </service>
+235        <uses-library
+235-->[androidx.window:window:1.2.0] C:\Users\PC\.gradle\caches\transforms-3\b3b0d74e6c26363551665a4548c08c59\transformed\jetified-window-1.2.0\AndroidManifest.xml:23:9-25:40
+236            android:name="androidx.window.extensions"
+236-->[androidx.window:window:1.2.0] C:\Users\PC\.gradle\caches\transforms-3\b3b0d74e6c26363551665a4548c08c59\transformed\jetified-window-1.2.0\AndroidManifest.xml:24:13-54
+237            android:required="false" />
+237-->[androidx.window:window:1.2.0] C:\Users\PC\.gradle\caches\transforms-3\b3b0d74e6c26363551665a4548c08c59\transformed\jetified-window-1.2.0\AndroidManifest.xml:25:13-37
+238        <uses-library
+238-->[androidx.window:window:1.2.0] C:\Users\PC\.gradle\caches\transforms-3\b3b0d74e6c26363551665a4548c08c59\transformed\jetified-window-1.2.0\AndroidManifest.xml:26:9-28:40
+239            android:name="androidx.window.sidecar"
+239-->[androidx.window:window:1.2.0] C:\Users\PC\.gradle\caches\transforms-3\b3b0d74e6c26363551665a4548c08c59\transformed\jetified-window-1.2.0\AndroidManifest.xml:27:13-51
+240            android:required="false" />
+240-->[androidx.window:window:1.2.0] C:\Users\PC\.gradle\caches\transforms-3\b3b0d74e6c26363551665a4548c08c59\transformed\jetified-window-1.2.0\AndroidManifest.xml:28:13-37
+241
+242        <provider
+242-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\PC\.gradle\caches\transforms-3\d61034987a380331e668e2fddcbf8be3\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:24:9-32:20
+243            android:name="androidx.startup.InitializationProvider"
+243-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\PC\.gradle\caches\transforms-3\d61034987a380331e668e2fddcbf8be3\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:25:13-67
+244            android:authorities="com.example.kivou_app.androidx-startup"
+244-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\PC\.gradle\caches\transforms-3\d61034987a380331e668e2fddcbf8be3\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:26:13-68
+245            android:exported="false" >
+245-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\PC\.gradle\caches\transforms-3\d61034987a380331e668e2fddcbf8be3\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:27:13-37
+246            <meta-data
+246-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\PC\.gradle\caches\transforms-3\d61034987a380331e668e2fddcbf8be3\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:29:13-31:52
+247                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+247-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\PC\.gradle\caches\transforms-3\d61034987a380331e668e2fddcbf8be3\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:30:17-78
+248                android:value="androidx.startup" />
+248-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\PC\.gradle\caches\transforms-3\d61034987a380331e668e2fddcbf8be3\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:31:17-49
+249            <meta-data
+249-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:29:13-31:52
+250                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+250-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:30:17-85
+251                android:value="androidx.startup" />
+251-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:31:17-49
+252        </provider>
+253
+254        <meta-data
+254-->[com.google.android.gms:play-services-basement:18.4.0] C:\Users\PC\.gradle\caches\transforms-3\3cb131a1f595d3a7b21c27febe325127\transformed\jetified-play-services-basement-18.4.0\AndroidManifest.xml:6:9-122
+255            android:name="com.google.android.gms.version"
+255-->[com.google.android.gms:play-services-basement:18.4.0] C:\Users\PC\.gradle\caches\transforms-3\3cb131a1f595d3a7b21c27febe325127\transformed\jetified-play-services-basement-18.4.0\AndroidManifest.xml:6:20-65
+256            android:value="@integer/google_play_services_version" />
+256-->[com.google.android.gms:play-services-basement:18.4.0] C:\Users\PC\.gradle\caches\transforms-3\3cb131a1f595d3a7b21c27febe325127\transformed\jetified-play-services-basement-18.4.0\AndroidManifest.xml:6:66-119
+257
+258        <receiver
+258-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:34:9-52:20
+259            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+259-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:35:13-76
+260            android:directBootAware="false"
+260-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:36:13-44
+261            android:enabled="true"
+261-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:37:13-35
+262            android:exported="true"
+262-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:38:13-36
+263            android:permission="android.permission.DUMP" >
+263-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:39:13-57
+264            <intent-filter>
+264-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:40:13-42:29
+265                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+265-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:41:17-91
+265-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:41:25-88
+266            </intent-filter>
+267            <intent-filter>
+267-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:43:13-45:29
+268                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+268-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:44:17-85
+268-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:44:25-82
+269            </intent-filter>
+270            <intent-filter>
+270-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:46:13-48:29
+271                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+271-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:47:17-88
+271-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:47:25-85
+272            </intent-filter>
+273            <intent-filter>
+273-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:49:13-51:29
+274                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+274-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:50:17-95
+274-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PC\.gradle\caches\transforms-3\7bae5b2beb1066b54c28054b05c49071\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:50:25-92
+275            </intent-filter>
+276        </receiver>
+277
 278        <service
-278-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\PC\.gradle\caches\transforms-3\922e55b8794ca4274dd5c0162a1af2b6\transformed\jetified-transport-runtime-3.1.8\AndroidManifest.xml:26:9-30:19
-279            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService"
-279-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\PC\.gradle\caches\transforms-3\922e55b8794ca4274dd5c0162a1af2b6\transformed\jetified-transport-runtime-3.1.8\AndroidManifest.xml:27:13-117
-280            android:exported="false"
-280-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\PC\.gradle\caches\transforms-3\922e55b8794ca4274dd5c0162a1af2b6\transformed\jetified-transport-runtime-3.1.8\AndroidManifest.xml:28:13-37
-281            android:permission="android.permission.BIND_JOB_SERVICE" >
-281-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\PC\.gradle\caches\transforms-3\922e55b8794ca4274dd5c0162a1af2b6\transformed\jetified-transport-runtime-3.1.8\AndroidManifest.xml:29:13-69
-282        </service>
-283
-284        <receiver
-284-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\PC\.gradle\caches\transforms-3\922e55b8794ca4274dd5c0162a1af2b6\transformed\jetified-transport-runtime-3.1.8\AndroidManifest.xml:32:9-34:40
-285            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver"
-285-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\PC\.gradle\caches\transforms-3\922e55b8794ca4274dd5c0162a1af2b6\transformed\jetified-transport-runtime-3.1.8\AndroidManifest.xml:33:13-132
-286            android:exported="false" />
-286-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\PC\.gradle\caches\transforms-3\922e55b8794ca4274dd5c0162a1af2b6\transformed\jetified-transport-runtime-3.1.8\AndroidManifest.xml:34:13-37
-287    </application>
-288
-289</manifest>
+278-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\PC\.gradle\caches\transforms-3\6f7b1fd58158de72ca75490c3cd4cec1\transformed\jetified-transport-backend-cct-3.1.8\AndroidManifest.xml:28:9-34:19
+279            android:name="com.google.android.datatransport.runtime.backends.TransportBackendDiscovery"
+279-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\PC\.gradle\caches\transforms-3\6f7b1fd58158de72ca75490c3cd4cec1\transformed\jetified-transport-backend-cct-3.1.8\AndroidManifest.xml:29:13-103
+280            android:exported="false" >
+280-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\PC\.gradle\caches\transforms-3\6f7b1fd58158de72ca75490c3cd4cec1\transformed\jetified-transport-backend-cct-3.1.8\AndroidManifest.xml:30:13-37
+281            <meta-data
+281-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\PC\.gradle\caches\transforms-3\6f7b1fd58158de72ca75490c3cd4cec1\transformed\jetified-transport-backend-cct-3.1.8\AndroidManifest.xml:31:13-33:39
+282                android:name="backend:com.google.android.datatransport.cct.CctBackendFactory"
+282-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\PC\.gradle\caches\transforms-3\6f7b1fd58158de72ca75490c3cd4cec1\transformed\jetified-transport-backend-cct-3.1.8\AndroidManifest.xml:32:17-94
+283                android:value="cct" />
+283-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\PC\.gradle\caches\transforms-3\6f7b1fd58158de72ca75490c3cd4cec1\transformed\jetified-transport-backend-cct-3.1.8\AndroidManifest.xml:33:17-36
+284        </service>
+285        <service
+285-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\PC\.gradle\caches\transforms-3\922e55b8794ca4274dd5c0162a1af2b6\transformed\jetified-transport-runtime-3.1.8\AndroidManifest.xml:26:9-30:19
+286            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService"
+286-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\PC\.gradle\caches\transforms-3\922e55b8794ca4274dd5c0162a1af2b6\transformed\jetified-transport-runtime-3.1.8\AndroidManifest.xml:27:13-117
+287            android:exported="false"
+287-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\PC\.gradle\caches\transforms-3\922e55b8794ca4274dd5c0162a1af2b6\transformed\jetified-transport-runtime-3.1.8\AndroidManifest.xml:28:13-37
+288            android:permission="android.permission.BIND_JOB_SERVICE" >
+288-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\PC\.gradle\caches\transforms-3\922e55b8794ca4274dd5c0162a1af2b6\transformed\jetified-transport-runtime-3.1.8\AndroidManifest.xml:29:13-69
+289        </service>
+290
+291        <receiver
+291-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\PC\.gradle\caches\transforms-3\922e55b8794ca4274dd5c0162a1af2b6\transformed\jetified-transport-runtime-3.1.8\AndroidManifest.xml:32:9-34:40
+292            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver"
+292-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\PC\.gradle\caches\transforms-3\922e55b8794ca4274dd5c0162a1af2b6\transformed\jetified-transport-runtime-3.1.8\AndroidManifest.xml:33:13-132
+293            android:exported="false" />
+293-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\PC\.gradle\caches\transforms-3\922e55b8794ca4274dd5c0162a1af2b6\transformed\jetified-transport-runtime-3.1.8\AndroidManifest.xml:34:13-37
+294    </application>
+295
+296</manifest>

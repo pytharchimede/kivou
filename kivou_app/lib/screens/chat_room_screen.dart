@@ -8,6 +8,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../widgets/quick_call_sheet.dart';
+import 'call_screen.dart';
 
 import '../models/chat.dart';
 import '../providers/app_providers.dart';
@@ -327,16 +329,55 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                 label: const Text('Commander'),
               ),
             ),
-          if (_peerPhone != null)
-            IconButton(
-              tooltip: 'Appeler',
-              onPressed: () => launchUrl(Uri.parse('tel:${_peerPhone!}')),
-              icon: const Icon(Icons.call_rounded),
+          if (_peerPhone != null) ...[
+            GestureDetector(
+              onLongPress: () async {
+                // Ouvre la feuille d'actions d'appel (téléphone/SMS)
+                // ignore: use_build_context_synchronously
+                await QuickCallSheet.show(context,
+                    phoneNumber: _peerPhone!,
+                    message:
+                        "Bonjour, je vous contacte via KIVOU à propos de notre conversation.");
+              },
+              child: IconButton(
+                tooltip: 'Appeler',
+                onPressed: () => launchUrl(Uri.parse('tel:${_peerPhone!}')),
+                icon: const Icon(Icons.call_rounded),
+              ),
             ),
+            IconButton(
+              tooltip: 'Appel audio',
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => _CallLauncher(
+                          video: false,
+                          roomId: widget.conversationId.toString(),
+                        )));
+              },
+              icon: const Icon(Icons.call_outlined),
+            ),
+            IconButton(
+              tooltip: 'Appel vidéo',
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => _CallLauncher(
+                          video: true,
+                          roomId: widget.conversationId.toString(),
+                        )));
+              },
+              icon: const Icon(Icons.videocam_outlined),
+            ),
+          ],
         ],
       ),
       body: Column(
         children: [
+          if (conv != null && (conv!.pinnedAdId ?? 0) > 0)
+            _PinnedAdBanner(
+              text: conv!.pinnedText ?? '',
+              imageUrl: conv!.pinnedImageUrl ?? '',
+              onTap: () {},
+            ),
           Expanded(
             child: msgs.when(
               data: (list) {
@@ -616,6 +657,66 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _CallLauncher extends StatelessWidget {
+  final bool video;
+  final String roomId;
+  const _CallLauncher({required this.video, required this.roomId});
+  @override
+  Widget build(BuildContext context) {
+    // Room Id simple: conversationId
+    // final route = ModalRoute.of(context);
+    // Fallback URL local si non dispo: wss://fidest.ci/kivou/backend/ws
+    const signalingUrl = 'wss://fidest.ci/kivou/backend/ws';
+    return CallScreen(
+      roomId: roomId,
+      video: video,
+      signalingUrl: signalingUrl,
+    );
+  }
+}
+
+class _PinnedAdBanner extends StatelessWidget {
+  final String text;
+  final String imageUrl;
+  final VoidCallback? onTap;
+  const _PinnedAdBanner(
+      {required this.text, required this.imageUrl, this.onTap});
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Material(
+      color: theme.colorScheme.surfaceContainerHighest,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Icon(Icons.push_pin_outlined, size: 18),
+              const SizedBox(width: 8),
+              if (imageUrl.isNotEmpty)
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(6),
+                  child: Image.network(imageUrl,
+                      width: 40, height: 40, fit: BoxFit.cover),
+                ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  text,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

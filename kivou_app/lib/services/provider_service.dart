@@ -39,4 +39,8 @@ class ProviderService {
   Future<Map<String, dynamic>> detail(int id) async {
     return _api.getJson('/api/providers/detail.php', {'id': id});
   }
+
+  Future<List<dynamic>> listMine() async {
+    return _api.getList('/api/providers/mine.php', {});
+  }
 }

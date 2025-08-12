@@ -13,6 +13,7 @@ import '../services/chat_service.dart';
 import 'dart:async';
 import '../models/chat.dart';
 import '../services/push_service.dart';
+import '../services/announcement_service.dart';
 
 /// Provider pour la liste des prestataires (local cache optionnel)
 final providersProvider = Provider<List<ServiceProvider>>((ref) => const []);
@@ -182,6 +183,10 @@ class OwnerPendingCountNotifier extends StateNotifier<int> {
 
 final providerServiceProvider = Provider<ProviderService>(
     (ref) => ProviderService(ref.read(apiClientProvider)));
+
+/// Annonces
+final announcementServiceProvider = Provider<AnnouncementService>(
+    (ref) => AnnouncementService(ref.read(apiClientProvider)));
 
 /// Chat service
 final chatServiceProvider =

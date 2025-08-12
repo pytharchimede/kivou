@@ -175,6 +175,12 @@
 -keep class androidx.lifecycle.DefaultLifecycleObserver
 
 # End of content from C:\PROJETS MOBILE\prestataires\kivou_app\build\flutter_plugin_android_lifecycle\intermediates\consumer_proguard_dir\release\lib0\proguard.txt
+# The proguard configuration file for the following section is C:\PROJETS MOBILE\prestataires\kivou_app\build\flutter_webrtc\intermediates\consumer_proguard_dir\release\lib0\proguard.txt
+# Flutter WebRTC
+-keep class com.cloudwebrtc.webrtc.** { *; }
+-keep class org.webrtc.** { *; }
+
+# End of content from C:\PROJETS MOBILE\prestataires\kivou_app\build\flutter_webrtc\intermediates\consumer_proguard_dir\release\lib0\proguard.txt
 # The proguard configuration file for the following section is C:\Users\PC\.gradle\caches\transforms-3\768613c31806c783e22d1bf46030a19e\transformed\jetified-play-services-maps-19.2.0\proguard.txt
 
 
@@ -502,6 +508,9 @@
 }
 
 # End of content from C:\Users\PC\.gradle\caches\transforms-3\53db198a16d42ba3518854b0265293d8\transformed\rules\lib\META-INF\com.android.tools\r8-from-1.6.0\coroutines.pro
+# The proguard configuration file for the following section is C:\Users\PC\.gradle\caches\transforms-3\909f3658d6eb786587328ea5eac58406\transformed\jetified-audioswitch-89582c47c9a04c62f90aa5e57251af4800a62c9a\proguard.txt
+
+# End of content from C:\Users\PC\.gradle\caches\transforms-3\909f3658d6eb786587328ea5eac58406\transformed\jetified-audioswitch-89582c47c9a04c62f90aa5e57251af4800a62c9a\proguard.txt
 # The proguard configuration file for the following section is C:\Users\PC\.gradle\caches\transforms-3\480f40628a64f6a60175c5a108eafc26\transformed\rules\lib\META-INF\proguard\protobuf.pro
 # Recently Protobuf Javalite introduced a change that relies on reflection,
 # which doesn't work with Proguard. This rule keeps the reflection usages in

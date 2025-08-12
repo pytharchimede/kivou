@@ -34,12 +34,14 @@ class ChatService {
       String? body,
       String? attachmentUrl,
       double? lat,
-      double? lng}) async {
+      double? lng,
+      bool isPinned = false}) async {
     final payload = <String, dynamic>{
       'conversation_id': conversationId,
       if (body != null) 'body': body,
       if (attachmentUrl != null) 'attachment_url': attachmentUrl,
       if (lat != null && lng != null) ...{'lat': lat, 'lng': lng},
+      if (isPinned) 'is_pinned': true,
     };
     final data = await _api.postJson('/api/chat/send.php', payload);
     return ChatMessage.fromApi(data);

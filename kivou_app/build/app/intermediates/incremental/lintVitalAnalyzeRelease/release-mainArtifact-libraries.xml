@@ -82,6 +82,19 @@
       externalAnnotations="annotations.zip"
       proguardRules="proguard.txt"/>
   <library
+      name="C:\PROJETS MOBILE\prestataires\kivou_app\android@@:flutter_webrtc::release"
+      jars="C:\PROJETS MOBILE\prestataires\kivou_app\build\flutter_webrtc\.transforms\0c7501683e43646831449abffc6ef6df\transformed\out\jars\classes.jar;C:\PROJETS MOBILE\prestataires\kivou_app\build\flutter_webrtc\.transforms\0c7501683e43646831449abffc6ef6df\transformed\out\jars\libs\R.jar"
+      resolved="com.cloudwebrtc.webrtc:flutter_webrtc:unspecified"
+      folder="C:\PROJETS MOBILE\prestataires\kivou_app\build\flutter_webrtc\.transforms\0c7501683e43646831449abffc6ef6df\transformed\out"
+      manifest="AndroidManifest.xml"
+      resFolder="res"
+      assetsFolder="assets"
+      lintJar="lint.jar"
+      publicResources="public.txt"
+      symbolFile="R.txt"
+      externalAnnotations="annotations.zip"
+      proguardRules="proguard.txt"/>
+  <library
       name="C:\PROJETS MOBILE\prestataires\kivou_app\android@@:geolocator_android::release"
       jars="C:\PROJETS MOBILE\prestataires\kivou_app\build\geolocator_android\.transforms\c10484f4ccc69613eef3382246012c46\transformed\out\jars\classes.jar;C:\PROJETS MOBILE\prestataires\kivou_app\build\geolocator_android\.transforms\c10484f4ccc69613eef3382246012c46\transformed\out\jars\libs\R.jar"
       resolved="com.baseflow.geolocator:geolocator_android:unspecified"
@@ -125,6 +138,19 @@
       jars="C:\PROJETS MOBILE\prestataires\kivou_app\build\path_provider_android\.transforms\72ec6ca7ee2271781e06c5b53970b620\transformed\out\jars\classes.jar;C:\PROJETS MOBILE\prestataires\kivou_app\build\path_provider_android\.transforms\72ec6ca7ee2271781e06c5b53970b620\transformed\out\jars\libs\R.jar"
       resolved="io.flutter.plugins.pathprovider:path_provider_android:unspecified"
       folder="C:\PROJETS MOBILE\prestataires\kivou_app\build\path_provider_android\.transforms\72ec6ca7ee2271781e06c5b53970b620\transformed\out"
+      manifest="AndroidManifest.xml"
+      resFolder="res"
+      assetsFolder="assets"
+      lintJar="lint.jar"
+      publicResources="public.txt"
+      symbolFile="R.txt"
+      externalAnnotations="annotations.zip"
+      proguardRules="proguard.txt"/>
+  <library
+      name="C:\PROJETS MOBILE\prestataires\kivou_app\android@@:permission_handler_android::release"
+      jars="C:\PROJETS MOBILE\prestataires\kivou_app\build\permission_handler_android\.transforms\934e8d9b4f4bebb2e063f83ea60a70a2\transformed\out\jars\classes.jar;C:\PROJETS MOBILE\prestataires\kivou_app\build\permission_handler_android\.transforms\934e8d9b4f4bebb2e063f83ea60a70a2\transformed\out\jars\libs\R.jar"
+      resolved="com.baseflow.permissionhandler:permission_handler_android:unspecified"
+      folder="C:\PROJETS MOBILE\prestataires\kivou_app\build\permission_handler_android\.transforms\934e8d9b4f4bebb2e063f83ea60a70a2\transformed\out"
       manifest="AndroidManifest.xml"
       resFolder="res"
       assetsFolder="assets"
@@ -770,6 +796,19 @@
       externalAnnotations="annotations.zip"
       proguardRules="proguard.txt"/>
   <library
+      name="com.github.davidliu:audioswitch:89582c47c9a04c62f90aa5e57251af4800a62c9a@aar"
+      jars="C:\Users\PC\.gradle\caches\transforms-3\909f3658d6eb786587328ea5eac58406\transformed\jetified-audioswitch-89582c47c9a04c62f90aa5e57251af4800a62c9a\jars\classes.jar"
+      resolved="com.github.davidliu:audioswitch:89582c47c9a04c62f90aa5e57251af4800a62c9a"
+      folder="C:\Users\PC\.gradle\caches\transforms-3\909f3658d6eb786587328ea5eac58406\transformed\jetified-audioswitch-89582c47c9a04c62f90aa5e57251af4800a62c9a"
+      manifest="AndroidManifest.xml"
+      resFolder="res"
+      assetsFolder="assets"
+      lintJar="lint.jar"
+      publicResources="public.txt"
+      symbolFile="R.txt"
+      externalAnnotations="annotations.zip"
+      proguardRules="proguard.txt"/>
+  <library
       name="androidx.localbroadcastmanager:localbroadcastmanager:1.1.0@aar"
       jars="C:\Users\PC\.gradle\caches\transforms-3\e38cff182b1b1c4d588e319fed004e26\transformed\localbroadcastmanager-1.1.0\jars\classes.jar"
       resolved="androidx.localbroadcastmanager:localbroadcastmanager:1.1.0"
@@ -971,6 +1010,19 @@
       name="com.google.code.gson:gson:2.10.1@jar"
       jars="C:\Users\PC\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.10.1\b3add478d4382b78ea20b1671390a858002feb6c\gson-2.10.1.jar"
       resolved="com.google.code.gson:gson:2.10.1"/>
+  <library
+      name="io.github.webrtc-sdk:android:125.6422.03@aar"
+      jars="C:\Users\PC\.gradle\caches\transforms-3\e24d09d4a9eb61c0176418e84718951a\transformed\jetified-android-125.6422.03\jars\classes.jar"
+      resolved="io.github.webrtc-sdk:android:125.6422.03"
+      folder="C:\Users\PC\.gradle\caches\transforms-3\e24d09d4a9eb61c0176418e84718951a\transformed\jetified-android-125.6422.03"
+      manifest="AndroidManifest.xml"
+      resFolder="res"
+      assetsFolder="assets"
+      lintJar="lint.jar"
+      publicResources="public.txt"
+      symbolFile="R.txt"
+      externalAnnotations="annotations.zip"
+      proguardRules="proguard.txt"/>
   <library
       name="com.google.maps.android:android-maps-utils:3.6.0@aar"
       jars="C:\Users\PC\.gradle\caches\transforms-3\66998af4f7c1f0e547a91fd349a8b731\transformed\jetified-android-maps-utils-3.6.0\jars\classes.jar"
