@@ -8,6 +8,7 @@ import 'dart:ui' as ui;
 import 'package:http/http.dart' as http;
 import '../providers/app_providers.dart';
 import '../widgets/provider_card.dart';
+import '../models/chat.dart';
 import '../widgets/service_chip.dart';
 import '../widgets/filter_sheet.dart';
 
@@ -23,17 +24,7 @@ class HomeScreen extends ConsumerWidget {
         title: const Text('KIVOU'),
         actions: [
           _BellButton(),
-          IconButton(
-              onPressed: () {
-                final auth = ref.read(authStateProvider);
-                if (!auth.isAuthenticated) {
-                  context.go('/auth');
-                } else {
-                  context.push('/chats');
-                }
-              },
-              tooltip: 'Discussions',
-              icon: const Icon(Icons.chat_bubble_outline)),
+          _ChatsWithBadgeButton(),
           IconButton(
               onPressed: () => context.go('/orders'),
               icon: const Icon(Icons.receipt_long)),
@@ -277,6 +268,53 @@ class _BellButton extends ConsumerWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class _ChatsWithBadgeButton extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final auth = ref.watch(authStateProvider);
+    final convs = ref.watch(chatConversationsProvider).maybeWhen(
+          data: (list) => list,
+          orElse: () => <ChatConversation>[],
+        );
+    final int totalUnread =
+        convs.map((c) => c.unreadCount).fold<int>(0, (prev, el) => prev + el);
+    final hasUnread = totalUnread > 0;
+    return Stack(
+      children: [
+        IconButton(
+          onPressed: () {
+            if (!auth.isAuthenticated) {
+              context.go('/auth');
+            } else {
+              context.push('/chats');
+            }
+          },
+          tooltip: 'Discussions',
+          icon: const Icon(Icons.chat_bubble_outline),
+        ),
+        if (hasUnread)
+          Positioned(
+            right: 6,
+            top: 6,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+              decoration: BoxDecoration(
+                color: Colors.redAccent,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              constraints: const BoxConstraints(minWidth: 18),
+              child: Text(
+                totalUnread > 99 ? '99+' : '$totalUnread',
+                style: const TextStyle(color: Colors.white, fontSize: 10),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+      ],
     );
   }
 }

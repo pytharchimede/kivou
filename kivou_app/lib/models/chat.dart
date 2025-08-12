@@ -12,6 +12,8 @@ class ChatConversation {
   final String providerAvatarUrl;
   final String clientName;
   final String clientAvatarUrl;
+  final int? clientUserId; // pour savoir si l'utilisateur courant est le client
+  final int? providerOwnerUserId; // propriétaire (utilisateur) du prestataire
 
   ChatConversation({
     required this.id,
@@ -26,6 +28,8 @@ class ChatConversation {
     this.providerAvatarUrl = '',
     this.clientName = '',
     this.clientAvatarUrl = '',
+    this.clientUserId,
+    this.providerOwnerUserId,
   });
 
   factory ChatConversation.fromApi(Map<String, dynamic> j) {
@@ -43,6 +47,9 @@ class ChatConversation {
       providerAvatarUrl: j['provider_avatar_url']?.toString() ?? '',
       clientName: j['client_name']?.toString() ?? '',
       clientAvatarUrl: j['client_avatar_url']?.toString() ?? '',
+      clientUserId: int.tryParse(j['client_user_id']?.toString() ?? ''),
+      providerOwnerUserId:
+          int.tryParse(j['provider_owner_user_id']?.toString() ?? ''),
     );
   }
 }

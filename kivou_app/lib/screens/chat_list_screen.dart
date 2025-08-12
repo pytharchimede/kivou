@@ -50,11 +50,20 @@ class _ConversationTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final providerName =
-        conv.providerName.isNotEmpty ? conv.providerName : conv.peerName;
-    final providerAvatar = conv.providerAvatarUrl.isNotEmpty
-        ? conv.providerAvatarUrl
-        : conv.peerAvatarUrl;
+    final auth = ref.watch(authStateProvider);
+    final myId = (auth.user?['id'] as int?) ?? -1;
+    final isProviderSide =
+        (conv.providerOwnerUserId != null && conv.providerOwnerUserId == myId);
+    final displayName = isProviderSide
+        ? (conv.clientName.isNotEmpty ? conv.clientName : conv.peerName)
+        : (conv.providerName.isNotEmpty ? conv.providerName : conv.peerName);
+    final displayAvatar = isProviderSide
+        ? (conv.clientAvatarUrl.isNotEmpty
+            ? conv.clientAvatarUrl
+            : conv.peerAvatarUrl)
+        : (conv.providerAvatarUrl.isNotEmpty
+            ? conv.providerAvatarUrl
+            : conv.peerAvatarUrl);
     return InkWell(
       onTap: () => context.push('/chat/${conv.id}'),
       child: Padding(
@@ -62,53 +71,31 @@ class _ConversationTile extends ConsumerWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Stack(
-              children: [
-                CircleAvatar(
-                  radius: 22,
-                  backgroundImage: providerAvatar.isNotEmpty
-                      ? NetworkImage(providerAvatar)
-                      : null,
-                  child: providerAvatar.isEmpty
-                      ? const Icon(Icons.storefront_rounded)
-                      : null,
-                ),
-                Positioned(
-                  right: -2,
-                  bottom: -2,
-                  child: CircleAvatar(
-                    radius: 12,
-                    backgroundColor: theme.colorScheme.surface,
-                    child: CircleAvatar(
-                      radius: 10,
-                      backgroundImage: conv.clientAvatarUrl.isNotEmpty
-                          ? NetworkImage(conv.clientAvatarUrl)
-                          : null,
-                      child: conv.clientAvatarUrl.isEmpty
-                          ? const Icon(Icons.person, size: 14)
-                          : null,
-                    ),
-                  ),
-                )
-              ],
+            CircleAvatar(
+              radius: 24,
+              backgroundImage:
+                  displayAvatar.isNotEmpty ? NetworkImage(displayAvatar) : null,
+              child: displayAvatar.isEmpty
+                  ? Icon(
+                      isProviderSide ? Icons.person : Icons.storefront_rounded)
+                  : null,
             ),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(providerName,
+                  Text(displayName,
                       style: theme.textTheme.titleMedium,
                       overflow: TextOverflow.ellipsis),
                   const SizedBox(height: 2),
-                  Text(
-                    conv.clientName.isNotEmpty
-                        ? 'Client: ${conv.clientName}'
-                        : conv.peerName,
-                    style: theme.textTheme.bodySmall
-                        ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                  if (!isProviderSide && conv.clientName.isNotEmpty)
+                    Text(
+                      'Avec ${conv.clientName}',
+                      style: theme.textTheme.bodySmall
+                          ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   const SizedBox(height: 4),
                   Text(conv.lastMessage,
                       maxLines: 1,
@@ -118,30 +105,12 @@ class _ConversationTile extends ConsumerWidget {
               ),
             ),
             const SizedBox(width: 8),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                if (conv.unreadCount > 0)
-                  CircleAvatar(
-                    radius: 10,
-                    child: Text('${conv.unreadCount}',
-                        style: const TextStyle(fontSize: 12)),
-                  ),
-                const SizedBox(height: 6),
-                IconButton(
-                  tooltip: 'Passer commande',
-                  onPressed: () {
-                    final pid = conv.providerId;
-                    if (pid != null && pid.isNotEmpty) {
-                      context.push('/booking/$pid');
-                    }
-                  },
-                  icon: Icon(Icons.push_pin_rounded,
-                      color: theme.colorScheme.primary),
-                ),
-              ],
-            )
+            if (conv.unreadCount > 0)
+              CircleAvatar(
+                radius: 10,
+                child: Text('${conv.unreadCount}',
+                    style: const TextStyle(fontSize: 12)),
+              ),
           ],
         ),
       ),

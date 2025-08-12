@@ -69,18 +69,41 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
       appBar: AppBar(
         title: Row(
           children: [
-            // Avatar prestataire principal
-            CircleAvatar(
-              radius: 16,
-              backgroundImage: (conv?.providerAvatarUrl.isNotEmpty ?? false)
-                  ? NetworkImage(conv!.providerAvatarUrl)
-                  : (conv?.peerAvatarUrl.isNotEmpty ?? false)
-                      ? NetworkImage(conv!.peerAvatarUrl)
+            // Avatar composite: prestataire + mini client
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                CircleAvatar(
+                  radius: 18,
+                  backgroundImage: (conv?.providerAvatarUrl.isNotEmpty ?? false)
+                      ? NetworkImage(conv!.providerAvatarUrl)
+                      : (conv?.peerAvatarUrl.isNotEmpty ?? false)
+                          ? NetworkImage(conv!.peerAvatarUrl)
+                          : null,
+                  child: ((conv?.providerAvatarUrl.isEmpty ?? true) &&
+                          (conv?.peerAvatarUrl.isEmpty ?? true))
+                      ? const Icon(Icons.storefront_rounded, size: 20)
                       : null,
-              child: ((conv?.providerAvatarUrl.isEmpty ?? true) &&
-                      (conv?.peerAvatarUrl.isEmpty ?? true))
-                  ? const Icon(Icons.storefront_rounded, size: 18)
-                  : null,
+                ),
+                Positioned(
+                  right: -4,
+                  bottom: -4,
+                  child: CircleAvatar(
+                    radius: 12,
+                    backgroundColor: theme.colorScheme.surface,
+                    child: CircleAvatar(
+                      radius: 10,
+                      backgroundImage:
+                          (conv?.clientAvatarUrl.isNotEmpty ?? false)
+                              ? NetworkImage(conv!.clientAvatarUrl)
+                              : null,
+                      child: (conv?.clientAvatarUrl.isEmpty ?? true)
+                          ? const Icon(Icons.person, size: 14)
+                          : null,
+                    ),
+                  ),
+                )
+              ],
             ),
             const SizedBox(width: 8),
             Expanded(
@@ -121,7 +144,10 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
           tooltip: 'Fermer',
         ),
         actions: [
-          if ((conv?.providerId?.isNotEmpty ?? false))
+          // Le bouton commande n'est visible que côté client
+          if ((conv?.providerId?.isNotEmpty ?? false) &&
+              (conv?.providerOwnerUserId == null ||
+                  conv!.providerOwnerUserId != myId))
             Padding(
               padding: const EdgeInsets.only(right: 8.0),
               child: FilledButton.icon(
