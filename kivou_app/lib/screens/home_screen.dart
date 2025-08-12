@@ -588,8 +588,8 @@ class _KoumassiMapState extends ConsumerState<_KoumassiMap> {
 
   Future<BitmapDescriptor> _buildMarkerIcon(
       String photoUrl, String name) async {
-    const int width = 160; // px
-    const int height = 180; // px total
+    const int width = 96; // px (réduit)
+    const int height = 120; // px total (réduit)
     final recorder = ui.PictureRecorder();
     final canvas = ui.Canvas(recorder);
     final paint = ui.Paint();
@@ -599,16 +599,16 @@ class _KoumassiMapState extends ConsumerState<_KoumassiMap> {
     canvas.drawRect(
         ui.Rect.fromLTWH(0, 0, width.toDouble(), height.toDouble()), paint);
 
-    // Circle image area
-    const double circleSize = 112;
+    // Zone de l'image (réduite)
+    const double circleSize = 64;
     final double cx = width / 2;
-    final double cy = circleSize / 2 + 8;
+    final double cy = circleSize / 2 + 6;
     final circleRect = ui.Rect.fromCenter(
         center: ui.Offset(cx, cy), width: circleSize, height: circleSize);
 
-    // Shadow
-    paint.color = const ui.Color(0x33000000);
-    canvas.drawCircle(ui.Offset(cx, cy + 2), circleSize / 2, paint);
+    // Ombre légère
+    paint.color = const ui.Color(0x22000000);
+    canvas.drawCircle(ui.Offset(cx, cy + 1.5), circleSize / 2, paint);
 
     // Load image
     ui.Image? img;
@@ -646,27 +646,27 @@ class _KoumassiMapState extends ConsumerState<_KoumassiMap> {
     }
     canvas.restore();
 
-    // White border
+    // Bordure blanche
     paint
       ..style = ui.PaintingStyle.stroke
-      ..strokeWidth = 4
+      ..strokeWidth = 3
       ..color = const ui.Color(0xFFFFFFFF);
     canvas.drawOval(circleRect, paint);
 
     // Label background below
     final label = name.trim().isEmpty ? 'Prestataire' : name.trim();
-    const double pad = 8;
-    final tpName = _textPainter(label, 16, const ui.Color(0xFF0D47A1),
+    const double pad = 6;
+    final tpName = _textPainter(label, 12, const ui.Color(0xFF0D47A1),
         bold: true, maxLines: 1, ellipsis: '…');
-    tpName.layout(maxWidth: width - 16);
+    tpName.layout(maxWidth: width - 12);
     final labelW = tpName.width + pad * 2;
     final labelH = tpName.height + pad;
     final rr = ui.RRect.fromRectAndRadius(
       ui.Rect.fromCenter(
-          center: ui.Offset(cx, circleRect.bottom + 24),
+          center: ui.Offset(cx, circleRect.bottom + 14),
           width: labelW,
           height: labelH),
-      const ui.Radius.circular(14),
+      const ui.Radius.circular(10),
     );
     paint
       ..style = ui.PaintingStyle.fill

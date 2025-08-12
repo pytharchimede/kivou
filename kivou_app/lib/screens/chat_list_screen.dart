@@ -54,9 +54,11 @@ class _ConversationTile extends ConsumerWidget {
     final myId = (auth.user?['id'] as int?) ?? -1;
     final isProviderSide =
         (conv.providerOwnerUserId != null && conv.providerOwnerUserId == myId);
+    // Détermine le titre principal (celui avec qui je parle)
     final displayName = isProviderSide
         ? (conv.clientName.isNotEmpty ? conv.clientName : conv.peerName)
         : (conv.providerName.isNotEmpty ? conv.providerName : conv.peerName);
+    // Avatar principal selon le rôle
     final displayAvatar = isProviderSide
         ? (conv.clientAvatarUrl.isNotEmpty
             ? conv.clientAvatarUrl
@@ -64,6 +66,12 @@ class _ConversationTile extends ConsumerWidget {
         : (conv.providerAvatarUrl.isNotEmpty
             ? conv.providerAvatarUrl
             : conv.peerAvatarUrl);
+    // Sous-titre: indique l’autre partie pour lever toute ambiguïté
+    final subtitle = isProviderSide
+        ? (conv.providerName.isNotEmpty
+            ? 'Prestataire: ${conv.providerName}'
+            : null)
+        : (conv.clientName.isNotEmpty ? 'Client: ${conv.clientName}' : null);
     return InkWell(
       onTap: () => context.push('/chat/${conv.id}'),
       child: Padding(
@@ -89,13 +97,11 @@ class _ConversationTile extends ConsumerWidget {
                       style: theme.textTheme.titleMedium,
                       overflow: TextOverflow.ellipsis),
                   const SizedBox(height: 2),
-                  if (!isProviderSide && conv.clientName.isNotEmpty)
-                    Text(
-                      'Avec ${conv.clientName}',
-                      style: theme.textTheme.bodySmall
-                          ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                  if (subtitle != null)
+                    Text(subtitle,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant),
+                        overflow: TextOverflow.ellipsis),
                   const SizedBox(height: 4),
                   Text(conv.lastMessage,
                       maxLines: 1,

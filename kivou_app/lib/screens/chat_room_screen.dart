@@ -112,9 +112,17 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    (conv != null && conv!.providerName.isNotEmpty)
-                        ? (conv!.providerName)
-                        : (conv?.peerName ?? 'Discussion'),
+                    // Côté client: titre = prestataire; côté prestataire: titre = client
+                    (conv != null)
+                        ? ((conv!.providerOwnerUserId != null &&
+                                conv!.providerOwnerUserId == myId)
+                            ? (conv!.clientName.isNotEmpty
+                                ? conv!.clientName
+                                : conv!.peerName)
+                            : (conv!.providerName.isNotEmpty
+                                ? conv!.providerName
+                                : conv!.peerName))
+                        : 'Discussion',
                     overflow: TextOverflow.ellipsis,
                     style: theme.textTheme.titleMedium,
                   ),
@@ -124,9 +132,17 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                       const SizedBox(width: 4),
                       Flexible(
                         child: Text(
-                          (conv != null && conv!.clientName.isNotEmpty)
-                              ? (conv!.clientName)
-                              : (conv?.peerName ?? ''),
+                          // Sous-titre: l’autre partie pour lever l’ambiguïté
+                          (conv != null)
+                              ? ((conv!.providerOwnerUserId != null &&
+                                      conv!.providerOwnerUserId == myId)
+                                  ? (conv!.providerName.isNotEmpty
+                                      ? 'Prestataire: ${conv!.providerName}'
+                                      : '')
+                                  : (conv!.clientName.isNotEmpty
+                                      ? 'Client: ${conv!.clientName}'
+                                      : ''))
+                              : '',
                           overflow: TextOverflow.ellipsis,
                           style: theme.textTheme.bodySmall,
                         ),
@@ -152,7 +168,7 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
               padding: const EdgeInsets.only(right: 8.0),
               child: FilledButton.icon(
                 onPressed: () => context.push('/booking/${conv!.providerId}'),
-                icon: const Icon(Icons.push_pin_rounded, size: 18),
+                icon: const Icon(Icons.shopping_bag_outlined, size: 18),
                 label: const Text('Commander'),
               ),
             ),
