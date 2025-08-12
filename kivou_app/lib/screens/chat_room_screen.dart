@@ -140,29 +140,20 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                     overflow: TextOverflow.ellipsis,
                     style: theme.textTheme.titleMedium,
                   ),
-                  Row(
-                    children: [
-                      const Icon(Icons.person, size: 14),
-                      const SizedBox(width: 4),
-                      Flexible(
-                        child: Text(
-                          // Sous-titre: l’autre partie pour lever l’ambiguïté
-                          (conv != null)
-                              ? ((conv!.providerOwnerUserId != null &&
-                                      conv!.providerOwnerUserId == myId)
-                                  ? (conv!.providerName.isNotEmpty
-                                      ? 'Prestataire: ${conv!.providerName}'
-                                      : '')
-                                  : (conv!.clientName.isNotEmpty
-                                      ? 'Client: ${conv!.clientName}'
-                                      : ''))
-                              : '',
-                          overflow: TextOverflow.ellipsis,
-                          style: theme.textTheme.bodySmall,
-                        ),
-                      )
-                    ],
-                  )
+                  if (conv != null) ...[
+                    Text(
+                      (conv!.providerOwnerUserId != null &&
+                              conv!.providerOwnerUserId == myId)
+                          ? (conv!.clientName.isNotEmpty
+                              ? 'Client: ${conv!.clientName}'
+                              : '')
+                          : (conv!.providerName.isNotEmpty
+                              ? 'Prestataire: ${conv!.providerName}'
+                              : ''),
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.bodySmall,
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -245,13 +236,51 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                                     : theme.colorScheme.surfaceContainerHighest,
                                 borderRadius: BorderRadius.circular(16),
                               ),
-                              child: Text(
-                                m.body,
-                                style: TextStyle(
-                                  color: mine
-                                      ? theme.colorScheme.onPrimaryContainer
-                                      : theme.colorScheme.onSurface,
-                                ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      m.body,
+                                      style: TextStyle(
+                                        color: mine
+                                            ? theme
+                                                .colorScheme.onPrimaryContainer
+                                            : theme.colorScheme.onSurface,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        _fmtTime(m.createdAt),
+                                        style: theme.textTheme.labelSmall
+                                            ?.copyWith(
+                                          color: theme
+                                              .colorScheme.onSurfaceVariant,
+                                        ),
+                                      ),
+                                      if (mine) ...[
+                                        const SizedBox(width: 6),
+                                        Icon(
+                                          m.readAt != null
+                                              ? Icons.done_all_rounded
+                                              : Icons.done_rounded,
+                                          size: 16,
+                                          color: m.readAt != null
+                                              ? theme.colorScheme.primary
+                                              : theme
+                                                  .colorScheme.onSurfaceVariant,
+                                        ),
+                                      ]
+                                    ],
+                                  )
+                                ],
                               ),
                             ),
                           ),
@@ -327,4 +356,10 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
       ),
     );
   }
+}
+
+String _fmtTime(DateTime dt) {
+  final h = dt.hour.toString().padLeft(2, '0');
+  final m = dt.minute.toString().padLeft(2, '0');
+  return '$h:$m';
 }

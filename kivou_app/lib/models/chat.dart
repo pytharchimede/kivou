@@ -61,6 +61,7 @@ class ChatMessage {
   final int toUserId;
   final String body;
   final DateTime createdAt;
+  final DateTime? readAt;
 
   ChatMessage({
     required this.id,
@@ -69,6 +70,7 @@ class ChatMessage {
     required this.toUserId,
     required this.body,
     required this.createdAt,
+    this.readAt,
   });
 
   bool isMine(int myUserId) => fromUserId == myUserId;
@@ -82,6 +84,10 @@ class ChatMessage {
       body: j['body']?.toString() ?? '',
       createdAt: DateTime.tryParse(j['created_at']?.toString() ?? '') ??
           DateTime.now(),
+      readAt:
+          (j['read_at'] == null || (j['read_at']?.toString().isEmpty ?? true))
+              ? null
+              : DateTime.tryParse(j['read_at']?.toString() ?? ''),
     );
   }
 }

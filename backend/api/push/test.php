@@ -18,11 +18,11 @@ if ($toUserId && $toUserId !== $userId) {
     json_error('FORBIDDEN', 'user_id non autorisé', 403);
 }
 
-$push = new \Kivou\Services\PushService();
 $debugFlag = isset($body['debug']) && ($body['debug'] === true || $body['debug'] === 1 || $body['debug'] === 'true');
 if ($debugFlag) {
     putenv('PUSH_DEBUG=1');
 }
+$push = new \Kivou\Services\PushService();
 if (!$push->isConfigured()) {
     json_error('PUSH_NOT_CONFIGURED', 'Push non configuré');
 }
