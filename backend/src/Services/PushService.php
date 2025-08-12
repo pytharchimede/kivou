@@ -26,11 +26,19 @@ class PushService
             if (is_array($decoded) && isset($decoded['private_key'])) {
                 $sa = $decoded;
             }
-        } elseif ($saPath !== '' && is_file($saPath)) {
-            $content = file_get_contents($saPath);
-            $decoded = $content ? json_decode($content, true) : null;
-            if (is_array($decoded) && isset($decoded['private_key'])) {
-                $sa = $decoded;
+        } elseif ($saPath !== '') {
+            // Supporte chemin relatif depuis le dossier backend
+            $base = dirname(__DIR__, 2);
+            $candidate = $saPath;
+            if (!preg_match('/^([A-Za-z]:\\\\|\\\\|\/)?.*/', $saPath)) {
+                $candidate = $base . DIRECTORY_SEPARATOR . $saPath;
+            }
+            if (is_file($candidate)) {
+                $content = file_get_contents($candidate);
+                $decoded = $content ? json_decode($content, true) : null;
+                if (is_array($decoded) && isset($decoded['private_key'])) {
+                    $sa = $decoded;
+                }
             }
         } else {
             // Fallback to backend/env/firebase_sa.json if exists
@@ -202,8 +210,21 @@ class PushService
         $enc = fn($arr) => rtrim(strtr(base64_encode(json_encode($arr, JSON_UNESCAPED_SLASHES)), '+/', '-_'), '=');
         $segments = [$enc($header), $enc($claims)];
         $signingInput = implode('.', $segments);
+        // Normaliser la clé: certains hôtes stockent les \n littéraux
+        $pem = $privateKeyPem;
+        if (strpos($pem, "\\n") !== false) {
+            $pem = str_replace("\\n", "\n", $pem);
+        }
+        // Obtenir une ressource clé privée sans bruit d'erreur
+        $pkey = @openssl_pkey_get_private($pem);
+        if ($pkey === false) {
+            // Tente avec fins de ligne normalisées CRLF->LF
+            $pem2 = str_replace(["\r\n", "\r"], "\n", $pem);
+            $pkey = @openssl_pkey_get_private($pem2);
+            if ($pkey === false) return null;
+        }
         $signature = '';
-        $ok = openssl_sign($signingInput, $signature, $privateKeyPem, OPENSSL_ALGO_SHA256);
+        $ok = @openssl_sign($signingInput, $signature, $pkey, OPENSSL_ALGO_SHA256);
         if (!$ok) return null;
         $sig = rtrim(strtr(base64_encode($signature), '+/', '-_'), '=');
         return $signingInput . '.' . $sig;

@@ -35,6 +35,12 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
       _controller.clear();
       // reload messages
       ref.invalidate(chatMessagesProvider(widget.conversationId));
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Échec d\'envoi du message: $e')),
+        );
+      }
     } finally {
       if (mounted) setState(() => _sending = false);
     }
