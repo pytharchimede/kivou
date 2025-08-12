@@ -49,22 +49,102 @@ class _ConversationTile extends ConsumerWidget {
   const _ConversationTile({required this.conv});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ListTile(
-      leading: CircleAvatar(
-          backgroundImage: conv.peerAvatarUrl.isNotEmpty
-              ? NetworkImage(conv.peerAvatarUrl)
-              : null,
-          child: conv.peerAvatarUrl.isEmpty ? const Icon(Icons.person) : null),
-      title: Text(conv.peerName),
-      subtitle:
-          Text(conv.lastMessage, maxLines: 1, overflow: TextOverflow.ellipsis),
-      trailing: conv.unreadCount > 0
-          ? CircleAvatar(
-              radius: 10,
-              child: Text('${conv.unreadCount}',
-                  style: const TextStyle(fontSize: 12)))
-          : null,
+    final theme = Theme.of(context);
+    final providerName =
+        conv.providerName.isNotEmpty ? conv.providerName : conv.peerName;
+    final providerAvatar = conv.providerAvatarUrl.isNotEmpty
+        ? conv.providerAvatarUrl
+        : conv.peerAvatarUrl;
+    return InkWell(
       onTap: () => context.push('/chat/${conv.id}'),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Stack(
+              children: [
+                CircleAvatar(
+                  radius: 22,
+                  backgroundImage: providerAvatar.isNotEmpty
+                      ? NetworkImage(providerAvatar)
+                      : null,
+                  child: providerAvatar.isEmpty
+                      ? const Icon(Icons.storefront_rounded)
+                      : null,
+                ),
+                Positioned(
+                  right: -2,
+                  bottom: -2,
+                  child: CircleAvatar(
+                    radius: 12,
+                    backgroundColor: theme.colorScheme.surface,
+                    child: CircleAvatar(
+                      radius: 10,
+                      backgroundImage: conv.clientAvatarUrl.isNotEmpty
+                          ? NetworkImage(conv.clientAvatarUrl)
+                          : null,
+                      child: conv.clientAvatarUrl.isEmpty
+                          ? const Icon(Icons.person, size: 14)
+                          : null,
+                    ),
+                  ),
+                )
+              ],
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(providerName,
+                      style: theme.textTheme.titleMedium,
+                      overflow: TextOverflow.ellipsis),
+                  const SizedBox(height: 2),
+                  Text(
+                    conv.clientName.isNotEmpty
+                        ? 'Client: ${conv.clientName}'
+                        : conv.peerName,
+                    style: theme.textTheme.bodySmall
+                        ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(conv.lastMessage,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.bodyMedium),
+                ],
+              ),
+            ),
+            const SizedBox(width: 8),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                if (conv.unreadCount > 0)
+                  CircleAvatar(
+                    radius: 10,
+                    child: Text('${conv.unreadCount}',
+                        style: const TextStyle(fontSize: 12)),
+                  ),
+                const SizedBox(height: 6),
+                IconButton(
+                  tooltip: 'Passer commande',
+                  onPressed: () {
+                    final pid = conv.providerId;
+                    if (pid != null && pid.isNotEmpty) {
+                      context.push('/booking/$pid');
+                    }
+                  },
+                  icon: Icon(Icons.push_pin_rounded,
+                      color: theme.colorScheme.primary),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
     );
   }
 }

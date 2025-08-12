@@ -7,6 +7,11 @@ class ChatConversation {
   final DateTime lastAt;
   final int unreadCount;
   final String? providerId; // optionnel pour relier au prestataire
+  // Enrichissements d'affichage
+  final String providerName;
+  final String providerAvatarUrl;
+  final String clientName;
+  final String clientAvatarUrl;
 
   ChatConversation({
     required this.id,
@@ -17,6 +22,10 @@ class ChatConversation {
     required this.lastAt,
     required this.unreadCount,
     this.providerId,
+    this.providerName = '',
+    this.providerAvatarUrl = '',
+    this.clientName = '',
+    this.clientAvatarUrl = '',
   });
 
   factory ChatConversation.fromApi(Map<String, dynamic> j) {
@@ -30,6 +39,10 @@ class ChatConversation {
           DateTime.tryParse(j['last_at']?.toString() ?? '') ?? DateTime.now(),
       unreadCount: int.tryParse(j['unread_count']?.toString() ?? '0') ?? 0,
       providerId: j['provider_id']?.toString(),
+      providerName: j['provider_name']?.toString() ?? '',
+      providerAvatarUrl: j['provider_avatar_url']?.toString() ?? '',
+      clientName: j['client_name']?.toString() ?? '',
+      clientAvatarUrl: j['client_avatar_url']?.toString() ?? '',
     );
   }
 }

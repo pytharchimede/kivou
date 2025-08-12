@@ -69,21 +69,50 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
       appBar: AppBar(
         title: Row(
           children: [
+            // Avatar prestataire principal
             CircleAvatar(
-              radius: 14,
-              backgroundImage: (conv?.peerAvatarUrl.isNotEmpty ?? false)
-                  ? NetworkImage(conv!.peerAvatarUrl)
-                  : null,
-              child: (conv?.peerAvatarUrl.isEmpty ?? true)
-                  ? const Icon(Icons.person, size: 18)
+              radius: 16,
+              backgroundImage: (conv?.providerAvatarUrl.isNotEmpty ?? false)
+                  ? NetworkImage(conv!.providerAvatarUrl)
+                  : (conv?.peerAvatarUrl.isNotEmpty ?? false)
+                      ? NetworkImage(conv!.peerAvatarUrl)
+                      : null,
+              child: ((conv?.providerAvatarUrl.isEmpty ?? true) &&
+                      (conv?.peerAvatarUrl.isEmpty ?? true))
+                  ? const Icon(Icons.storefront_rounded, size: 18)
                   : null,
             ),
             const SizedBox(width: 8),
             Expanded(
-                child: Text(
-              conv?.peerName ?? 'Discussion',
-              overflow: TextOverflow.ellipsis,
-            )),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    (conv != null && conv!.providerName.isNotEmpty)
+                        ? (conv!.providerName)
+                        : (conv?.peerName ?? 'Discussion'),
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.titleMedium,
+                  ),
+                  Row(
+                    children: [
+                      const Icon(Icons.person, size: 14),
+                      const SizedBox(width: 4),
+                      Flexible(
+                        child: Text(
+                          (conv != null && conv!.clientName.isNotEmpty)
+                              ? (conv!.clientName)
+                              : (conv?.peerName ?? ''),
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.bodySmall,
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
           ],
         ),
         leading: IconButton(
@@ -91,6 +120,17 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
           onPressed: () => Navigator.of(context).maybePop(),
           tooltip: 'Fermer',
         ),
+        actions: [
+          if ((conv?.providerId?.isNotEmpty ?? false))
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: FilledButton.icon(
+                onPressed: () => context.push('/booking/${conv!.providerId}'),
+                icon: const Icon(Icons.push_pin_rounded, size: 18),
+                label: const Text('Commander'),
+              ),
+            ),
+        ],
       ),
       body: Column(
         children: [
