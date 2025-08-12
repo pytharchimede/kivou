@@ -121,10 +121,17 @@ class _ConversationTile extends ConsumerWidget {
             ),
             const SizedBox(width: 8),
             if (conv.unreadCount > 0)
-              CircleAvatar(
-                radius: 10,
-                child: Text('${conv.unreadCount}',
-                    style: const TextStyle(fontSize: 12)),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                decoration: BoxDecoration(
+                  color: Colors.redAccent,
+                  borderRadius: BorderRadius.circular(999),
+                ),
+                child: Text(
+                  '${conv.unreadCount}',
+                  style: const TextStyle(
+                      color: Colors.white, fontSize: 12, height: 1),
+                ),
               ),
           ],
         ),

@@ -10,6 +10,7 @@ import '../services/auth_service.dart';
 import '../services/notification_service.dart';
 import '../services/booking_service.dart';
 import '../services/chat_service.dart';
+import 'dart:async';
 import '../models/chat.dart';
 
 /// Provider pour la liste des prestataires (local cache optionnel)
@@ -180,19 +181,29 @@ final chatServiceProvider =
 
 /// Conversations list
 final chatConversationsProvider =
-    FutureProvider<List<ChatConversation>>((ref) async {
+    FutureProvider.autoDispose<List<ChatConversation>>((ref) async {
   final auth = ref.watch(authStateProvider);
   if (!auth.isAuthenticated) return const <ChatConversation>[];
   final svc = ref.read(chatServiceProvider);
+  // Poll toutes les 3s
+  final timer = Timer.periodic(const Duration(seconds: 3), (_) {
+    ref.invalidateSelf();
+  });
+  ref.onDispose(() => timer.cancel());
   return svc.listConversations();
 });
 
 /// Messages in a conversation
-final chatMessagesProvider =
-    FutureProvider.family<List<ChatMessage>, int>((ref, conversationId) async {
+final chatMessagesProvider = FutureProvider.autoDispose
+    .family<List<ChatMessage>, int>((ref, conversationId) async {
   final auth = ref.watch(authStateProvider);
   if (!auth.isAuthenticated) return const <ChatMessage>[];
   final svc = ref.read(chatServiceProvider);
+  // Poll toutes les 3s
+  final timer = Timer.periodic(const Duration(seconds: 3), (_) {
+    ref.invalidateSelf();
+  });
+  ref.onDispose(() => timer.cancel());
   return svc.listMessages(conversationId);
 });
 
