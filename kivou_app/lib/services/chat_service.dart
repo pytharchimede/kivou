@@ -30,11 +30,18 @@ class ChatService {
   }
 
   Future<ChatMessage> send(
-      {required int conversationId, required String body}) async {
-    final data = await _api.postJson('/api/chat/send.php', {
+      {required int conversationId,
+      String? body,
+      String? attachmentUrl,
+      double? lat,
+      double? lng}) async {
+    final payload = <String, dynamic>{
       'conversation_id': conversationId,
-      'body': body,
-    });
+      if (body != null) 'body': body,
+      if (attachmentUrl != null) 'attachment_url': attachmentUrl,
+      if (lat != null && lng != null) ...{'lat': lat, 'lng': lng},
+    };
+    final data = await _api.postJson('/api/chat/send.php', payload);
     return ChatMessage.fromApi(data);
   }
 

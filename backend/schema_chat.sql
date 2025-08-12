@@ -26,6 +26,8 @@ CREATE TABLE IF NOT EXISTS chat_messages (
   to_user_id INT NOT NULL,
   body TEXT NOT NULL,
   attachment_url VARCHAR(255) DEFAULT NULL,
+  lat DECIMAL(10,7) DEFAULT NULL,
+  lng DECIMAL(10,7) DEFAULT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   read_at DATETIME DEFAULT NULL,
   CONSTRAINT fk_chat_msg_conversation FOREIGN KEY (conversation_id) REFERENCES chat_conversations(id) ON DELETE CASCADE,
@@ -46,7 +48,12 @@ AFTER INSERT ON chat_messages FOR EACH ROW
 BEGIN
   -- Update conversation last message/at
   UPDATE chat_conversations
-    SET last_message = NEW.body,
+    SET last_message = CASE 
+                         WHEN (NEW.body IS NOT NULL AND CHAR_LENGTH(NEW.body) > 0) THEN NEW.body
+                         WHEN (NEW.attachment_url IS NOT NULL AND CHAR_LENGTH(NEW.attachment_url) > 0) THEN '[Image]'
+                         WHEN (NEW.lat IS NOT NULL AND NEW.lng IS NOT NULL) THEN '[Localisation]'
+                         ELSE ''
+                       END,
         last_at = NEW.created_at,
         unread_a = CASE WHEN user_a_id = NEW.to_user_id THEN unread_a + 1 ELSE unread_a END,
         unread_b = CASE WHEN user_b_id = NEW.to_user_id THEN unread_b + 1 ELSE unread_b END

@@ -3,6 +3,7 @@ class ChatConversation {
   final int peerUserId; // l'interlocuteur (prestataire ou client)
   final String peerName;
   final String peerAvatarUrl;
+  final String? peerPhone;
   final String lastMessage;
   final DateTime lastAt;
   final int unreadCount;
@@ -24,6 +25,7 @@ class ChatConversation {
     required this.lastAt,
     required this.unreadCount,
     this.providerId,
+    this.peerPhone,
     this.providerName = '',
     this.providerAvatarUrl = '',
     this.clientName = '',
@@ -38,6 +40,7 @@ class ChatConversation {
       peerUserId: int.tryParse(j['peer_user_id']?.toString() ?? '') ?? 0,
       peerName: j['peer_name']?.toString() ?? 'Utilisateur',
       peerAvatarUrl: j['peer_avatar_url']?.toString() ?? '',
+      peerPhone: j['peer_phone']?.toString(),
       lastMessage: j['last_message']?.toString() ?? '',
       lastAt:
           DateTime.tryParse(j['last_at']?.toString() ?? '') ?? DateTime.now(),
@@ -60,6 +63,9 @@ class ChatMessage {
   final int fromUserId;
   final int toUserId;
   final String body;
+  final String? attachmentUrl;
+  final double? lat;
+  final double? lng;
   final DateTime createdAt;
   final DateTime? readAt;
 
@@ -69,6 +75,9 @@ class ChatMessage {
     required this.fromUserId,
     required this.toUserId,
     required this.body,
+    this.attachmentUrl,
+    this.lat,
+    this.lng,
     required this.createdAt,
     this.readAt,
   });
@@ -82,6 +91,13 @@ class ChatMessage {
       fromUserId: int.tryParse(j['from_user_id']?.toString() ?? '') ?? 0,
       toUserId: int.tryParse(j['to_user_id']?.toString() ?? '') ?? 0,
       body: j['body']?.toString() ?? '',
+      attachmentUrl: (j['attachment_url']?.toString().isEmpty ?? true)
+          ? null
+          : j['attachment_url']?.toString(),
+      lat:
+          j['lat'] == null ? null : double.tryParse(j['lat']?.toString() ?? ''),
+      lng:
+          j['lng'] == null ? null : double.tryParse(j['lng']?.toString() ?? ''),
       createdAt: DateTime.tryParse(j['created_at']?.toString() ?? '') ??
           DateTime.now(),
       readAt:

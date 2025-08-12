@@ -4,6 +4,12 @@ import 'package:go_router/go_router.dart';
 import '../providers/app_providers.dart';
 import '../models/chat.dart';
 import 'dart:async';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'package:geolocator/geolocator.dart';
+import '../services/chat_upload_service.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class ChatRoomScreen extends ConsumerStatefulWidget {
   final int conversationId;
@@ -16,6 +22,8 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
   final _controller = TextEditingController();
   bool _sending = false;
   Timer? _poll;
+  final _picker = ImagePicker();
+  String? _peerPhone;
 
   @override
   void dispose() {
@@ -46,6 +54,65 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
     }
   }
 
+  Future<void> _pickAndSendImage() async {
+    if (_sending) return;
+    try {
+      final img = await _picker.pickImage(
+          source: ImageSource.gallery, imageQuality: 80);
+      if (img == null) return;
+      setState(() => _sending = true);
+      final url = await ChatUploadService().uploadAttachment(File(img.path));
+      await ref
+          .read(chatServiceProvider)
+          .send(conversationId: widget.conversationId, attachmentUrl: url);
+      ref.invalidate(chatMessagesProvider(widget.conversationId));
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Envoi image: $e')));
+      }
+    } finally {
+      if (mounted) setState(() => _sending = false);
+    }
+  }
+
+  Future<void> _shareLocation() async {
+    if (_sending) return;
+    try {
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        throw Exception('Service de localisation désactivé');
+      }
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          throw Exception('Permission de localisation refusée');
+        }
+      }
+      if (permission == LocationPermission.deniedForever) {
+        throw Exception('Permission de localisation refusée définitivement');
+      }
+      setState(() => _sending = true);
+      final pos = await Geolocator.getCurrentPosition();
+      await ref.read(chatServiceProvider).send(
+            conversationId: widget.conversationId,
+            lat: pos.latitude,
+            lng: pos.longitude,
+            body:
+                'Ma position: ${pos.latitude.toStringAsFixed(5)}, ${pos.longitude.toStringAsFixed(5)}',
+          );
+      ref.invalidate(chatMessagesProvider(widget.conversationId));
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Localisation: $e')));
+      }
+    } finally {
+      if (mounted) setState(() => _sending = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final auth = ref.watch(authStateProvider);
@@ -64,6 +131,10 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
         conv = list.firstWhere((c) => c.id == widget.conversationId);
       } catch (_) {}
     });
+    // Tenter de récupérer le numéro du pair via openOrCreate si manquant
+    if (_peerPhone == null && conv != null) {
+      _ensurePeerPhone(conv!);
+    }
     // Démarre un petit polling tant que l'écran est monté
     _poll ??= Timer.periodic(const Duration(seconds: 4), (_) {
       if (!mounted) return;
@@ -165,6 +236,15 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
           tooltip: 'Fermer',
         ),
         actions: [
+          if ((_peerPhone ?? '').isNotEmpty)
+            IconButton(
+              tooltip: 'Appeler',
+              onPressed: () {
+                final tel = Uri.parse('tel:${_peerPhone!}');
+                launchUrl(tel);
+              },
+              icon: const Icon(Icons.call_rounded),
+            ),
           // Le bouton commande n'est visible que côté client
           if ((conv?.providerId?.isNotEmpty ?? false) &&
               (conv?.providerOwnerUserId == null ||
@@ -242,14 +322,99 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                                 children: [
                                   Align(
                                     alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      m.body,
-                                      style: TextStyle(
-                                        color: mine
-                                            ? theme
-                                                .colorScheme.onPrimaryContainer
-                                            : theme.colorScheme.onSurface,
-                                      ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        if ((m.attachmentUrl ?? '')
+                                            .isNotEmpty) ...[
+                                          ConstrainedBox(
+                                            constraints: BoxConstraints(
+                                              maxWidth: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.6,
+                                              maxHeight: 280,
+                                            ),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              child: CachedNetworkImage(
+                                                imageUrl:
+                                                    _absUrl(m.attachmentUrl!),
+                                                fit: BoxFit.cover,
+                                                placeholder: (ctx, _) =>
+                                                    Container(
+                                                  height: 150,
+                                                  color: theme.colorScheme
+                                                      .surfaceContainerHighest,
+                                                  alignment: Alignment.center,
+                                                  child: const SizedBox(
+                                                    width: 24,
+                                                    height: 24,
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                            strokeWidth: 2),
+                                                  ),
+                                                ),
+                                                errorWidget: (ctx, _, __) =>
+                                                    Container(
+                                                  padding:
+                                                      const EdgeInsets.all(12),
+                                                  color: theme.colorScheme
+                                                      .errorContainer,
+                                                  child: Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: const [
+                                                      Icon(
+                                                          Icons
+                                                              .broken_image_outlined,
+                                                          size: 18),
+                                                      SizedBox(width: 6),
+                                                      Text(
+                                                          'Image indisponible'),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                        if (m.lat != null && m.lng != null) ...[
+                                          const SizedBox(height: 6),
+                                          InkWell(
+                                            onTap: () {
+                                              final url = Uri.parse(
+                                                  'https://www.google.com/maps/search/?api=1&query=${m.lat},${m.lng}');
+                                              launchUrl(url);
+                                            },
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: const [
+                                                Icon(Icons.place, size: 16),
+                                                SizedBox(width: 4),
+                                                Text('Voir sur la carte'),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                        if (m.body.isNotEmpty) ...[
+                                          if ((m.attachmentUrl ?? '')
+                                                  .isNotEmpty ||
+                                              (m.lat != null && m.lng != null))
+                                            const SizedBox(height: 6),
+                                          Text(
+                                            m.body,
+                                            style: TextStyle(
+                                              color: mine
+                                                  ? theme.colorScheme
+                                                      .onPrimaryContainer
+                                                  : theme.colorScheme.onSurface,
+                                            ),
+                                          ),
+                                        ],
+                                      ],
                                     ),
                                   ),
                                   const SizedBox(height: 4),
@@ -327,6 +492,16 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                 child: Row(
                   children: [
                     const SizedBox(width: 12),
+                    IconButton(
+                      tooltip: 'Joindre une image',
+                      onPressed: _sending ? null : _pickAndSendImage,
+                      icon: const Icon(Icons.image_rounded),
+                    ),
+                    IconButton(
+                      tooltip: 'Partager ma position',
+                      onPressed: _sending ? null : _shareLocation,
+                      icon: const Icon(Icons.my_location_rounded),
+                    ),
                     Expanded(
                       child: TextField(
                         controller: _controller,
@@ -356,10 +531,31 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
       ),
     );
   }
+
+  Future<void> _ensurePeerPhone(ChatConversation conv) async {
+    try {
+      final opened = await ref.read(chatServiceProvider).openOrCreate(
+          peerUserId: conv.peerUserId, providerId: conv.providerId);
+      if (!mounted) return;
+      setState(() {
+        _peerPhone = opened.peerPhone;
+      });
+    } catch (_) {
+      // silencieux
+    }
+  }
 }
 
 String _fmtTime(DateTime dt) {
   final h = dt.hour.toString().padLeft(2, '0');
   final m = dt.minute.toString().padLeft(2, '0');
   return '$h:$m';
+}
+
+String _absUrl(String url) {
+  if (url.startsWith('http')) return url;
+  // Base backend par défaut (voir ApiClient.baseUrl)
+  final base = 'https://fidest.ci';
+  if (!url.startsWith('/')) return '$base/$url';
+  return '$base$url';
 }

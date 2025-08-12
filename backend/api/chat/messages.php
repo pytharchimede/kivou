@@ -13,7 +13,7 @@ if (!$chk->fetchColumn()) json_error('FORBIDDEN', 'Accès refusé', 403);
 $limit = isset($_GET['limit']) ? max(1, min(200, (int)$_GET['limit'])) : 100;
 $since = isset($_GET['since']) ? (int)$_GET['since'] : 0; // id > since
 
-$sql = 'SELECT id, conversation_id, from_user_id, to_user_id, body, attachment_url, created_at, read_at
+$sql = 'SELECT id, conversation_id, from_user_id, to_user_id, body, attachment_url, lat, lng, created_at, read_at
                     FROM chat_messages
                  WHERE conversation_id = :cid ' . ($since > 0 ? ' AND id > :since' : '') . '
                  ORDER BY id DESC
@@ -34,7 +34,9 @@ foreach ($rows as $r) {
         'from_user_id' => (int)$r['from_user_id'],
         'to_user_id' => (int)$r['to_user_id'],
         'body' => (string)$r['body'],
-        'attachment_url' => $r['attachment_url'],
+        'attachment_url' => $r['attachment_url'] ?? null,
+        'lat' => isset($r['lat']) ? (float)$r['lat'] : null,
+        'lng' => isset($r['lng']) ? (float)$r['lng'] : null,
         'created_at' => date('c', strtotime($r['created_at'])),
         'read_at' => $r['read_at'] ? date('c', strtotime($r['read_at'])) : null,
     ];

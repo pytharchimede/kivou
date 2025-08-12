@@ -66,7 +66,7 @@ if (!$conv) {
 
 // Trouver le peer pour cette conv
 $peerId = ($conv['user_a_id'] == $userId) ? (int)$conv['user_b_id'] : (int)$conv['user_a_id'];
-$u = db()->prepare('SELECT id, name, avatar_url FROM users WHERE id = :id');
+$u = db()->prepare('SELECT id, name, avatar_url, phone FROM users WHERE id = :id');
 $u->execute([':id' => $peerId]);
 $peerRow = $u->fetch(PDO::FETCH_ASSOC) ?: ['id' => $peerId, 'name' => 'Utilisateur', 'avatar_url' => ''];
 
@@ -77,6 +77,7 @@ json_ok([
     'peer_user_id' => (int)$peerRow['id'],
     'peer_name' => (string)($peerRow['name'] ?? 'Utilisateur'),
     'peer_avatar_url' => (string)($peerRow['avatar_url'] ?? ''),
+    'peer_phone' => (string)($peerRow['phone'] ?? ''),
     'last_message' => (string)($conv['last_message'] ?? ''),
     'last_at' => $conv['last_at'] ? date('c', strtotime($conv['last_at'])) : null,
     'unread_count' => $unread,
