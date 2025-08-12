@@ -19,6 +19,10 @@ if ($toUserId && $toUserId !== $userId) {
 }
 
 $push = new \Kivou\Services\PushService();
+$debugFlag = isset($body['debug']) && ($body['debug'] === true || $body['debug'] === 1 || $body['debug'] === 'true');
+if ($debugFlag) {
+    putenv('PUSH_DEBUG=1');
+}
 if (!$push->isConfigured()) {
     json_error('PUSH_NOT_CONFIGURED', 'Push non configuré');
 }
@@ -32,9 +36,8 @@ if ($token !== '') {
     $ok = $push->sendToUser($userId, $title, $msg, $data);
 }
 
-json_ok([
+$out = [
     'ok' => (bool)$ok,
-    'using' => [
-        'v1' => true, // indicatif: le service choisit
-    ],
-]);
+    'hint' => $debugFlag ? 'Logs FCM écrits dans backend/logs/push.log' : null,
+];
+json_ok($out);

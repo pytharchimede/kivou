@@ -10,6 +10,7 @@ class PushService
     private ?array $serviceAccount;
     private ?string $projectId;
     private static ?array $tokenCache = null; // ['access_token'=>..., 'expires_at'=>timestamp]
+    private bool $debug = false;
 
     public function __construct(?string $serverKey = null)
     {
@@ -53,6 +54,8 @@ class PushService
         }
         $this->serviceAccount = $sa;
         $this->projectId = getenv('FIREBASE_PROJECT_ID') ?: ($sa['project_id'] ?? null);
+        $dbg = getenv('PUSH_DEBUG') ?: getenv('FCM_DEBUG') ?: '';
+        $this->debug = in_array(strtolower((string)$dbg), ['1', 'true', 'yes', 'on'], true);
     }
 
     private function useLegacy(): bool
@@ -106,10 +109,13 @@ class PushService
         ]);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload, JSON_UNESCAPED_UNICODE));
-        curl_exec($ch);
+        $resp = curl_exec($ch);
         $err = curl_error($ch);
         $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
+        if ($this->debug || $code < 200 || $code >= 300) {
+            $this->debugLog('[LEGACY] HTTP ' . $code . ' err=' . $err . ' body=' . substr((string)$resp, 0, 2000));
+        }
         return $err === '' && $code >= 200 && $code < 300;
     }
 
@@ -141,10 +147,13 @@ class PushService
             ]);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload, JSON_UNESCAPED_UNICODE));
-            curl_exec($ch);
+            $resp = curl_exec($ch);
             $err = curl_error($ch);
             $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);
+            if ($this->debug || $code < 200 || $code >= 300) {
+                $this->debugLog('[V1] HTTP ' . $code . ' err=' . $err . ' body=' . substr((string)$resp, 0, 2000));
+            }
             if ($err === '' && $code >= 200 && $code < 300) {
                 $okAny = true;
             }
@@ -193,6 +202,9 @@ class PushService
         $err = curl_error($ch);
         $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
+        if ($this->debug || $code < 200 || $code >= 300) {
+            $this->debugLog('[OAUTH] HTTP ' . $code . ' err=' . $err . ' body=' . substr((string)$resp, 0, 2000));
+        }
         if ($err !== '' || $code < 200 || $code >= 300) return null;
         $json = json_decode($resp, true);
         if (!is_array($json) || empty($json['access_token'])) return null;
@@ -238,5 +250,19 @@ class PushService
         $tokens = array_map(fn($r) => $r['token'], $st->fetchAll(\PDO::FETCH_ASSOC));
         if (empty($tokens)) return false;
         return $this->sendToTokens($tokens, $title, $body, $data);
+    }
+
+    private function debugLog(string $line): void
+    {
+        try {
+            $base = dirname(__DIR__, 2);
+            $dir = $base . DIRECTORY_SEPARATOR . 'logs';
+            if (!is_dir($dir)) @mkdir($dir, 0755, true);
+            $file = $dir . DIRECTORY_SEPARATOR . 'push.log';
+            @file_put_contents($file, '[' . date('c') . "] " . $line . "\n", FILE_APPEND);
+        } catch (\Throwable $e) {
+            // Fallback vers error_log
+            @error_log('[KivouPush] ' . $line);
+        }
     }
 }
