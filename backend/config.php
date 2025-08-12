@@ -101,6 +101,10 @@ function require_auth()
         }
         return $claims;
     } catch (\Throwable $e) {
-        json_error('UNAUTHORIZED', $e->getMessage(), 401);
+        json_error(
+            (stripos($e->getMessage(), 'expir') !== false) ? 'TOKEN_EXPIRED' : 'UNAUTHORIZED',
+            $e->getMessage(),
+            401
+        );
     }
 }

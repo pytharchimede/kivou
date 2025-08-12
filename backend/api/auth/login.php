@@ -10,7 +10,15 @@ require_fields($body, ['email', 'password']);
 try {
     $auth = new \Kivou\Services\AuthService();
     $u = $auth->login($body['email'], $body['password']);
-    $token = issue_token(['sub' => $u->id, 'email' => $u->email]);
+    $now = time();
+    // Token valable 90 jours
+    $token = issue_token([
+        'sub' => $u->id,
+        'id' => $u->id,
+        'email' => $u->email,
+        'iat' => $now,
+        'exp' => $now + 90 * 24 * 60 * 60,
+    ]);
     json_ok(['user' => $u->json(), 'token' => $token]);
 } catch (\RuntimeException $e) {
     if ($e->getMessage() === 'INVALID_CREDENTIALS') {

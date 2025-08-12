@@ -16,7 +16,16 @@ import '../models/chat.dart';
 final providersProvider = Provider<List<ServiceProvider>>((ref) => const []);
 
 /// Client et services API
-final apiClientProvider = Provider<ApiClient>((ref) => ApiClient());
+final apiClientProvider = Provider<ApiClient>((ref) {
+  final client = ApiClient();
+  // Déconnexion automatique si 401/TOKEN_EXPIRED/INVALID_TOKEN
+  client.setOnUnauthorized((code, msg) {
+    // Évite les boucles: on nettoie la session puis on laisse la navigation/guards rediriger
+    // Ne pas await ici (callback sync), on déclenche en arrière-plan
+    ref.read(authStateProvider.notifier).logout();
+  });
+  return client;
+});
 final sessionStorageProvider =
     Provider<SessionStorage>((ref) => SessionStorage());
 final authServiceProvider =

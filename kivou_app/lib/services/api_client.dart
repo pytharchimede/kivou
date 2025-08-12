@@ -2,16 +2,25 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiClient {
-  ApiClient({http.Client? client, String? baseUrl})
+  ApiClient(
+      {http.Client? client,
+      String? baseUrl,
+      void Function(String code, String message)? onUnauthorized})
       : _client = client ?? http.Client(),
-        baseUrl = baseUrl ?? 'https://fidest.ci/kivou/backend';
+        baseUrl = baseUrl ?? 'https://fidest.ci/kivou/backend',
+        _onUnauthorized = onUnauthorized;
 
   final http.Client _client;
   final String baseUrl;
   String? _bearerToken;
+  void Function(String code, String message)? _onUnauthorized;
 
   void setBearerToken(String? token) {
     _bearerToken = token;
+  }
+
+  void setOnUnauthorized(void Function(String code, String message)? handler) {
+    _onUnauthorized = handler;
   }
 
   Uri _u(String path, [Map<String, dynamic>? query]) =>
@@ -42,8 +51,15 @@ class ApiClient {
                   : ' Détails: ${raw.substring(0, raw.length.clamp(0, 200))}'));
     }
     if (res.statusCode >= 400 || map['ok'] != true) {
-      throw ApiException(map['error']?.toString() ?? 'HTTP_${res.statusCode}',
-          map['message']?.toString() ?? 'Erreur inconnue');
+      final code = map['error']?.toString() ?? 'HTTP_${res.statusCode}';
+      final msg = map['message']?.toString() ?? 'Erreur inconnue';
+      if (res.statusCode == 401 ||
+          code == 'UNAUTHORIZED' ||
+          code == 'TOKEN_EXPIRED' ||
+          code == 'INVALID_TOKEN') {
+        _onUnauthorized?.call(code, msg);
+      }
+      throw ApiException(code, msg);
     }
     final data = map['data'];
     return (data is Map<String, dynamic>) ? data : <String, dynamic>{};
@@ -71,8 +87,15 @@ class ApiClient {
                   : ' Détails: ${raw.substring(0, raw.length.clamp(0, 200))}'));
     }
     if (res.statusCode >= 400 || map['ok'] != true) {
-      throw ApiException(map['error']?.toString() ?? 'HTTP_${res.statusCode}',
-          map['message']?.toString() ?? 'Erreur inconnue');
+      final code = map['error']?.toString() ?? 'HTTP_${res.statusCode}';
+      final msg = map['message']?.toString() ?? 'Erreur inconnue';
+      if (res.statusCode == 401 ||
+          code == 'UNAUTHORIZED' ||
+          code == 'TOKEN_EXPIRED' ||
+          code == 'INVALID_TOKEN') {
+        _onUnauthorized?.call(code, msg);
+      }
+      throw ApiException(code, msg);
     }
     final data = map['data'];
     return (data is List<dynamic>) ? data : const [];
@@ -96,8 +119,15 @@ class ApiClient {
           'Réponse serveur invalide (HTTP ${res.statusCode}).');
     }
     if (res.statusCode >= 400 || map['ok'] != true) {
-      throw ApiException(map['error']?.toString() ?? 'HTTP_${res.statusCode}',
-          map['message']?.toString() ?? 'Erreur inconnue');
+      final code = map['error']?.toString() ?? 'HTTP_${res.statusCode}';
+      final msg = map['message']?.toString() ?? 'Erreur inconnue';
+      if (res.statusCode == 401 ||
+          code == 'UNAUTHORIZED' ||
+          code == 'TOKEN_EXPIRED' ||
+          code == 'INVALID_TOKEN') {
+        _onUnauthorized?.call(code, msg);
+      }
+      throw ApiException(code, msg);
     }
     final data = map['data'];
     return (data is Map<String, dynamic>) ? data : <String, dynamic>{};
