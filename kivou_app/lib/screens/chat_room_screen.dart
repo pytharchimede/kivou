@@ -1,15 +1,18 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import '../providers/app_providers.dart';
-import '../models/chat.dart';
 import 'dart:async';
 import 'dart:io';
-import 'package:image_picker/image_picker.dart';
-import 'package:geolocator/geolocator.dart';
-import '../services/chat_upload_service.dart';
-import 'package:url_launcher/url_launcher.dart';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../models/chat.dart';
+import '../providers/app_providers.dart';
+import '../services/chat_upload_service.dart';
+import 'image_viewer_screen.dart';
 
 class ChatRoomScreen extends ConsumerStatefulWidget {
   final int conversationId;
@@ -20,9 +23,9 @@ class ChatRoomScreen extends ConsumerStatefulWidget {
 
 class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
   final _controller = TextEditingController();
+  final _picker = ImagePicker();
   bool _sending = false;
   Timer? _poll;
-  final _picker = ImagePicker();
   String? _peerPhone;
 
   @override
@@ -41,24 +44,22 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
           .read(chatServiceProvider)
           .send(conversationId: widget.conversationId, body: text);
       _controller.clear();
-      // reload messages
       ref.invalidate(chatMessagesProvider(widget.conversationId));
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Échec d\'envoi du message: $e')),
-        );
+            SnackBar(content: Text("Échec d'envoi du message: $e")));
       }
     } finally {
       if (mounted) setState(() => _sending = false);
     }
   }
 
-  Future<void> _pickAndSendImage() async {
+  Future<void> _pickAndSendFromCamera() async {
     if (_sending) return;
     try {
-      final img = await _picker.pickImage(
-          source: ImageSource.gallery, imageQuality: 80);
+      final img =
+          await _picker.pickImage(source: ImageSource.camera, imageQuality: 80);
       if (img == null) return;
       setState(() => _sending = true);
       final url = await ChatUploadService().uploadAttachment(File(img.path));
@@ -69,7 +70,30 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Envoi image: $e')));
+            .showSnackBar(SnackBar(content: Text('Caméra: $e')));
+      }
+    } finally {
+      if (mounted) setState(() => _sending = false);
+    }
+  }
+
+  Future<void> _pickAndSendMultiple() async {
+    if (_sending) return;
+    try {
+      final imgs = await _picker.pickMultiImage(imageQuality: 80);
+      if (imgs.isEmpty) return;
+      setState(() => _sending = true);
+      for (final x in imgs) {
+        final url = await ChatUploadService().uploadAttachment(File(x.path));
+        await ref
+            .read(chatServiceProvider)
+            .send(conversationId: widget.conversationId, attachmentUrl: url);
+      }
+      ref.invalidate(chatMessagesProvider(widget.conversationId));
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Envoi multiple: $e')));
       }
     } finally {
       if (mounted) setState(() => _sending = false);
@@ -113,6 +137,65 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
     }
   }
 
+  Future<void> _ensurePeerPhone(ChatConversation conv) async {
+    try {
+      final opened = await ref.read(chatServiceProvider).openOrCreate(
+          peerUserId: conv.peerUserId, providerId: conv.providerId);
+      if (!mounted) return;
+      setState(() => _peerPhone = opened.peerPhone);
+    } catch (_) {
+      // silencieux
+    }
+  }
+
+  void _showAttachSheet() {
+    showModalBottomSheet(
+      context: context,
+      showDragHandle: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (ctx) {
+        return SafeArea(
+          child: Wrap(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.photo_library_rounded),
+                title: const Text('Galerie (plusieurs)'),
+                onTap: _sending
+                    ? null
+                    : () {
+                        Navigator.pop(ctx);
+                        _pickAndSendMultiple();
+                      },
+              ),
+              ListTile(
+                leading: const Icon(Icons.camera_alt_rounded),
+                title: const Text('Caméra'),
+                onTap: _sending
+                    ? null
+                    : () {
+                        Navigator.pop(ctx);
+                        _pickAndSendFromCamera();
+                      },
+              ),
+              ListTile(
+                leading: const Icon(Icons.my_location_rounded),
+                title: const Text('Ma position'),
+                onTap: _sending
+                    ? null
+                    : () {
+                        Navigator.pop(ctx);
+                        _shareLocation();
+                      },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final auth = ref.watch(authStateProvider);
@@ -122,8 +205,8 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
       });
       return const SizedBox.shrink();
     }
+
     final theme = Theme.of(context);
-    // Récupère éventuellement les infos de la conversation pour l'AppBar
     final convsAsync = ref.watch(chatConversationsProvider);
     ChatConversation? conv;
     convsAsync.whenData((list) {
@@ -131,22 +214,23 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
         conv = list.firstWhere((c) => c.id == widget.conversationId);
       } catch (_) {}
     });
-    // Tenter de récupérer le numéro du pair via openOrCreate si manquant
+
     if (_peerPhone == null && conv != null) {
       _ensurePeerPhone(conv!);
     }
-    // Démarre un petit polling tant que l'écran est monté
+
     _poll ??= Timer.periodic(const Duration(seconds: 4), (_) {
       if (!mounted) return;
       ref.invalidate(chatMessagesProvider(widget.conversationId));
     });
+
     final msgs = ref.watch(chatMessagesProvider(widget.conversationId));
     final myId = (auth.user?['id'] as int?) ?? -1;
+
     return Scaffold(
       appBar: AppBar(
         title: Row(
           children: [
-            // Avatar composite: prestataire + mini client
             Stack(
               clipBehavior: Clip.none,
               children: [
@@ -197,7 +281,6 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    // Côté client: titre = prestataire; côté prestataire: titre = client
                     (conv != null)
                         ? ((conv!.providerOwnerUserId != null &&
                                 conv!.providerOwnerUserId == myId)
@@ -233,22 +316,9 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
           onPressed: () => Navigator.of(context).maybePop(),
-          tooltip: 'Fermer',
         ),
         actions: [
-          if ((_peerPhone ?? '').isNotEmpty)
-            IconButton(
-              tooltip: 'Appeler',
-              onPressed: () {
-                final tel = Uri.parse('tel:${_peerPhone!}');
-                launchUrl(tel);
-              },
-              icon: const Icon(Icons.call_rounded),
-            ),
-          // Le bouton commande n'est visible que côté client
-          if ((conv?.providerId?.isNotEmpty ?? false) &&
-              (conv?.providerOwnerUserId == null ||
-                  conv!.providerOwnerUserId != myId))
+          if (conv != null && (conv!.providerOwnerUserId != myId))
             Padding(
               padding: const EdgeInsets.only(right: 8.0),
               child: FilledButton.icon(
@@ -257,6 +327,12 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                 label: const Text('Commander'),
               ),
             ),
+          if (_peerPhone != null)
+            IconButton(
+              tooltip: 'Appeler',
+              onPressed: () => launchUrl(Uri.parse('tel:${_peerPhone!}')),
+              icon: const Icon(Icons.call_rounded),
+            ),
         ],
       ),
       body: Column(
@@ -264,11 +340,6 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
           Expanded(
             child: msgs.when(
               data: (list) {
-                // Marquer les messages comme lus pour cet utilisateur
-                ref
-                    .read(chatServiceProvider)
-                    .markRead(widget.conversationId)
-                    .catchError((_) {});
                 return ListView.builder(
                   reverse: true,
                   padding:
@@ -277,6 +348,127 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                   itemBuilder: (context, i) {
                     final m = list[list.length - 1 - i];
                     final mine = m.isMine(myId);
+
+                    Widget messageContent() {
+                      final children = <Widget>[];
+                      if ((m.attachmentUrl ?? '').isNotEmpty) {
+                        children.add(
+                          ConstrainedBox(
+                            constraints: BoxConstraints(
+                              maxWidth: MediaQuery.of(context).size.width * 0.6,
+                              maxHeight: 280,
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (_) => ImageViewerScreen(
+                                          imageUrl: _absUrl(m.attachmentUrl!)),
+                                    ),
+                                  );
+                                },
+                                child: CachedNetworkImage(
+                                  imageUrl: _absUrl(m.attachmentUrl!),
+                                  fit: BoxFit.cover,
+                                  placeholder: (ctx, _) => Container(
+                                    height: 150,
+                                    color: theme
+                                        .colorScheme.surfaceContainerHighest,
+                                    alignment: Alignment.center,
+                                    child: const SizedBox(
+                                      width: 24,
+                                      height: 24,
+                                      child: CircularProgressIndicator(
+                                          strokeWidth: 2),
+                                    ),
+                                  ),
+                                  errorWidget: (ctx, _, __) => Container(
+                                    padding: const EdgeInsets.all(12),
+                                    color: theme.colorScheme.errorContainer,
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: const [
+                                        Icon(Icons.broken_image_outlined,
+                                            size: 18),
+                                        SizedBox(width: 6),
+                                        Text('Image indisponible'),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                        children.add(const SizedBox(height: 4));
+                        children.add(
+                          Text(
+                            _fileNameFromUrl(m.attachmentUrl!),
+                            style: theme.textTheme.labelSmall?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                        );
+                      }
+
+                      if (m.lat != null && m.lng != null) {
+                        children.add(const SizedBox(height: 6));
+                        children.add(
+                          InkWell(
+                            onTap: () {
+                              final url = Uri.parse(
+                                  'https://www.google.com/maps/search/?api=1&query=${m.lat},${m.lng}');
+                              launchUrl(url);
+                            },
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: const [
+                                Icon(Icons.place, size: 16),
+                                SizedBox(width: 4),
+                                Text('Voir sur la carte'),
+                              ],
+                            ),
+                          ),
+                        );
+                      }
+
+                      if (m.body.isNotEmpty) {
+                        children.add(
+                          Container(
+                            margin: EdgeInsets.only(
+                                top: ((m.attachmentUrl ?? '').isNotEmpty ||
+                                        (m.lat != null && m.lng != null))
+                                    ? 6
+                                    : 0),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: mine
+                                  ? theme.colorScheme.primaryContainer
+                                  : theme.colorScheme.surfaceContainerHighest,
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: Text(
+                              m.body,
+                              style: TextStyle(
+                                color: mine
+                                    ? theme.colorScheme.onPrimaryContainer
+                                    : theme.colorScheme.onSurface,
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: children,
+                      );
+                    }
+
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 4),
                       child: Row(
@@ -303,150 +495,43 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                             const SizedBox(width: 6),
                           ],
                           Flexible(
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 8),
-                              constraints: BoxConstraints(
-                                maxWidth:
-                                    MediaQuery.of(context).size.width * 0.7,
-                              ),
-                              decoration: BoxDecoration(
-                                color: mine
-                                    ? theme.colorScheme.primaryContainer
-                                    : theme.colorScheme.surfaceContainerHighest,
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        if ((m.attachmentUrl ?? '')
-                                            .isNotEmpty) ...[
-                                          ConstrainedBox(
-                                            constraints: BoxConstraints(
-                                              maxWidth: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.6,
-                                              maxHeight: 280,
-                                            ),
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                              child: CachedNetworkImage(
-                                                imageUrl:
-                                                    _absUrl(m.attachmentUrl!),
-                                                fit: BoxFit.cover,
-                                                placeholder: (ctx, _) =>
-                                                    Container(
-                                                  height: 150,
-                                                  color: theme.colorScheme
-                                                      .surfaceContainerHighest,
-                                                  alignment: Alignment.center,
-                                                  child: const SizedBox(
-                                                    width: 24,
-                                                    height: 24,
-                                                    child:
-                                                        CircularProgressIndicator(
-                                                            strokeWidth: 2),
-                                                  ),
-                                                ),
-                                                errorWidget: (ctx, _, __) =>
-                                                    Container(
-                                                  padding:
-                                                      const EdgeInsets.all(12),
-                                                  color: theme.colorScheme
-                                                      .errorContainer,
-                                                  child: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: const [
-                                                      Icon(
-                                                          Icons
-                                                              .broken_image_outlined,
-                                                          size: 18),
-                                                      SizedBox(width: 6),
-                                                      Text(
-                                                          'Image indisponible'),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                        if (m.lat != null && m.lng != null) ...[
-                                          const SizedBox(height: 6),
-                                          InkWell(
-                                            onTap: () {
-                                              final url = Uri.parse(
-                                                  'https://www.google.com/maps/search/?api=1&query=${m.lat},${m.lng}');
-                                              launchUrl(url);
-                                            },
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: const [
-                                                Icon(Icons.place, size: 16),
-                                                SizedBox(width: 4),
-                                                Text('Voir sur la carte'),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                        if (m.body.isNotEmpty) ...[
-                                          if ((m.attachmentUrl ?? '')
-                                                  .isNotEmpty ||
-                                              (m.lat != null && m.lng != null))
-                                            const SizedBox(height: 6),
-                                          Text(
-                                            m.body,
-                                            style: TextStyle(
-                                              color: mine
-                                                  ? theme.colorScheme
-                                                      .onPrimaryContainer
-                                                  : theme.colorScheme.onSurface,
-                                            ),
-                                          ),
-                                        ],
-                                      ],
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        _fmtTime(m.createdAt),
-                                        style: theme.textTheme.labelSmall
-                                            ?.copyWith(
-                                          color: theme
-                                              .colorScheme.onSurfaceVariant,
-                                        ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: messageContent(),
+                                ),
+                                const SizedBox(height: 4),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      _fmtTime(m.createdAt),
+                                      style:
+                                          theme.textTheme.labelSmall?.copyWith(
+                                        color:
+                                            theme.colorScheme.onSurfaceVariant,
                                       ),
-                                      if (mine) ...[
-                                        const SizedBox(width: 6),
-                                        Icon(
-                                          m.readAt != null
-                                              ? Icons.done_all_rounded
-                                              : Icons.done_rounded,
-                                          size: 16,
-                                          color: m.readAt != null
-                                              ? theme.colorScheme.primary
-                                              : theme
-                                                  .colorScheme.onSurfaceVariant,
-                                        ),
-                                      ]
-                                    ],
-                                  )
-                                ],
-                              ),
+                                    ),
+                                    if (mine) ...[
+                                      const SizedBox(width: 6),
+                                      Icon(
+                                        m.readAt != null
+                                            ? Icons.done_all_rounded
+                                            : Icons.done_rounded,
+                                        size: 16,
+                                        color: m.readAt != null
+                                            ? theme.colorScheme.primary
+                                            : theme
+                                                .colorScheme.onSurfaceVariant,
+                                      ),
+                                    ]
+                                  ],
+                                )
+                              ],
                             ),
                           ),
                           if (mine) ...[
@@ -481,68 +566,58 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
           SafeArea(
             top: false,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(12, 6, 12, 12),
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.surfaceContainerHighest,
-                  borderRadius: BorderRadius.circular(24),
-                  border: Border.all(
-                      color: theme.colorScheme.outlineVariant, width: 1),
-                ),
-                child: Row(
-                  children: [
-                    const SizedBox(width: 12),
-                    IconButton(
-                      tooltip: 'Joindre une image',
-                      onPressed: _sending ? null : _pickAndSendImage,
-                      icon: const Icon(Icons.image_rounded),
-                    ),
-                    IconButton(
-                      tooltip: 'Partager ma position',
-                      onPressed: _sending ? null : _shareLocation,
-                      icon: const Icon(Icons.my_location_rounded),
-                    ),
-                    Expanded(
-                      child: TextField(
-                        controller: _controller,
-                        minLines: 1,
-                        maxLines: 4,
-                        textInputAction: TextInputAction.send,
-                        onSubmitted: (_) => _sending ? null : _send(),
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'Votre message…',
+              padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _controller,
+                      minLines: 1,
+                      maxLines: 4,
+                      textInputAction: TextInputAction.send,
+                      onSubmitted: (_) => _sending ? null : _send(),
+                      decoration: InputDecoration(
+                        hintText: 'Écrire un message…',
+                        filled: true,
+                        fillColor: theme.colorScheme.surfaceContainerHighest,
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 10),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(
+                              color: theme.colorScheme.outlineVariant),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(
+                              color: theme.colorScheme.outlineVariant),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(
+                              color: theme.colorScheme.primary, width: 1.5),
                         ),
                       ),
                     ),
-                    IconButton(
-                      onPressed: _sending ? null : _send,
-                      icon: Icon(Icons.send_rounded,
-                          color: _sending
-                              ? theme.disabledColor
-                              : theme.colorScheme.primary),
-                    ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(width: 6),
+                  _ActionButton(
+                    icon: Icons.attach_file_rounded,
+                    onTap: _sending ? null : _showAttachSheet,
+                  ),
+                  const SizedBox(width: 4),
+                  _ActionButton(
+                    icon: Icons.send_rounded,
+                    onTap: _sending ? null : _send,
+                    color: theme.colorScheme.primary,
+                  ),
+                ],
               ),
             ),
           ),
         ],
       ),
     );
-  }
-
-  Future<void> _ensurePeerPhone(ChatConversation conv) async {
-    try {
-      final opened = await ref.read(chatServiceProvider).openOrCreate(
-          peerUserId: conv.peerUserId, providerId: conv.providerId);
-      if (!mounted) return;
-      setState(() {
-        _peerPhone = opened.peerPhone;
-      });
-    } catch (_) {
-      // silencieux
-    }
   }
 }
 
@@ -558,4 +633,35 @@ String _absUrl(String url) {
   final base = 'https://fidest.ci';
   if (!url.startsWith('/')) return '$base/$url';
   return '$base$url';
+}
+
+String _fileNameFromUrl(String url) {
+  final u = Uri.parse(_absUrl(url));
+  final path = u.path;
+  final idx = path.lastIndexOf('/');
+  return idx >= 0 ? path.substring(idx + 1) : path;
+}
+
+class _ActionButton extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback? onTap;
+  final Color? color;
+  const _ActionButton({required this.icon, this.onTap, this.color});
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Icon(icon,
+            size: 22, color: color ?? theme.colorScheme.onSurfaceVariant),
+      ),
+    );
+  }
 }
