@@ -588,8 +588,8 @@ class _KoumassiMapState extends ConsumerState<_KoumassiMap> {
 
   Future<BitmapDescriptor> _buildMarkerIcon(
       String photoUrl, String name) async {
-    const int width = 96; // px (réduit)
-    const int height = 120; // px total (réduit)
+    const int width = 80; // px (encore réduit)
+    const int height = 100; // px total (encore réduit)
     final recorder = ui.PictureRecorder();
     final canvas = ui.Canvas(recorder);
     final paint = ui.Paint();
@@ -600,9 +600,9 @@ class _KoumassiMapState extends ConsumerState<_KoumassiMap> {
         ui.Rect.fromLTWH(0, 0, width.toDouble(), height.toDouble()), paint);
 
     // Zone de l'image (réduite)
-    const double circleSize = 64;
+    const double circleSize = 52;
     final double cx = width / 2;
-    final double cy = circleSize / 2 + 6;
+    final double cy = circleSize / 2 + 5;
     final circleRect = ui.Rect.fromCenter(
         center: ui.Offset(cx, cy), width: circleSize, height: circleSize);
 
@@ -655,15 +655,15 @@ class _KoumassiMapState extends ConsumerState<_KoumassiMap> {
 
     // Label background below
     final label = name.trim().isEmpty ? 'Prestataire' : name.trim();
-    const double pad = 6;
-    final tpName = _textPainter(label, 12, const ui.Color(0xFF0D47A1),
+    const double pad = 5;
+    final tpName = _textPainter(label, 11, const ui.Color(0xFF0D47A1),
         bold: true, maxLines: 1, ellipsis: '…');
-    tpName.layout(maxWidth: width - 12);
+    tpName.layout(maxWidth: width - 10);
     final labelW = tpName.width + pad * 2;
     final labelH = tpName.height + pad;
     final rr = ui.RRect.fromRectAndRadius(
       ui.Rect.fromCenter(
-          center: ui.Offset(cx, circleRect.bottom + 14),
+          center: ui.Offset(cx, circleRect.bottom + 10),
           width: labelW,
           height: labelH),
       const ui.Radius.circular(10),

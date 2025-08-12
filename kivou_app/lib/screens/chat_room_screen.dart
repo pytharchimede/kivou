@@ -73,17 +73,25 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
             Stack(
               clipBehavior: Clip.none,
               children: [
-                CircleAvatar(
-                  radius: 18,
-                  backgroundImage: (conv?.providerAvatarUrl.isNotEmpty ?? false)
-                      ? NetworkImage(conv!.providerAvatarUrl)
-                      : (conv?.peerAvatarUrl.isNotEmpty ?? false)
-                          ? NetworkImage(conv!.peerAvatarUrl)
-                          : null,
-                  child: ((conv?.providerAvatarUrl.isEmpty ?? true) &&
-                          (conv?.peerAvatarUrl.isEmpty ?? true))
-                      ? const Icon(Icons.storefront_rounded, size: 20)
-                      : null,
+                Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border:
+                        Border.all(color: theme.colorScheme.surface, width: 2),
+                  ),
+                  child: CircleAvatar(
+                    radius: 20,
+                    backgroundImage:
+                        (conv?.providerAvatarUrl.isNotEmpty ?? false)
+                            ? NetworkImage(conv!.providerAvatarUrl)
+                            : (conv?.peerAvatarUrl.isNotEmpty ?? false)
+                                ? NetworkImage(conv!.peerAvatarUrl)
+                                : null,
+                    child: ((conv?.providerAvatarUrl.isEmpty ?? true) &&
+                            (conv?.peerAvatarUrl.isEmpty ?? true))
+                        ? const Icon(Icons.storefront_rounded, size: 22)
+                        : null,
+                  ),
                 ),
                 Positioned(
                   right: -4,
@@ -192,29 +200,75 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                   itemBuilder: (context, i) {
                     final m = list[list.length - 1 - i];
                     final mine = m.isMine(myId);
-                    return Align(
-                      alignment:
-                          mine ? Alignment.centerRight : Alignment.centerLeft,
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(vertical: 4),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 8),
-                        constraints: BoxConstraints(
-                            maxWidth: MediaQuery.of(context).size.width * 0.7),
-                        decoration: BoxDecoration(
-                          color: mine
-                              ? theme.colorScheme.primaryContainer
-                              : theme.colorScheme.surfaceContainerHighest,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Text(
-                          m.body,
-                          style: TextStyle(
-                            color: mine
-                                ? theme.colorScheme.onPrimaryContainer
-                                : theme.colorScheme.onSurface,
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: mine
+                            ? MainAxisAlignment.end
+                            : MainAxisAlignment.start,
+                        children: [
+                          if (!mine) ...[
+                            CircleAvatar(
+                              radius: 14,
+                              backgroundImage: (conv
+                                          ?.clientAvatarUrl.isNotEmpty ??
+                                      false)
+                                  ? NetworkImage(conv!.clientAvatarUrl)
+                                  : (conv?.peerAvatarUrl.isNotEmpty ?? false)
+                                      ? NetworkImage(conv!.peerAvatarUrl)
+                                      : null,
+                              child: ((conv?.clientAvatarUrl.isEmpty ?? true) &&
+                                      (conv?.peerAvatarUrl.isEmpty ?? true))
+                                  ? const Icon(Icons.person, size: 14)
+                                  : null,
+                            ),
+                            const SizedBox(width: 6),
+                          ],
+                          Flexible(
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 8),
+                              constraints: BoxConstraints(
+                                maxWidth:
+                                    MediaQuery.of(context).size.width * 0.7,
+                              ),
+                              decoration: BoxDecoration(
+                                color: mine
+                                    ? theme.colorScheme.primaryContainer
+                                    : theme.colorScheme.surfaceContainerHighest,
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: Text(
+                                m.body,
+                                style: TextStyle(
+                                  color: mine
+                                      ? theme.colorScheme.onPrimaryContainer
+                                      : theme.colorScheme.onSurface,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
+                          if (mine) ...[
+                            const SizedBox(width: 6),
+                            CircleAvatar(
+                              radius: 14,
+                              backgroundImage: (auth.user?['avatar_url']
+                                          ?.toString()
+                                          .isNotEmpty ??
+                                      false)
+                                  ? NetworkImage(
+                                      auth.user!['avatar_url'].toString())
+                                  : null,
+                              child: (auth.user?['avatar_url']
+                                          ?.toString()
+                                          .isEmpty ??
+                                      true)
+                                  ? const Icon(Icons.person, size: 14)
+                                  : null,
+                            ),
+                          ],
+                        ],
                       ),
                     );
                   },

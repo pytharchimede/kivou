@@ -79,14 +79,23 @@ class _ConversationTile extends ConsumerWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CircleAvatar(
-              radius: 24,
-              backgroundImage:
-                  displayAvatar.isNotEmpty ? NetworkImage(displayAvatar) : null,
-              child: displayAvatar.isEmpty
-                  ? Icon(
-                      isProviderSide ? Icons.person : Icons.storefront_rounded)
-                  : null,
+            Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: theme.colorScheme.surface, width: 2),
+              ),
+              child: CircleAvatar(
+                radius: 26,
+                backgroundColor: theme.colorScheme.surfaceContainerHighest,
+                backgroundImage: displayAvatar.isNotEmpty
+                    ? NetworkImage(displayAvatar)
+                    : null,
+                child: displayAvatar.isEmpty
+                    ? Icon(isProviderSide
+                        ? Icons.person
+                        : Icons.storefront_rounded)
+                    : null,
+              ),
             ),
             const SizedBox(width: 12),
             Expanded(
