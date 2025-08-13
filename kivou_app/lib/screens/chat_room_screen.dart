@@ -10,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../widgets/quick_call_sheet.dart';
 import 'call_screen.dart';
+import 'package:kivou_app/utils/app_theme.dart';
 
 import '../models/chat.dart';
 import '../providers/app_providers.dart';
@@ -247,9 +248,9 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                     radius: 20,
                     backgroundImage:
                         (conv?.providerAvatarUrl.isNotEmpty ?? false)
-                            ? NetworkImage(conv!.providerAvatarUrl)
+                            ? NetworkImage(_absUrl(conv!.providerAvatarUrl))
                             : (conv?.peerAvatarUrl.isNotEmpty ?? false)
-                                ? NetworkImage(conv!.peerAvatarUrl)
+                                ? NetworkImage(_absUrl(conv!.peerAvatarUrl))
                                 : null,
                     child: ((conv?.providerAvatarUrl.isEmpty ?? true) &&
                             (conv?.peerAvatarUrl.isEmpty ?? true))
@@ -267,7 +268,7 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                       radius: 10,
                       backgroundImage:
                           (conv?.clientAvatarUrl.isNotEmpty ?? false)
-                              ? NetworkImage(conv!.clientAvatarUrl)
+                              ? NetworkImage(_absUrl(conv!.clientAvatarUrl))
                               : null,
                       child: (conv?.clientAvatarUrl.isEmpty ?? true)
                           ? const Icon(Icons.person, size: 14)
@@ -575,7 +576,9 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                       }
 
                       return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: mine
+                            ? CrossAxisAlignment.end
+                            : CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: children,
                       );
@@ -595,9 +598,10 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                               backgroundImage: (conv
                                           ?.clientAvatarUrl.isNotEmpty ??
                                       false)
-                                  ? NetworkImage(conv!.clientAvatarUrl)
+                                  ? NetworkImage(_absUrl(conv!.clientAvatarUrl))
                                   : (conv?.peerAvatarUrl.isNotEmpty ?? false)
-                                      ? NetworkImage(conv!.peerAvatarUrl)
+                                      ? NetworkImage(
+                                          _absUrl(conv!.peerAvatarUrl))
                                       : null,
                               child: ((conv?.clientAvatarUrl.isEmpty ?? true) &&
                                       (conv?.peerAvatarUrl.isEmpty ?? true))
@@ -608,17 +612,23 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                           ],
                           Flexible(
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
+                              crossAxisAlignment: mine
+                                  ? CrossAxisAlignment.end
+                                  : CrossAxisAlignment.start,
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Align(
-                                  alignment: Alignment.centerLeft,
+                                  alignment: mine
+                                      ? Alignment.centerRight
+                                      : Alignment.centerLeft,
                                   child: messageContent(),
                                 ),
                                 const SizedBox(height: 4),
                                 Row(
                                   mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  mainAxisAlignment: mine
+                                      ? MainAxisAlignment.end
+                                      : MainAxisAlignment.start,
                                   children: [
                                     Text(
                                       _fmtTime(m.createdAt),
@@ -636,7 +646,7 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                                             : Icons.done_rounded,
                                         size: 16,
                                         color: m.readAt != null
-                                            ? theme.colorScheme.primary
+                                            ? AppTheme.primaryBlue
                                             : theme
                                                 .colorScheme.onSurfaceVariant,
                                       ),
@@ -654,8 +664,8 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                                           ?.toString()
                                           .isNotEmpty ??
                                       false)
-                                  ? NetworkImage(
-                                      auth.user!['avatar_url'].toString())
+                                  ? NetworkImage(_absUrl(
+                                      auth.user!['avatar_url'].toString()))
                                   : null,
                               child: (auth.user?['avatar_url']
                                           ?.toString()
@@ -794,8 +804,10 @@ class _PinnedAdBanner extends StatelessWidget {
 }
 
 String _fmtTime(DateTime dt) {
-  final h = dt.hour.toString().padLeft(2, '0');
-  final m = dt.minute.toString().padLeft(2, '0');
+  // Ajuste à l'heure locale de l'appareil (Côte d'Ivoire GMT+0)
+  final local = dt.toLocal();
+  final h = local.hour.toString().padLeft(2, '0');
+  final m = local.minute.toString().padLeft(2, '0');
   return '$h:$m';
 }
 
