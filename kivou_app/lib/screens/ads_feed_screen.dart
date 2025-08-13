@@ -525,4 +525,13 @@ class _ChatsWithBadgeButton extends ConsumerWidget {
               ),
               constraints: const BoxConstraints(minWidth: 18),
               child: Text(
-                totalUnread > 99 ? '99+' : '$totalUn
+                totalUnread > 99 ? '99+' : '$totalUnread',
+                style: const TextStyle(color: Colors.white, fontSize: 10),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+}
