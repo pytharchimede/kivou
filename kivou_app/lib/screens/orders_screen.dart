@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../providers/app_providers.dart';
 import '../services/booking_service.dart';
-// import '../services/api_client.dart';
+import '../services/mappers.dart';
 
 final ordersFutureProvider =
     FutureProvider.autoDispose<List<dynamic>>((ref) async {
@@ -15,162 +15,164 @@ final ordersFutureProvider =
     final userId = (auth.user?['id'] is int)
         ? auth.user!['id'] as int
         : int.tryParse((auth.user?['id'] ?? '').toString()) ?? 0;
-    return await svc.listByUser(userId);
+    return await svc.listByUser(userId); // Commandes émises par l'utilisateur
   }
   return <dynamic>[];
 });
 
-final ownerOrdersFutureProvider =
-    FutureProvider.autoDispose<List<dynamic>>((ref) async {
-  final auth = ref.watch(authStateProvider);
-  final api = ref.read(apiClientProvider);
-  final svc = BookingService(api);
-  if (auth.isAuthenticated) {
-    return await svc.listByOwner();
-  }
-  return <dynamic>[];
-});
-
-class OrdersScreen extends ConsumerWidget {
-  final int initialIndex; // 0 = Demandeur, 1 = Prestataire
-  const OrdersScreen({super.key, this.initialIndex = 0});
-
+class OrdersScreen extends ConsumerStatefulWidget {
+  final int? initialIndex; // conservé pour compat compatibilité ancienne route
+  const OrdersScreen({super.key, this.initialIndex});
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return DefaultTabController(
-      length: 2,
-      initialIndex: initialIndex,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Commandes'),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new_rounded),
-            tooltip: 'Accueil',
-            onPressed: () => context.go('/home'),
-          ),
-          bottom: const TabBar(
-            tabs: [
-              Tab(text: 'Demandeur'),
-              Tab(text: 'Prestataire'),
-            ],
-          ),
-        ),
-        body: const TabBarView(
-          children: [
-            _RequesterOrdersTab(),
-            _OwnerOrdersTab(),
-          ],
-        ),
-      ),
-    );
-  }
+  ConsumerState<OrdersScreen> createState() => _OrdersScreenState();
 }
 
-class _RequesterOrdersTab extends ConsumerWidget {
-  const _RequesterOrdersTab();
+class _OrdersScreenState extends ConsumerState<OrdersScreen> {
+  final _searchCtrl = TextEditingController();
+  String _query = '';
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final future = ref.watch(ordersFutureProvider);
-    return RefreshIndicator(
-      onRefresh: () async {
-        ref.invalidate(ordersFutureProvider);
-        try {
-          await ref.read(ordersFutureProvider.future);
-        } catch (_) {}
-      },
-      child: future.when(
-        data: (bookings) {
-          final now = DateTime.now();
-          final items = bookings.cast<Map<String, dynamic>>();
-          final upcoming = items.where((b) {
-            final dt =
-                _BookingCard._parseDate((b['scheduled_at'] ?? '').toString());
-            return dt == null || dt.isAfter(now);
-          }).toList();
-          final past = items.where((b) {
-            final dt =
-                _BookingCard._parseDate((b['scheduled_at'] ?? '').toString());
-            return dt != null && dt.isBefore(now);
-          }).toList();
-          if (items.isEmpty) {
-            return ListView(children: const [
-              SizedBox(height: 120),
-              Center(child: Text('Aucune commande')),
-            ]);
-          }
-          return ListView(
-            padding: const EdgeInsets.all(12),
-            children: [
-              if (upcoming.isNotEmpty) ...[
-                _SectionHeader(title: 'À venir'),
-                const SizedBox(height: 8),
-                ...List.generate(
-                    upcoming.length,
-                    (i) => Padding(
-                          padding: const EdgeInsets.only(bottom: 12),
-                          child: _BookingCard(booking: upcoming[i]),
-                        )),
-              ],
-              if (past.isNotEmpty) ...[
-                const SizedBox(height: 8),
-                _SectionHeader(title: 'Passées'),
-                const SizedBox(height: 8),
-                ...List.generate(
-                    past.length,
-                    (i) => Padding(
-                          padding: const EdgeInsets.only(bottom: 12),
-                          child: _BookingCard(booking: past[i]),
-                        )),
-              ],
-            ],
-          );
-        },
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, st) => Center(child: Text('Erreur: $e')),
-      ),
-    );
+  void initState() {
+    super.initState();
+    _searchCtrl.addListener(() {
+      final q = _searchCtrl.text.trim();
+      if (q != _query) setState(() => _query = q);
+    });
   }
-}
-
-class _OwnerOrdersTab extends ConsumerWidget {
-  const _OwnerOrdersTab();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final future = ref.watch(ownerOrdersFutureProvider);
-    return RefreshIndicator(
-      onRefresh: () async {
-        ref.invalidate(ownerOrdersFutureProvider);
-        try {
-          await ref.read(ownerOrdersFutureProvider.future);
-        } catch (_) {}
-      },
-      child: future.when(
-        data: (bookings) => bookings.isEmpty
-            ? ListView(children: const [
-                SizedBox(height: 120),
-                Center(child: Text('Aucune commande à traiter')),
-              ])
-            : ListView.separated(
-                padding: const EdgeInsets.all(12),
-                itemCount: bookings.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 12),
-                itemBuilder: (context, i) {
-                  final b = bookings[i] as Map<String, dynamic>;
-                  return _OwnerBookingCard(booking: b);
-                },
+  void dispose() {
+    _searchCtrl.dispose();
+    super.dispose();
+  }
+
+  Future<void> _refresh() async {
+    ref.invalidate(ordersFutureProvider);
+    try {
+      await ref.read(ordersFutureProvider.future);
+    } catch (_) {}
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final asyncOrders = ref.watch(ordersFutureProvider);
+    final loading = asyncOrders.isLoading;
+    final orders = asyncOrders.maybeWhen(
+      data: (v) => v.cast<Map<String, dynamic>>(),
+      orElse: () => const <Map<String, dynamic>>[],
+    );
+
+    // Filtrage simple
+    final q = _query.toLowerCase();
+    final filtered = q.isEmpty
+        ? orders
+        : orders.where((o) {
+            bool match(String? s) => (s ?? '').toLowerCase().contains(q);
+            return match(o['service_category']?.toString()) ||
+                match(o['service_description']?.toString()) ||
+                match(o['description']?.toString()) ||
+                match(o['notes']?.toString()) ||
+                match(o['provider_name']?.toString()) ||
+                match(o['status']?.toString()) ||
+                match(o['id']?.toString());
+          }).toList();
+
+    List<Widget> listChildren;
+    if (loading && orders.isEmpty) {
+      listChildren = [
+        const SizedBox(height: 12),
+        ...List.generate(
+            6,
+            (i) => const Padding(
+                  padding: EdgeInsets.only(bottom: 12),
+                  child: _OrderSkeletonCard(),
+                )),
+      ];
+    } else if (filtered.isEmpty) {
+      listChildren = const [
+        SizedBox(height: 140),
+        Center(child: Text('Aucune commande')),
+      ];
+    } else {
+      listChildren = [
+        const SizedBox(height: 8),
+        ...List.generate(
+          filtered.length,
+          (i) => Padding(
+            padding: const EdgeInsets.only(bottom: 14),
+            child: _SentBookingCard(booking: filtered[i]),
+          ),
+        ),
+        const SizedBox(height: 32),
+      ];
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Mes commandes émises'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+          onPressed: () => context.go('/home'),
+        ),
+        bottom: loading
+            ? PreferredSize(
+                preferredSize: const Size.fromHeight(2),
+                child: LinearProgressIndicator(
+                  minHeight: 2,
+                  backgroundColor: theme.colorScheme.surfaceContainerHighest,
+                ),
+              )
+            : null,
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(12, 10, 12, 4),
+            child: TextField(
+              controller: _searchCtrl,
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.search_rounded),
+                hintText: 'Rechercher (service, prestataire, statut, id...)',
+                filled: true,
+                isDense: true,
+                suffixIcon: _query.isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          _searchCtrl.clear();
+                          FocusScope.of(context).unfocus();
+                        },
+                      )
+                    : null,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: BorderSide.none,
+                ),
               ),
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, st) => Center(child: Text('Erreur: $e')),
+            ),
+          ),
+          Expanded(
+            child: RefreshIndicator(
+              onRefresh: _refresh,
+              child: ListView(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                children: listChildren,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 }
 
-class _BookingCard extends ConsumerWidget {
+// Anciennes vues par onglets supprimées au profit d'un filtre en haut de page.
+
+class _SentBookingCard extends ConsumerWidget {
   final Map<String, dynamic> booking;
-  const _BookingCard({required this.booking});
+  const _SentBookingCard({required this.booking});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -178,22 +180,26 @@ class _BookingCard extends ConsumerWidget {
     final df = DateFormat('EEE d MMM yyyy • HH:mm', 'fr');
 
     final service = (booking['service_category'] ?? 'Service').toString();
-    final desc = (booking['service_description'] ?? '').toString();
+    final desc = (booking['service_description'] ??
+            booking['description'] ??
+            booking['notes'] ??
+            '')
+        .toString();
     final status = (booking['status'] ?? 'pending').toString();
     final scheduledAtStr = (booking['scheduled_at'] ?? '').toString();
     final createdAtStr = (booking['created_at'] ?? '').toString();
-    final duration = _toDouble(booking['duration']);
-    final total = _toDouble(booking['total_price']);
+    final duration = _Util.toDouble(booking['duration']);
+    final total = _Util.toDouble(booking['total_price']);
+    final DateTime? scheduledAt = _Util.parseDate(scheduledAtStr);
+    final DateTime? createdAt = _Util.parseDate(createdAtStr);
 
-    final DateTime? scheduledAt = _parseDate(scheduledAtStr);
-    final DateTime? createdAt = _parseDate(createdAtStr);
-
-    // Affiche le prestataire (nom + photo) côté demandeur
-    final provider = booking['provider'] is Map<String, dynamic>
-        ? booking['provider'] as Map<String, dynamic>
-        : null;
-    final avatarUrl = (provider?['photo_url'] ?? '').toString();
-    final displayName = (provider?['name'] ?? 'Prestataire').toString();
+    final requesterName =
+        (booking['user_name'] ?? booking['user_id'] ?? 'Moi').toString();
+    final requesterAvatar = normalizeImageUrl(
+        (booking['user_avatar_url'] ?? booking['avatar_url'] ?? '').toString());
+    final providerName = (booking['provider_name'] ?? 'Prestataire').toString();
+    final providerAvatar =
+        normalizeImageUrl((booking['provider_photo_url'] ?? '').toString());
 
     final st = _StatusStyle.from(status, theme);
     final gradient = LinearGradient(
@@ -226,45 +232,73 @@ class _BookingCard extends ConsumerWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _Avatar(name: displayName, url: avatarUrl),
-                const SizedBox(width: 12),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _Avatar(name: requesterName, url: requesterAvatar),
+                    const SizedBox(height: 6),
+                    Text('Moi', style: theme.textTheme.labelSmall),
+                  ],
+                ),
+                const SizedBox(width: 10),
+                Padding(
+                  padding: const EdgeInsets.only(top: 12.0),
+                  child: Icon(Icons.arrow_forward_rounded,
+                      size: 20, color: theme.colorScheme.primary),
+                ),
+                const SizedBox(width: 10),
                 Expanded(
-                  child: Column(
+                  child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
+                      _Avatar(name: providerName, url: providerAvatar),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    providerName,
+                                    style: theme.textTheme.titleMedium
+                                        ?.copyWith(fontWeight: FontWeight.w700),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                _StatusPill(
+                                    text: st.label,
+                                    color: st.bg,
+                                    textColor: st.fg,
+                                    icon: st.icon),
+                              ],
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
                               service,
-                              style: theme.textTheme.titleMedium
-                                  ?.copyWith(fontWeight: FontWeight.w700),
+                              style: theme.textTheme.bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.w600),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
-                          ),
-                          const SizedBox(width: 8),
-                          _StatusPill(
-                              text: st.label,
-                              color: st.bg,
-                              textColor: st.fg,
-                              icon: st.icon),
-                        ],
-                      ),
-                      if (desc.isNotEmpty) ...[
-                        const SizedBox(height: 8),
-                        Text(
-                          desc,
-                          style: theme.textTheme.bodyMedium,
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
+                          ],
                         ),
-                      ],
+                      ),
                     ],
                   ),
                 ),
               ],
             ),
+            if (desc.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Text(desc,
+                  style: theme.textTheme.bodyMedium,
+                  maxLines: 5,
+                  overflow: TextOverflow.ellipsis),
+            ],
             const SizedBox(height: 12),
             _InfoRow(
               icon: Icons.calendar_month_outlined,
@@ -275,12 +309,12 @@ class _BookingCard extends ConsumerWidget {
             _InfoRow(
               icon: Icons.timer_outlined,
               label: 'Durée',
-              value: duration != null ? _formatHours(duration) : '-',
+              value: duration != null ? _Util.formatHours(duration) : '-',
             ),
             _InfoRow(
               icon: Icons.payments_outlined,
               label: 'Montant',
-              value: total != null ? _formatMoney(total) : '-',
+              value: total != null ? _Util.formatMoney(total) : '-',
             ),
             if (createdAt != null || createdAtStr.isNotEmpty)
               _InfoRow(
@@ -289,22 +323,13 @@ class _BookingCard extends ConsumerWidget {
                 value: createdAt != null ? df.format(createdAt) : createdAtStr,
               ),
             const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextButton.icon(
-                  onPressed: () => _showDetails(context),
-                  icon: const Icon(Icons.receipt_long_outlined),
-                  label: const Text('Détails'),
-                ),
-                const SizedBox(width: 8),
-                if (status == 'pending')
-                  ElevatedButton.icon(
-                    onPressed: () {},
-                    icon: const Icon(Icons.edit_calendar_outlined),
-                    label: const Text('Reprogrammer'),
-                  ),
-              ],
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton.icon(
+                onPressed: () => _showDetails(context),
+                icon: const Icon(Icons.receipt_long_outlined),
+                label: const Text('Détails'),
+              ),
             )
           ],
         ),
@@ -312,13 +337,99 @@ class _BookingCard extends ConsumerWidget {
     );
   }
 
-  static String _formatMoney(double v) {
+  void _showDetails(BuildContext context) {
+    final theme = Theme.of(context);
+    final entries = <MapEntry<String, String>>[
+      MapEntry('Service', (booking['service_category'] ?? '').toString()),
+      MapEntry(
+          'Description',
+          (booking['service_description'] ??
+                  booking['description'] ??
+                  booking['notes'] ??
+                  '')
+              .toString()),
+      MapEntry('Statut', (booking['status'] ?? '').toString()),
+      MapEntry('Planifié', (booking['scheduled_at'] ?? '').toString()),
+      MapEntry('Durée', (booking['duration'] ?? '').toString()),
+      MapEntry('Montant', (booking['total_price'] ?? '').toString()),
+      MapEntry('Créée', (booking['created_at'] ?? '').toString()),
+      if (booking['id'] != null) MapEntry('ID', booking['id'].toString()),
+      if (booking['provider_id'] != null)
+        MapEntry('Prestataire', booking['provider_id'].toString()),
+    ];
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (ctx) => DraggableScrollableSheet(
+        expand: false,
+        initialChildSize: 0.6,
+        minChildSize: 0.4,
+        maxChildSize: 0.9,
+        builder: (_, controller) => Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Icon(Icons.receipt_long_outlined),
+                  const SizedBox(width: 8),
+                  Text('Détails de la commande',
+                      style: theme.textTheme.titleMedium
+                          ?.copyWith(fontWeight: FontWeight.w700)),
+                  const Spacer(),
+                  IconButton(
+                      onPressed: () => Navigator.of(ctx).pop(),
+                      icon: const Icon(Icons.close)),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Expanded(
+                child: ListView.separated(
+                  controller: controller,
+                  itemCount: entries.length,
+                  separatorBuilder: (_, __) => const Divider(height: 16),
+                  itemBuilder: (_, i) {
+                    final e = entries[i];
+                    return Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: 110,
+                          child: Text(e.key,
+                              style: theme.textTheme.bodySmall
+                                  ?.copyWith(color: theme.hintColor)),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(e.value.isEmpty ? '-' : e.value,
+                              style: theme.textTheme.bodyMedium),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _Util {
+  static String formatMoney(double v) {
     final f =
-        NumberFormat.currency(locale: 'fr', symbol: 'F CFA', decimalDigits: 0);
+        NumberFormat.currency(locale: 'fr', symbol: 'F CFA', decimalDigits: 0);
     return f.format(v);
   }
 
-  static String _formatHours(double hours) {
+  static String formatHours(double hours) {
     if (hours < 1) {
       final mins = (hours * 60).round();
       return '$mins min';
@@ -328,107 +439,20 @@ class _BookingCard extends ConsumerWidget {
     return m > 0 ? '${h}h ${m}min' : '${h}h';
   }
 
-  static double? _toDouble(dynamic x) {
+  static double? toDouble(dynamic x) {
     if (x == null) return null;
     if (x is num) return x.toDouble();
     return double.tryParse(x.toString());
   }
 
-  static DateTime? _parseDate(String s) {
+  static DateTime? parseDate(String s) {
     if (s.isEmpty) return null;
-    // Supporte 'YYYY-MM-DD HH:MM:SS'
     try {
       if (s.contains('T')) return DateTime.tryParse(s);
-      // Remplace espace par T pour ISO
       return DateTime.tryParse(s.replaceFirst(' ', 'T'));
     } catch (_) {
       return null;
     }
-  }
-
-  void _showDetails(BuildContext context) {
-    final theme = Theme.of(context);
-    final entries = <MapEntry<String, String>>[
-      MapEntry('Service', (booking['service_category'] ?? '').toString()),
-      MapEntry(
-          'Description', (booking['service_description'] ?? '').toString()),
-      MapEntry('Statut', (booking['status'] ?? '').toString()),
-      MapEntry('Planifié', (booking['scheduled_at'] ?? '').toString()),
-      MapEntry('Durée', (booking['duration'] ?? '').toString()),
-      MapEntry('Montant', (booking['total_price'] ?? '').toString()),
-      MapEntry('Créée', (booking['created_at'] ?? '').toString()),
-      if (booking['id'] != null) MapEntry('ID', booking['id'].toString()),
-      if (booking['provider_id'] != null)
-        MapEntry('Prestataire', booking['provider_id'].toString()),
-      if (booking['user_id'] != null)
-        MapEntry('Demandeur', booking['user_id'].toString()),
-    ];
-
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
-      builder: (ctx) {
-        return DraggableScrollableSheet(
-          expand: false,
-          initialChildSize: 0.6,
-          minChildSize: 0.4,
-          maxChildSize: 0.9,
-          builder: (_, controller) => Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    const Icon(Icons.receipt_long_outlined),
-                    const SizedBox(width: 8),
-                    Text('Détails de la commande',
-                        style: theme.textTheme.titleMedium
-                            ?.copyWith(fontWeight: FontWeight.w700)),
-                    const Spacer(),
-                    IconButton(
-                      icon: const Icon(Icons.close),
-                      onPressed: () => Navigator.of(ctx).pop(),
-                    )
-                  ],
-                ),
-                const SizedBox(height: 12),
-                Expanded(
-                  child: ListView.separated(
-                    controller: controller,
-                    itemBuilder: (_, i) {
-                      final e = entries[i];
-                      return Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                              width: 110,
-                              child: Text(e.key,
-                                  style: theme.textTheme.bodySmall
-                                      ?.copyWith(color: theme.hintColor))),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              e.value.isEmpty ? '-' : e.value,
-                              style: theme.textTheme.bodyMedium,
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                    separatorBuilder: (_, __) => const Divider(height: 16),
-                    itemCount: entries.length,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
   }
 }
 
@@ -577,48 +601,21 @@ class _Avatar extends StatelessWidget {
   }
 }
 
-class _OwnerBookingCard extends ConsumerWidget {
-  final Map<String, dynamic> booking;
-  const _OwnerBookingCard({required this.booking});
+// Suppression de la carte propriétaire avec actions; remplacée par _SentBookingCard.
 
+// _SectionHeader supprimé (plus utilisé).
+
+class _OrderSkeletonCard extends StatelessWidget {
+  const _OrderSkeletonCard();
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final df = DateFormat('EEE d MMM yyyy • HH:mm', 'fr');
-
-    final service = (booking['service_category'] ?? 'Service').toString();
-    final desc = (booking['service_description'] ?? '').toString();
-    final status = (booking['status'] ?? 'pending').toString();
-    final scheduledAtStr = (booking['scheduled_at'] ?? '').toString();
-    final duration = _BookingCard._toDouble(booking['duration']);
-    final total = _BookingCard._toDouble(booking['total_price']);
-    final DateTime? scheduledAt = _BookingCard._parseDate(scheduledAtStr);
-
-    final requesterName = (booking['user_name'] ?? 'Demandeur').toString();
-    final requesterAvatar = (booking['user_avatar_url'] ?? '').toString();
-
-    final st = _StatusStyle.from(status, theme);
-    final gradient = LinearGradient(
-      colors: [
-        theme.colorScheme.primary.withValues(alpha: 0.08),
-        theme.colorScheme.secondary.withValues(alpha: 0.06)
-      ],
-      begin: Alignment.topLeft,
-      end: Alignment.bottomRight,
-    );
-
+    final base = theme.colorScheme.surfaceContainerHighest;
     return Container(
       decoration: BoxDecoration(
-        gradient: gradient,
+        color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: theme.dividerColor.withValues(alpha: 0.2)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 12,
-            offset: const Offset(0, 6),
-          )
-        ],
       ),
       child: Padding(
         padding: const EdgeInsets.all(14),
@@ -628,163 +625,113 @@ class _OwnerBookingCard extends ConsumerWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _Avatar(name: requesterName, url: requesterAvatar),
-                const SizedBox(width: 12),
+                // avatar demandeur
+                _Shimmer(
+                  child: Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: base,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              requesterName,
-                              style: theme.textTheme.titleMedium
-                                  ?.copyWith(fontWeight: FontWeight.w700),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          _StatusPill(
-                              text: st.label,
-                              color: st.bg,
-                              textColor: st.fg,
-                              icon: st.icon),
-                        ],
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        service,
-                        style: theme.textTheme.bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.w600),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      if (desc.isNotEmpty) ...[
-                        const SizedBox(height: 6),
-                        Text(
-                          desc,
-                          style: theme.textTheme.bodyMedium,
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
+                    children: const [
+                      _SkeletonLine(widthFactor: 0.5, height: 16),
+                      SizedBox(height: 6),
+                      _SkeletonLine(widthFactor: 0.8),
                     ],
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 12),
-            _InfoRow(
-              icon: Icons.calendar_month_outlined,
-              label: 'Date/heure',
-              value:
-                  scheduledAt != null ? df.format(scheduledAt) : scheduledAtStr,
-            ),
-            _InfoRow(
-              icon: Icons.timer_outlined,
-              label: 'Durée',
-              value:
-                  duration != null ? _BookingCard._formatHours(duration) : '-',
-            ),
-            _InfoRow(
-              icon: Icons.payments_outlined,
-              label: 'Montant',
-              value: total != null ? _BookingCard._formatMoney(total) : '-',
-            ),
-            const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextButton.icon(
-                  onPressed: () => _showOwnerDetails(context),
-                  icon: const Icon(Icons.receipt_long_outlined),
-                  label: const Text('Détails'),
-                ),
-                const SizedBox(width: 8),
-                if (status == 'pending') ...[
-                  OutlinedButton.icon(
-                    onPressed: () => _updateStatus(ref, context, 'cancelled'),
-                    icon: const Icon(Icons.close_rounded),
-                    label: const Text('Refuser'),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.red.shade700,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  FilledButton.icon(
-                    onPressed: () => _updateStatus(ref, context, 'confirmed'),
-                    icon: const Icon(Icons.check_rounded),
-                    label: const Text('Valider'),
-                  ),
-                ] else if (status == 'confirmed') ...[
-                  FilledButton.icon(
-                    onPressed: null,
-                    icon: const Icon(Icons.verified_outlined),
-                    label: const Text('Confirmée'),
-                  ),
-                ] else if (status == 'cancelled') ...[
-                  OutlinedButton.icon(
-                    onPressed: null,
-                    icon: const Icon(Icons.block),
-                    label: const Text('Refusée'),
-                  ),
-                ] else if (status == 'completed') ...[
-                  OutlinedButton.icon(
-                    onPressed: null,
-                    icon: const Icon(Icons.check_circle_outline),
-                    label: const Text('Terminée'),
-                  ),
-                ],
-              ],
-            )
+            const _SkeletonLine(widthFactor: 0.6),
+            const SizedBox(height: 6),
+            const _SkeletonLine(widthFactor: 0.4),
           ],
         ),
       ),
     );
   }
-
-  void _showOwnerDetails(BuildContext context) {
-    _BookingCard(booking: booking)._showDetails(context);
-  }
-
-  Future<void> _updateStatus(
-      WidgetRef ref, BuildContext context, String status) async {
-    try {
-      final api = ref.read(apiClientProvider);
-      await BookingService(api).updateStatus(
-          bookingId: int.tryParse(booking['id']?.toString() ?? '') ?? 0,
-          status: status);
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(
-                'Commande ${status == 'confirmed' ? 'confirmée' : 'refusée'}')));
-      }
-      ref.invalidate(ownerOrdersFutureProvider);
-    } catch (e) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Erreur: $e')));
-      }
-    }
-  }
 }
 
-class _SectionHeader extends StatelessWidget {
-  final String title;
-  const _SectionHeader({required this.title});
+class _SkeletonLine extends StatelessWidget {
+  final double widthFactor;
+  final double height;
+  const _SkeletonLine({this.widthFactor = 1.0, this.height = 12});
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Row(
-      children: [
-        Icon(Icons.segment, size: 18, color: theme.colorScheme.primary),
-        const SizedBox(width: 6),
-        Text(title,
-            style: theme.textTheme.titleSmall
-                ?.copyWith(fontWeight: FontWeight.w700)),
-      ],
+    final base = theme.colorScheme.surfaceContainerHighest;
+    return FractionallySizedBox(
+      widthFactor: widthFactor,
+      child: _Shimmer(
+        child: Container(
+          height: height,
+          decoration: BoxDecoration(
+            color: base,
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _Shimmer extends StatefulWidget {
+  final Widget child;
+  const _Shimmer({required this.child});
+  @override
+  State<_Shimmer> createState() => _ShimmerState();
+}
+
+class _ShimmerState extends State<_Shimmer>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ctrl;
+  late final Animation<double> _anim;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 1200))
+      ..repeat();
+    _anim = Tween<double>(begin: -1.0, end: 2.0)
+        .animate(CurvedAnimation(parent: _ctrl, curve: Curves.linear));
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final base = theme.colorScheme.surfaceContainerHighest;
+    final highlight = base.withValues(alpha: 0.5);
+    return AnimatedBuilder(
+      animation: _anim,
+      builder: (context, child) {
+        final grad = LinearGradient(
+          colors: [base, highlight, base],
+          stops: const [0.25, 0.5, 0.75],
+          begin: Alignment(-1 + _anim.value, 0),
+          end: Alignment(1 + _anim.value, 0),
+        );
+        return ShaderMask(
+          shaderCallback: (rect) => grad.createShader(rect),
+          blendMode: BlendMode.srcATop,
+          child: child,
+        );
+      },
+      child: widget.child,
     );
   }
 }
