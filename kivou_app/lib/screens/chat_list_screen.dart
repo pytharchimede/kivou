@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/app_providers.dart';
 import '../models/chat.dart';
+import '../services/mappers.dart';
 
 class ChatListScreen extends ConsumerWidget {
   const ChatListScreen({super.key});
@@ -64,13 +65,14 @@ class _ConversationTile extends ConsumerWidget {
         ? (conv.clientName.isNotEmpty ? conv.clientName : conv.peerName)
         : (conv.providerName.isNotEmpty ? conv.providerName : conv.peerName);
     // Avatar principal selon le rôle
-    final displayAvatar = isProviderSide
+    final displayAvatarRaw = isProviderSide
         ? (conv.clientAvatarUrl.isNotEmpty
             ? conv.clientAvatarUrl
             : conv.peerAvatarUrl)
         : (conv.providerAvatarUrl.isNotEmpty
             ? conv.providerAvatarUrl
             : conv.peerAvatarUrl);
+    final displayAvatar = normalizeImageUrl(displayAvatarRaw);
     // Sous-titre: indique l’autre partie pour lever toute ambiguïté
     final subtitle = isProviderSide
         ? (conv.providerName.isNotEmpty
