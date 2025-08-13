@@ -23,6 +23,11 @@ class HomeScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Liste des prestataires'),
         actions: [
+          IconButton(
+            onPressed: () => context.go('/home'),
+            tooltip: 'Annonces',
+            icon: const Icon(Icons.view_list_outlined),
+          ),
           _BellButton(),
           _ChatsWithBadgeButton(),
           IconButton(

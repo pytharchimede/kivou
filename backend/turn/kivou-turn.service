@@ -1,0 +1,13 @@
+[Unit]
+Description=Coturn TURN server for KIVOU
+After=network.target
+
+[Service]
+Type=simple
+User=turnserver
+Group=turnserver
+ExecStart=/usr/bin/turnserver -c /etc/turnserver.conf --no-stdout-log
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

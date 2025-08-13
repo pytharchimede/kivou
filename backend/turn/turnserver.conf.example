@@ -1,0 +1,33 @@
+# Example Coturn configuration for KIVOU
+# Copy to /etc/turnserver.conf and adjust values
+
+# Listening ports
+listening-port=3478
+tls-listening-port=5349
+
+# External IP (public IP of your server)
+#external-ip=YOUR_PUBLIC_IP
+
+# Realm (use your domain)
+realm=fidest.ci
+
+# Auth
+lt-cred-mech
+user=turnuser:turnpassword
+# Or use a users file
+#userdb=/etc/turnuserdb.conf
+
+# Certificates for TLS/DTLS
+#cert=/etc/ssl/certs/your_cert.pem
+#pkey=/etc/ssl/private/your_key.pem
+
+# Allowed peer ports (optional)
+min-port=49160
+max-port=49200
+
+# Logging
+verbose
+fingerprint
+
+# No CLI for simplicity
+no-cli

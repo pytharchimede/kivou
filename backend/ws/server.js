@@ -34,6 +34,13 @@ wss.on("connection", (ws) => {
     }
     if (msg.type === "join") {
       joinRoom(msg.room, ws);
+      // informer les pairs déjà dans la room
+      const peers = rooms.get(msg.room) || new Set();
+      peers.forEach((client) => {
+        if (client !== ws && client.readyState === WebSocket.OPEN) {
+          client.send(JSON.stringify({ type: "peer-joined", room: msg.room }));
+        }
+      });
       return;
     }
     if (msg.type === "leave") {
@@ -49,7 +56,18 @@ wss.on("connection", (ws) => {
       }
     });
   });
-  ws.on("close", () => leaveRoom(ws));
+  ws.on("close", () => {
+    const room = ws._roomId;
+    leaveRoom(ws);
+    if (room) {
+      const peers = rooms.get(room) || new Set();
+      peers.forEach((client) => {
+        if (client !== ws && client.readyState === WebSocket.OPEN) {
+          client.send(JSON.stringify({ type: "peer-left", room }));
+        }
+      });
+    }
+  });
 });
 
 console.log(`[signaling] WebSocket server running on port ${port}`);

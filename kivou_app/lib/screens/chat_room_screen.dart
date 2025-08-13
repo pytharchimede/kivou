@@ -330,46 +330,70 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                 label: const Text('Commander'),
               ),
             ),
-          if (_peerPhone != null) ...[
-            GestureDetector(
-              onLongPress: () async {
-                // Ouvre la feuille d'actions d'appel (téléphone/SMS)
-                // ignore: use_build_context_synchronously
-                await QuickCallSheet.show(context,
-                    phoneNumber: _peerPhone!,
-                    message:
-                        "Bonjour, je vous contacte via KIVOU à propos de notre conversation.");
-              },
-              child: IconButton(
-                tooltip: 'Appeler',
-                onPressed: () => launchUrl(Uri.parse('tel:${_peerPhone!}')),
-                icon: const Icon(Icons.call_rounded),
-              ),
-            ),
-            IconButton(
-              tooltip: 'Appel audio',
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => _CallLauncher(
-                          video: false,
-                          roomId: widget.conversationId.toString(),
-                        )));
-              },
-              icon: const Icon(Icons.call_outlined),
-            ),
-            IconButton(
-              tooltip: 'Appel vidéo',
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => _CallLauncher(
-                          video: true,
-                          roomId: widget.conversationId.toString(),
-                        )));
-              },
-              icon: const Icon(Icons.videocam_outlined),
-            ),
-          ],
         ],
+        bottom: (_peerPhone != null)
+            ? PreferredSize(
+                preferredSize: const Size.fromHeight(44),
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // Appel téléphonique (appui long => QuickCallSheet)
+                      GestureDetector(
+                        onLongPress: () async {
+                          await QuickCallSheet.show(
+                            context,
+                            phoneNumber: _peerPhone!,
+                            message:
+                                "Bonjour, je vous contacte via KIVOU à propos de notre conversation.",
+                          );
+                        },
+                        child: IconButton(
+                          tooltip: 'Appeler',
+                          onPressed: () =>
+                              launchUrl(Uri.parse('tel:${_peerPhone!}')),
+                          icon: const Icon(Icons.call_rounded),
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      // Appel audio WebRTC
+                      IconButton(
+                        tooltip: 'Appel audio',
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => _CallLauncher(
+                                video: false,
+                                roomId: widget.conversationId.toString(),
+                              ),
+                            ),
+                          );
+                        },
+                        icon: const Icon(Icons.call_outlined),
+                      ),
+                      const SizedBox(width: 4),
+                      // Appel vidéo WebRTC
+                      IconButton(
+                        tooltip: 'Appel vidéo',
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => _CallLauncher(
+                                video: true,
+                                roomId: widget.conversationId.toString(),
+                              ),
+                            ),
+                          );
+                        },
+                        icon: const Icon(Icons.videocam_outlined),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            : null,
       ),
       body: Column(
         children: [

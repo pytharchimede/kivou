@@ -27,6 +27,8 @@ class _CallScreenState extends State<CallScreen> {
   bool _camOn = true;
   late final WebRtcSignalingClient _signal;
   StreamSubscription? _sub;
+  bool _offerSent = false;
+  bool _hasRemote = false;
 
   @override
   void initState() {
@@ -46,11 +48,23 @@ class _CallScreenState extends State<CallScreen> {
     }
     await _localRenderer.initialize();
     await _remoteRenderer.initialize();
-    final config = {
-      'iceServers': [
-        {'urls': 'stun:stun.l.google.com:19302'},
-      ]
-    };
+    // ICE servers: STUN par défaut + TURN si fourni via --dart-define
+    const turnUrlsStr = String.fromEnvironment(
+        'TURN_URLS'); // ex: "turn:turn.example.com:3478?transport=udp,turns:turn.example.com:5349"
+    const turnUser = String.fromEnvironment('TURN_USERNAME');
+    const turnPass = String.fromEnvironment('TURN_PASSWORD');
+    final List<Map<String, dynamic>> ice = [
+      {'urls': 'stun:stun.l.google.com:19302'},
+    ];
+    if (turnUrlsStr.trim().isNotEmpty && turnUser.isNotEmpty) {
+      final urls = turnUrlsStr
+          .split(',')
+          .map((e) => e.trim())
+          .where((e) => e.isNotEmpty)
+          .toList();
+      ice.add({'urls': urls, 'username': turnUser, 'credential': turnPass});
+    }
+    final config = {'iceServers': ice};
     _pc = await createPeerConnection(config);
     _pc!.onIceCandidate = (c) {
       if (c.candidate != null) {
@@ -90,21 +104,27 @@ class _CallScreenState extends State<CallScreen> {
     _signal.onMessage = _onSignal;
     await _signal.connect();
     _signal.join(widget.roomId, 'me');
-
-    final offer = await _pc!.createOffer();
-    await _pc!.setLocalDescription(offer);
-    _signal.send({
-      'type': 'offer',
-      'room': widget.roomId,
-      'sdp': offer.sdp,
-    });
   }
 
   void _onSignal(Map<String, dynamic> msg) async {
     switch (msg['type']) {
+      case 'peer-joined':
+        // Un pair vient d'arriver: si aucune remote et aucune offre envoyée, proposer une offre
+        if (!_hasRemote && !_offerSent) {
+          final offer = await _pc!.createOffer({
+            'offerToReceiveAudio': 1,
+            'offerToReceiveVideo': widget.video ? 1 : 0,
+          });
+          await _pc!.setLocalDescription(offer);
+          _offerSent = true;
+          _signal
+              .send({'type': 'offer', 'room': widget.roomId, 'sdp': offer.sdp});
+        }
+        break;
       case 'offer':
         final desc = RTCSessionDescription(msg['sdp'] as String, 'offer');
         await _pc!.setRemoteDescription(desc);
+        _hasRemote = true;
         final answer = await _pc!.createAnswer();
         await _pc!.setLocalDescription(answer);
         _signal
@@ -113,6 +133,7 @@ class _CallScreenState extends State<CallScreen> {
       case 'answer':
         final desc = RTCSessionDescription(msg['sdp'] as String, 'answer');
         await _pc!.setRemoteDescription(desc);
+        _hasRemote = true;
         break;
       case 'ice':
         final cand = RTCIceCandidate(
