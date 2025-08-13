@@ -333,61 +333,91 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
         ],
         bottom: (_peerPhone != null)
             ? PreferredSize(
-                preferredSize: const Size.fromHeight(44),
+                preferredSize: const Size.fromHeight(56),
                 child: Container(
                   alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      // Appel téléphonique (appui long => QuickCallSheet)
-                      GestureDetector(
-                        onLongPress: () async {
-                          await QuickCallSheet.show(
-                            context,
-                            phoneNumber: _peerPhone!,
-                            message:
-                                "Bonjour, je vous contacte via KIVOU à propos de notre conversation.",
-                          );
-                        },
-                        child: IconButton(
-                          tooltip: 'Appeler',
-                          onPressed: () =>
-                              launchUrl(Uri.parse('tel:${_peerPhone!}')),
-                          icon: const Icon(Icons.call_rounded),
+                      // Téléphone (réseau GSM)
+                      Tooltip(
+                        message:
+                            'Appel téléphonique (réseau GSM) — appui long: options SMS/WhatsApp',
+                        child: GestureDetector(
+                          onLongPress: () async {
+                            await QuickCallSheet.show(
+                              context,
+                              phoneNumber: _peerPhone!,
+                              message:
+                                  "Bonjour, je vous contacte via KIVOU à propos de notre conversation.",
+                            );
+                          },
+                          child: OutlinedButton.icon(
+                            style: OutlinedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 8),
+                              visualDensity: const VisualDensity(
+                                  horizontal: -1, vertical: -1),
+                            ),
+                            onPressed: () =>
+                                launchUrl(Uri.parse('tel:${_peerPhone!}')),
+                            icon: const Icon(Icons.call_rounded,
+                                color: Colors.green),
+                            label: const Text('Téléphone'),
+                          ),
                         ),
                       ),
-                      const SizedBox(width: 4),
-                      // Appel audio WebRTC
-                      IconButton(
-                        tooltip: 'Appel audio',
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => _CallLauncher(
-                                video: false,
-                                roomId: widget.conversationId.toString(),
+                      const SizedBox(width: 8),
+                      // VoIP audio (Internet)
+                      Tooltip(
+                        message: 'Appel VoIP (audio) via Internet',
+                        child: FilledButton.tonalIcon(
+                          style: FilledButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 8),
+                            visualDensity: const VisualDensity(
+                                horizontal: -1, vertical: -1),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => _CallLauncher(
+                                  video: false,
+                                  roomId: widget.conversationId.toString(),
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                        icon: const Icon(Icons.call_outlined),
+                            );
+                          },
+                          icon: const Icon(Icons.wifi_tethering_rounded),
+                          label: const Text('VoIP audio'),
+                        ),
                       ),
-                      const SizedBox(width: 4),
-                      // Appel vidéo WebRTC
-                      IconButton(
-                        tooltip: 'Appel vidéo',
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => _CallLauncher(
-                                video: true,
-                                roomId: widget.conversationId.toString(),
+                      const SizedBox(width: 8),
+                      // VoIP vidéo (Internet)
+                      Tooltip(
+                        message: 'Appel VoIP (vidéo) via Internet',
+                        child: FilledButton.icon(
+                          style: FilledButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 8),
+                            visualDensity: const VisualDensity(
+                                horizontal: -1, vertical: -1),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => _CallLauncher(
+                                  video: true,
+                                  roomId: widget.conversationId.toString(),
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                        icon: const Icon(Icons.videocam_outlined),
+                            );
+                          },
+                          icon: const Icon(Icons.videocam_rounded),
+                          label: const Text('VoIP vidéo'),
+                        ),
                       ),
                     ],
                   ),
