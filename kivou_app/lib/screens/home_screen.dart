@@ -21,7 +21,7 @@ class HomeScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('KIVOU'),
+        title: const Text('Liste des prestataires'),
         actions: [
           _BellButton(),
           _ChatsWithBadgeButton(),

@@ -21,6 +21,11 @@ class ChatListScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Discussions'),
+        leading: IconButton(
+          tooltip: 'Accueil',
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+          onPressed: () => context.go('/home'),
+        ),
       ),
       body: convs.when(
         data: (list) => RefreshIndicator(
