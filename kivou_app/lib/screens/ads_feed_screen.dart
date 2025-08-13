@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../providers/app_providers.dart';
 import '../services/ads_service.dart';
+import '../services/mappers.dart';
 import '../models/ad.dart';
-import 'package:go_router/go_router.dart';
 
 final adsServiceProvider =
     Provider<AdsService>((ref) => AdsService(ref.read(apiClientProvider)));
@@ -19,7 +20,7 @@ class AdsFeedScreen extends ConsumerWidget {
     final ads = ref.watch(adsFeedProvider);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Fil d\'annonces'),
+        title: const Text("Fil d'annonces"),
         actions: [
           IconButton(
             onPressed: () => context.go('/home-providers'),
@@ -40,9 +41,18 @@ class AdsFeedScreen extends ConsumerWidget {
         data: (list) => RefreshIndicator(
           onRefresh: () async {
             ref.invalidate(adsFeedProvider);
-            await ref.read(adsFeedProvider.future);
+            try {
+              await ref.read(adsFeedProvider.future);
+            } catch (_) {}
           },
-          child: ListView.builder(
+          child: GridView.builder(
+            padding: const EdgeInsets.fromLTRB(8, 8, 8, 96),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 8,
+              crossAxisSpacing: 8,
+              childAspectRatio: 0.78,
+            ),
             itemCount: list.length,
             itemBuilder: (ctx, i) => _AdCard(ad: list[i]),
           ),
@@ -66,22 +76,20 @@ class _AdCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     return Card(
-      margin: const EdgeInsets.fromLTRB(12, 10, 12, 6),
+      margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: () async {
-          // Ouvrir/Créer conversation entre auteur et utilisateur courant
           final auth = ref.read(authStateProvider);
           if (!auth.isAuthenticated) {
             if (context.mounted) context.go('/auth');
             return;
           }
           final myId = (auth.user?['id'] as int?) ?? 0;
-          if (myId == ad.authorUserId) return; // pas de chat avec soi-même
+          if (myId == ad.authorUserId) return;
           final conv = await ref.read(chatServiceProvider).openOrCreate(
               peerUserId: ad.authorUserId, providerId: ad.providerId);
-          // Épingler l'annonce dans la conversation
           try {
             await ref
                 .read(adsServiceProvider)
@@ -92,11 +100,10 @@ class _AdCard extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (ad.imageUrl.isNotEmpty)
-              AspectRatio(
-                aspectRatio: 16 / 9,
-                child: Image.network(ad.imageUrl, fit: BoxFit.cover),
-              ),
+            AspectRatio(
+              aspectRatio: 16 / 9,
+              child: _AdImage(url: ad.imageUrl),
+            ),
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: Column(
@@ -106,7 +113,8 @@ class _AdCard extends ConsumerWidget {
                     children: [
                       CircleAvatar(
                         backgroundImage: ad.authorAvatarUrl.isNotEmpty
-                            ? NetworkImage(ad.authorAvatarUrl)
+                            ? NetworkImage(
+                                normalizeImageUrl(ad.authorAvatarUrl))
                             : null,
                         child: ad.authorAvatarUrl.isEmpty
                             ? const Icon(Icons.person)
@@ -118,36 +126,71 @@ class _AdCard extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                                ad.authorName.isNotEmpty
-                                    ? ad.authorName
-                                    : (ad.authorType == 'provider'
-                                        ? ad.providerName
-                                        : 'Client'),
-                                style: theme.textTheme.bodyMedium),
-                            Text(ad.kind == 'request' ? 'Demande' : 'Offre',
-                                style: theme.textTheme.labelSmall),
+                              ad.authorName.isNotEmpty
+                                  ? ad.authorName
+                                  : (ad.authorType == 'provider'
+                                      ? ad.providerName
+                                      : 'Client'),
+                              style: theme.textTheme.bodyMedium,
+                            ),
+                            Text(
+                              ad.kind == 'request' ? 'Demande' : 'Offre',
+                              style: theme.textTheme.labelSmall,
+                            ),
                           ],
                         ),
                       ),
                       if (ad.amount != null)
                         Chip(
-                            label: Text(
-                                '${ad.amount!.toStringAsFixed(0)} ${ad.currency}')),
+                          label: Text(
+                              '${ad.amount!.toStringAsFixed(0)} ${ad.currency}'),
+                        ),
                     ],
                   ),
                   const SizedBox(height: 8),
-                  Text(ad.title, style: theme.textTheme.titleMedium),
+                  Text(
+                    ad.title,
+                    style: theme.textTheme.titleMedium,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                   if (ad.description.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.only(top: 4.0),
-                      child: Text(ad.description,
-                          maxLines: 3, overflow: TextOverflow.ellipsis),
+                      child: Text(
+                        ad.description,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                 ],
               ),
             )
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _AdImage extends StatelessWidget {
+  final String url;
+  const _AdImage({required this.url});
+  @override
+  Widget build(BuildContext context) {
+    final u = normalizeImageUrl(url);
+    if (u.isEmpty) {
+      return Container(
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+        child: const Center(child: Icon(Icons.image, size: 32)),
+      );
+    }
+    return Image.network(
+      u,
+      fit: BoxFit.cover,
+      errorBuilder: (_, __, ___) => Container(
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+        child: const Center(child: Icon(Icons.broken_image_outlined)),
       ),
     );
   }

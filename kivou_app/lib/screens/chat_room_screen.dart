@@ -29,6 +29,7 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
   bool _sending = false;
   Timer? _poll;
   String? _peerPhone;
+  bool _initialMarked = false;
 
   @override
   void dispose() {
@@ -381,6 +382,22 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
           Expanded(
             child: msgs.when(
               data: (list) {
+                // Marquer comme lu si des messages du pair existent non lus
+                if (!_initialMarked) {
+                  _initialMarked = true;
+                  // déclencher après build pour éviter setState pendant build
+                  WidgetsBinding.instance.addPostFrameCallback((_) async {
+                    try {
+                      await ref
+                          .read(chatServiceProvider)
+                          .markRead(widget.conversationId);
+                      // rafraîchir la liste des conversations (compteurs)
+                      ref.invalidate(chatConversationsProvider);
+                      ref.invalidate(
+                          chatMessagesProvider(widget.conversationId));
+                    } catch (_) {}
+                  });
+                }
                 return ListView.builder(
                   reverse: true,
                   padding:
@@ -703,7 +720,7 @@ class _PinnedAdBanner extends StatelessWidget {
               if (imageUrl.isNotEmpty)
                 ClipRRect(
                   borderRadius: BorderRadius.circular(6),
-                  child: Image.network(imageUrl,
+                  child: Image.network(_absUrl(imageUrl),
                       width: 40, height: 40, fit: BoxFit.cover),
                 ),
               const SizedBox(width: 8),
