@@ -2,10 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../services/mappers.dart';
+import '../services/booking_service.dart';
+import '../widgets/booking_sheet.dart';
 
 import '../models/announcement.dart';
 import '../providers/app_providers.dart';
-import '../services/chat_service.dart';
+// chat_service import non requis ici, on passe par les providers
 
 class AnnouncementsScreen extends ConsumerStatefulWidget {
   const AnnouncementsScreen({super.key});
@@ -63,9 +66,69 @@ class _AnnouncementsScreenState extends ConsumerState<AnnouncementsScreen> {
     if (mounted) context.push('/chat/${conv.id}');
   }
 
+  Future<void> _order(Announcement a) async {
+    final auth = ref.read(authStateProvider);
+    if (!auth.isAuthenticated) {
+      if (mounted) context.go('/auth');
+      return;
+    }
+    if (a.providerId == null || a.providerId!.isEmpty) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text('Cette annonce n\'est pas liée à un prestataire.')),
+        );
+      }
+      return;
+    }
+    try {
+      final userId = (auth.user?['id'] as int?) ?? 0;
+      final providerId = int.tryParse(a.providerId!) ?? 0;
+      final input = await showBookingSheet(
+        context: context,
+        serviceCategory: a.title,
+        initialNotes: a.description.isEmpty ? null : a.description,
+        initialDurationHours: 1.0,
+        initialDateTime: DateTime.now().add(const Duration(hours: 1)),
+        pricePerHour: null,
+      );
+      if (input == null) return;
+      final scheduledAt = input.scheduledAt;
+      final duration = input.durationHours;
+      final total = a.price ?? 0.0;
+      await BookingService(ref.read(apiClientProvider)).create(
+        userId: userId,
+        providerId: providerId,
+        serviceCategory: input.serviceCategory,
+        description: input.notes,
+        scheduledAt: scheduledAt,
+        duration: duration,
+        totalPrice: total,
+      );
+      // Best-effort: notifier le propriétaire du prestataire
+      try {
+        await ref.read(notificationServiceProvider).create(
+              title: 'Nouvelle commande',
+              body: 'Sur votre annonce: ${a.title}',
+              providerId: providerId,
+            );
+        // Rafraîchir le compteur des commandes en attente (côté owner)
+        await ref.read(ownerPendingCountProvider.notifier).refresh();
+      } catch (_) {}
+      if (!mounted) return;
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text('Commande créée.')));
+      // Optionnel: rediriger vers mes commandes
+      // if (mounted) context.go('/orders');
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Erreur: $e')));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Annonces'),
@@ -98,8 +161,23 @@ class _AnnouncementsScreenState extends ConsumerState<AnnouncementsScreen> {
                     child: ListView.separated(
                       padding: const EdgeInsets.all(12),
                       itemBuilder: (c, i) => _Card(
-                          item: _items[i],
-                          onContact: () => _contact(_items[i])),
+                        item: _items[i],
+                        onContact: () => _contact(_items[i]),
+                        onOrder: () => _order(_items[i]),
+                        onViewImages: _items[i].images.length > 1
+                            ? () => Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => AnnouncementGalleryScreen(
+                                      images: _items[i]
+                                          .images
+                                          .map(normalizeImageUrl)
+                                          .toList(),
+                                      title: _items[i].title,
+                                    ),
+                                  ),
+                                )
+                            : null,
+                      ),
                       separatorBuilder: (_, __) => const SizedBox(height: 12),
                       itemCount: _items.length,
                     ),
@@ -172,7 +250,13 @@ class _Filters extends StatelessWidget {
 class _Card extends StatelessWidget {
   final Announcement item;
   final VoidCallback onContact;
-  const _Card({required this.item, required this.onContact});
+  final VoidCallback? onOrder;
+  final VoidCallback? onViewImages;
+  const _Card(
+      {required this.item,
+      required this.onContact,
+      this.onOrder,
+      this.onViewImages});
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -194,7 +278,8 @@ class _Card extends StatelessWidget {
                     radius: 20,
                     backgroundImage:
                         (item.publisherAvatarUrl?.isNotEmpty ?? false)
-                            ? NetworkImage(item.publisherAvatarUrl!)
+                            ? NetworkImage(
+                                normalizeImageUrl(item.publisherAvatarUrl!))
                             : null,
                     child: (item.publisherAvatarUrl?.isEmpty ?? true)
                         ? const Icon(Icons.person)
@@ -246,12 +331,35 @@ class _Card extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                   child: AspectRatio(
                     aspectRatio: 16 / 9,
-                    child: CachedNetworkImage(
-                      imageUrl: item.images.first,
-                      fit: BoxFit.cover,
+                    child: InkWell(
+                      onTap: onViewImages,
+                      child: CachedNetworkImage(
+                        imageUrl: normalizeImageUrl(item.images.first),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
+                if (item.images.length > 1) ...[
+                  const SizedBox(height: 6),
+                  SizedBox(
+                    height: 64,
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (c, i) => ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: CachedNetworkImage(
+                          imageUrl: normalizeImageUrl(item.images[i]),
+                          width: 96,
+                          height: 64,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      separatorBuilder: (_, __) => const SizedBox(width: 6),
+                      itemCount: item.images.length,
+                    ),
+                  )
+                ]
               ],
               const SizedBox(height: 10),
               Row(
@@ -262,6 +370,13 @@ class _Card extends StatelessWidget {
                     label: const Text('Contacter'),
                   ),
                   const SizedBox(width: 8),
+                  if (onOrder != null)
+                    FilledButton.icon(
+                      onPressed: onOrder,
+                      icon: const Icon(Icons.shopping_bag_outlined, size: 18),
+                      label: const Text('Commander'),
+                    ),
+                  const SizedBox(width: 8),
                   OutlinedButton.icon(
                     onPressed: () {},
                     icon: const Icon(Icons.share_rounded, size: 18),
@@ -270,6 +385,32 @@ class _Card extends StatelessWidget {
                 ],
               )
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class AnnouncementGalleryScreen extends StatelessWidget {
+  final List<String> images;
+  final String title;
+  const AnnouncementGalleryScreen(
+      {super.key, required this.images, required this.title});
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(title)),
+      body: PageView.builder(
+        itemCount: images.length,
+        itemBuilder: (c, i) => InteractiveViewer(
+          minScale: 0.8,
+          maxScale: 4.0,
+          child: Center(
+            child: CachedNetworkImage(
+              imageUrl: images[i],
+              fit: BoxFit.contain,
+            ),
           ),
         ),
       ),

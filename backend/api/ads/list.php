@@ -54,7 +54,25 @@ $st = db()->prepare($sql);
 $st->execute($params);
 $rows = $st->fetchAll(PDO::FETCH_ASSOC);
 
+// Prefetch images for listed ads to avoid N+1
+$ids = array_map(function ($r) {
+    return (int)$r['id'];
+}, $rows);
+$imagesByAd = [];
+if (!empty($ids)) {
+    $in = implode(',', array_fill(0, count($ids), '?'));
+    $imgs = db()->prepare("SELECT ad_id, url FROM ad_images WHERE ad_id IN ($in) ORDER BY sort_order ASC, id ASC");
+    $imgs->execute($ids);
+    foreach ($imgs->fetchAll(PDO::FETCH_ASSOC) as $ir) {
+        $aid = (int)$ir['ad_id'];
+        $u = (string)$ir['url'];
+        if (!isset($imagesByAd[$aid])) $imagesByAd[$aid] = [];
+        $imagesByAd[$aid][] = $u;
+    }
+}
+
 $out = array_map(function ($r) {
+    $images = $imagesByAd[(int)$r['id']] ?? [];
     return [
         'id' => (int)$r['id'],
         'author_user_id' => (int)$r['author_user_id'],
@@ -64,6 +82,7 @@ $out = array_map(function ($r) {
         'title' => (string)$r['title'],
         'description' => (string)($r['description'] ?? ''),
         'image_url' => (string)($r['image_url'] ?? ''),
+        'images' => $images,
         'amount' => isset($r['amount']) ? (float)$r['amount'] : null,
         'currency' => (string)($r['currency'] ?? 'XOF'),
         'category' => (string)($r['category'] ?? ''),

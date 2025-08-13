@@ -12,7 +12,9 @@ if (!$r) json_error('NOT_FOUND', "Annonce $id introuvable", 404);
 
 $imgs = db()->prepare('SELECT id, url, sort_order FROM ad_images WHERE ad_id=? ORDER BY sort_order ASC, id ASC');
 $imgs->execute([$id]);
-$images = array_map(fn($x) => ['id' => (int)$x['id'], 'url' => (string)$x['url'], 'sort_order' => (int)$x['sort_order']], $imgs->fetchAll(PDO::FETCH_ASSOC));
+$imgRows = $imgs->fetchAll(PDO::FETCH_ASSOC);
+$images = array_map(fn($x) => (string)$x['url'], $imgRows);
+$imagesDetailed = array_map(fn($x) => ['id' => (int)$x['id'], 'url' => (string)$x['url'], 'sort_order' => (int)$x['sort_order']], $imgRows);
 
 json_ok([
     'id' => (int)$r['id'],
@@ -24,6 +26,7 @@ json_ok([
     'description' => (string)($r['description'] ?? ''),
     'image_url' => (string)($r['image_url'] ?? ''),
     'images' => $images,
+    'images_detailed' => $imagesDetailed,
     'amount' => isset($r['amount']) ? (float)$r['amount'] : null,
     'currency' => (string)($r['currency'] ?? 'XOF'),
     'category' => (string)($r['category'] ?? ''),

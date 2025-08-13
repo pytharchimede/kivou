@@ -23,6 +23,34 @@ String normalizeImageUrl(String? u) {
   return ('https://fidest.ci' + s).replaceAll(' ', '%20');
 }
 
+// Convertit une URL absolue ou un chemin quelconque en chemin relatif préféré par l'API (uploads/…)
+String toServerImagePath(String? u) {
+  if (u == null || u.isEmpty) return '';
+  String s = u.trim().replaceAll('\\', '/');
+  // Retirer domaine si présent
+  if (s.startsWith('http://fidest.ci')) {
+    s = s.replaceFirst('http://fidest.ci', '');
+    s = s.replaceFirst('http://', '');
+  }
+  if (s.startsWith('https://fidest.ci')) {
+    s = s.replaceFirst('https://fidest.ci', '');
+  }
+  // Normaliser en chemin relatif
+  if (s.startsWith('/')) s = s.substring(1);
+  // Chercher uploads/ et en déduire le segment attendu
+  final idx = s.indexOf('uploads/');
+  if (idx >= 0) {
+    return s.substring(idx);
+  }
+  // Cas fréquents: kivou/backend/uploads/…
+  final idx2 = s.indexOf('backend/uploads/');
+  if (idx2 >= 0) {
+    return s.substring(idx2 + 'backend/'.length);
+  }
+  // Dernier recours: renvoyer tel quel (chemin relatif déjà acceptable)
+  return s;
+}
+
 ServiceProvider providerFromApi(Map<String, dynamic> j) {
   List<String> _split(String? s) => s == null || s.isEmpty
       ? []

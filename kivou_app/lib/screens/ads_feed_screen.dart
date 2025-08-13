@@ -5,7 +5,10 @@ import '../providers/app_providers.dart';
 import '../services/ads_service.dart';
 import '../services/mappers.dart';
 import '../models/ad.dart';
+import '../services/booking_service.dart';
 import '../models/chat.dart';
+import 'gallery_viewer_screen.dart';
+import '../widgets/booking_sheet.dart';
 
 final adsServiceProvider =
     Provider<AdsService>((ref) => AdsService(ref.read(apiClientProvider)));
@@ -243,96 +246,143 @@ class _AdCard extends ConsumerWidget {
       margin: const EdgeInsets.fromLTRB(12, 8, 12, 8),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: () async {
-          final auth = ref.read(authStateProvider);
-          if (!auth.isAuthenticated) {
-            if (context.mounted) context.go('/auth');
-            return;
-          }
-          final myId = (auth.user?['id'] as int?) ?? 0;
-          if (myId == ad.authorUserId) return;
-          final conv = await ref.read(chatServiceProvider).openOrCreate(
-              peerUserId: ad.authorUserId, providerId: ad.providerId);
-          try {
-            await ref
-                .read(adsServiceProvider)
-                .pinInConversation(conversationId: conv.id, adId: ad.id);
-          } catch (_) {}
-          if (context.mounted) context.push('/chat/${conv.id}');
-        },
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (ad.images.isNotEmpty)
+            _AdGallery(images: ad.images, adId: ad.id)
+          else
             AspectRatio(
               aspectRatio: 16 / 9,
-              child: _AdImage(url: ad.imageUrl),
+              child: GestureDetector(
+                onTap: () async {
+                  // Charger le détail pour récupérer toutes les images si disponibles
+                  try {
+                    final detailed =
+                        await ref.read(adsServiceProvider).detail(ad.id);
+                    final imgs = (detailed.images.isNotEmpty)
+                        ? detailed.images
+                        : (ad.imageUrl.isNotEmpty ? [ad.imageUrl] : <String>[]);
+                    final norm = imgs
+                        .map(normalizeImageUrl)
+                        .where((e) => e.isNotEmpty)
+                        .toList();
+                    if (norm.isEmpty) return;
+                    if (context.mounted) {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => GalleryViewerScreen(
+                            images: norm,
+                            initialIndex: 0,
+                          ),
+                        ),
+                      );
+                    }
+                  } catch (_) {}
+                },
+                child: _AdImage(url: ad.imageUrl),
+              ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      CircleAvatar(
-                        backgroundImage: ad.authorAvatarUrl.isNotEmpty
-                            ? NetworkImage(
-                                normalizeImageUrl(ad.authorAvatarUrl))
-                            : null,
-                        child: ad.authorAvatarUrl.isEmpty
-                            ? const Icon(Icons.person)
-                            : null,
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              ad.authorName.isNotEmpty
-                                  ? ad.authorName
-                                  : (ad.authorType == 'provider'
-                                      ? ad.providerName
-                                      : 'Client'),
-                              style: theme.textTheme.bodyMedium,
-                            ),
-                            Text(
-                              ad.kind == 'request' ? 'Demande' : 'Offre',
-                              style: theme.textTheme.labelSmall,
-                            ),
-                          ],
-                        ),
-                      ),
-                      if (ad.amount != null)
-                        Chip(
-                          label: Text(
-                              '${ad.amount!.toStringAsFixed(0)} ${ad.currency}'),
-                        ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    ad.title,
-                    style: theme.textTheme.titleMedium,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  if (ad.description.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 4.0),
-                      child: Text(
-                        ad.description,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: ad.authorAvatarUrl.isNotEmpty
+                          ? NetworkImage(normalizeImageUrl(ad.authorAvatarUrl))
+                          : null,
+                      child: ad.authorAvatarUrl.isEmpty
+                          ? const Icon(Icons.person)
+                          : null,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            ad.authorName.isNotEmpty
+                                ? ad.authorName
+                                : (ad.authorType == 'provider'
+                                    ? ad.providerName
+                                    : 'Client'),
+                            style: theme.textTheme.bodyMedium,
+                          ),
+                          Text(
+                            ad.kind == 'request' ? 'Demande' : 'Offre',
+                            style: theme.textTheme.labelSmall,
+                          ),
+                        ],
                       ),
                     ),
-                ],
-              ),
-            )
-          ],
-        ),
+                    if (ad.amount != null)
+                      Chip(
+                        label: Text(
+                            '${ad.amount!.toStringAsFixed(0)} ${ad.currency}'),
+                      ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  ad.title,
+                  style: theme.textTheme.titleMedium,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                if (ad.description.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4.0),
+                    child: Text(
+                      ad.description,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+            child: OverflowBar(
+              alignment: MainAxisAlignment.start,
+              spacing: 8,
+              overflowSpacing: 8,
+              children: [
+                ElevatedButton.icon(
+                  onPressed: () => _contactFromAd(context, ref, ad),
+                  icon: const Icon(Icons.chat_rounded, size: 18),
+                  label: const Text('Contacter'),
+                ),
+                FilledButton.icon(
+                  onPressed: () => _orderFromAd(context, ref, ad),
+                  icon: const Icon(Icons.shopping_bag_outlined, size: 18),
+                  label: const Text('Commander'),
+                ),
+                _EditIfOwner(ad: ad),
+              ],
+            ),
+          )
+        ],
       ),
+    );
+  }
+}
+
+class _EditIfOwner extends ConsumerWidget {
+  final Ad ad;
+  const _EditIfOwner({required this.ad});
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final auth = ref.watch(authStateProvider);
+    final myId = (auth.user?['id'] as int?) ?? 0;
+    if (myId == 0 || myId != ad.authorUserId) return const SizedBox.shrink();
+    return TextButton.icon(
+      onPressed: () => context.push('/ad/${ad.id}/edit-images'),
+      icon: const Icon(Icons.edit, size: 18),
+      label: const Text('Éditer'),
     );
   }
 }
@@ -357,6 +407,174 @@ class _AdImage extends StatelessWidget {
         child: const Center(child: Icon(Icons.broken_image_outlined)),
       ),
     );
+  }
+}
+
+class _AdGallery extends ConsumerWidget {
+  final List<String> images;
+  final int adId;
+  const _AdGallery({required this.images, required this.adId});
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final norm = images
+        .map((e) => normalizeImageUrl(e))
+        .where((e) => e.isNotEmpty)
+        .toList();
+    return Column(
+      children: [
+        AspectRatio(
+          aspectRatio: 16 / 9,
+          child: PageView.builder(
+            itemCount: norm.length,
+            itemBuilder: (c, i) => GestureDetector(
+              onTap: () async {
+                var imgs = norm;
+                try {
+                  final detailed =
+                      await ref.read(adsServiceProvider).detail(adId);
+                  final full = detailed.images
+                      .map((e) => normalizeImageUrl(e))
+                      .where((e) => e.isNotEmpty)
+                      .toList();
+                  if (full.isNotEmpty) imgs = full;
+                } catch (_) {}
+                if (!context.mounted) return;
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => GalleryViewerScreen(
+                      images: imgs,
+                      initialIndex: i,
+                    ),
+                  ),
+                );
+              },
+              child: Image.network(
+                norm[i],
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+        ),
+        if (norm.length > 1)
+          SizedBox(
+            height: 70,
+            child: ListView.separated(
+              padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
+              scrollDirection: Axis.horizontal,
+              itemCount: norm.length,
+              separatorBuilder: (_, __) => const SizedBox(width: 8),
+              itemBuilder: (c, i) => GestureDetector(
+                onTap: () async {
+                  var imgs = norm;
+                  try {
+                    final detailed =
+                        await ref.read(adsServiceProvider).detail(adId);
+                    final full = detailed.images
+                        .map((e) => normalizeImageUrl(e))
+                        .where((e) => e.isNotEmpty)
+                        .toList();
+                    if (full.isNotEmpty) imgs = full;
+                  } catch (_) {}
+                  if (!context.mounted) return;
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => GalleryViewerScreen(
+                        images: imgs,
+                        initialIndex: i,
+                      ),
+                    ),
+                  );
+                },
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.network(norm[i],
+                      width: 100, height: 70, fit: BoxFit.cover),
+                ),
+              ),
+            ),
+          )
+      ],
+    );
+  }
+}
+
+Future<void> _contactFromAd(BuildContext context, WidgetRef ref, Ad ad) async {
+  final auth = ref.read(authStateProvider);
+  if (!auth.isAuthenticated) {
+    if (context.mounted) context.go('/auth');
+    return;
+  }
+  final myId = (auth.user?['id'] as int?) ?? 0;
+  if (myId == ad.authorUserId) return;
+  final conv = await ref
+      .read(chatServiceProvider)
+      .openOrCreate(peerUserId: ad.authorUserId, providerId: ad.providerId);
+  try {
+    await ref
+        .read(adsServiceProvider)
+        .pinInConversation(conversationId: conv.id, adId: ad.id);
+  } catch (_) {}
+  if (context.mounted) context.push('/chat/${conv.id}');
+}
+
+Future<void> _orderFromAd(BuildContext context, WidgetRef ref, Ad ad) async {
+  final auth = ref.read(authStateProvider);
+  if (!auth.isAuthenticated) {
+    if (context.mounted) context.go('/auth');
+    return;
+  }
+  if (ad.providerId == null || ad.providerId!.isEmpty) {
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Cette annonce n\'est pas liée à un prestataire.')),
+      );
+    }
+    return;
+  }
+  try {
+    final userId = (auth.user?['id'] as int?) ?? 0;
+    final providerId = int.tryParse(ad.providerId!) ?? 0;
+    // Feuille de saisie
+    final input = await showBookingSheet(
+      context: context,
+      serviceCategory: ad.title,
+      initialNotes: ad.description.isEmpty ? null : ad.description,
+      initialDurationHours: 1.0,
+      initialDateTime: DateTime.now().add(const Duration(hours: 1)),
+      pricePerHour: null,
+    );
+    if (input == null) return; // annulé par l'utilisateur
+    final scheduledAt = input.scheduledAt;
+    final duration = input.durationHours;
+    final total = ad.amount ?? 0.0;
+    await BookingService(ref.read(apiClientProvider)).create(
+      userId: userId,
+      providerId: providerId,
+      serviceCategory: input.serviceCategory,
+      description: input.notes,
+      scheduledAt: scheduledAt,
+      duration: duration,
+      totalPrice: total,
+    );
+    try {
+      await ref.read(notificationServiceProvider).create(
+            title: 'Nouvelle commande',
+            body: 'Sur votre annonce: ${ad.title}',
+            providerId: providerId,
+          );
+      await ref.read(ownerPendingCountProvider.notifier).refresh();
+    } catch (_) {}
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Commande créée.')),
+      );
+    }
+  } catch (e) {
+    if (context.mounted) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Erreur: $e')));
+    }
   }
 }
 

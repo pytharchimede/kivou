@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 
 import '../providers/app_providers.dart';
 import '../models/service_provider.dart';
-import '../services/announcement_service.dart';
 import '../services/announcement_upload_service.dart';
 import '../services/mappers.dart';
 
@@ -100,7 +99,7 @@ class _AnnouncementCreateScreenState
           urls.add(await up.upload(f));
         }
       }
-      final id = await ref.read(announcementServiceProvider).create(
+      await ref.read(announcementServiceProvider).create(
             type: _type,
             authorRole: _role,
             providerId: _selectedProvider?.id,
@@ -206,34 +205,22 @@ class _AnnouncementCreateScreenState
               ),
             ],
             const SizedBox(height: 12),
-            Wrap(spacing: 8, runSpacing: 8, children: [
-              for (final f in _images)
-                Stack(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.file(f,
-                          width: 100, height: 100, fit: BoxFit.cover),
-                    ),
-                    Positioned(
-                      right: -8,
-                      top: -8,
-                      child: IconButton(
-                        icon: const Icon(Icons.close, size: 18),
-                        visualDensity: VisualDensity.compact,
-                        onPressed: () => setState(() {
-                          _images.remove(f);
-                        }),
-                      ),
-                    )
-                  ],
-                ),
-              OutlinedButton.icon(
-                onPressed: _pickImages,
-                icon: const Icon(Icons.add_a_photo_rounded),
-                label: const Text('Images'),
-              )
-            ]),
+            _ReorderableImageGrid(
+              files: _images,
+              onReorder: (oldIndex, newIndex) {
+                setState(() {
+                  final item = _images.removeAt(oldIndex);
+                  _images.insert(newIndex, item);
+                });
+              },
+              onRemoveAt: (index) => setState(() => _images.removeAt(index)),
+            ),
+            const SizedBox(height: 8),
+            OutlinedButton.icon(
+              onPressed: _pickImages,
+              icon: const Icon(Icons.add_a_photo_rounded),
+              label: const Text('Ajouter des images'),
+            ),
             const SizedBox(height: 24),
             FilledButton.icon(
               onPressed: _submitting ? null : _submit,
@@ -242,6 +229,74 @@ class _AnnouncementCreateScreenState
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _ReorderableImageGrid extends StatelessWidget {
+  final List<File> files;
+  final void Function(int oldIndex, int newIndex) onReorder;
+  final void Function(int index) onRemoveAt;
+  const _ReorderableImageGrid({
+    required this.files,
+    required this.onReorder,
+    required this.onRemoveAt,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (files.isEmpty) return const SizedBox.shrink();
+    return SizedBox(
+      height: 110,
+      child: ReorderableListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: files.length,
+        onReorder: (oldIndex, newIndex) {
+          if (newIndex > oldIndex) newIndex -= 1;
+          onReorder(oldIndex, newIndex);
+        },
+        proxyDecorator: (child, index, animation) => Material(
+          elevation: 6,
+          child: child,
+        ),
+        itemBuilder: (ctx, i) {
+          final f = files[i];
+          return Padding(
+            key: ValueKey(f.path),
+            padding: const EdgeInsets.only(right: 8.0),
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.file(
+                    f,
+                    width: 120,
+                    height: 90,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Positioned(
+                  right: -8,
+                  top: -8,
+                  child: Material(
+                    color: Colors.black54,
+                    shape: const CircleBorder(),
+                    child: InkWell(
+                      customBorder: const CircleBorder(),
+                      onTap: () => onRemoveAt(i),
+                      child: const Padding(
+                        padding: EdgeInsets.all(4),
+                        child: Icon(Icons.close, size: 16, color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

@@ -6,7 +6,8 @@ class Ad {
   final String kind; // request | offer
   final String title;
   final String description;
-  final String imageUrl;
+  final String imageUrl; // rétrocompatibilité (première image)
+  final List<String> images; // multi-images
   final double? amount;
   final String currency;
   final String category;
@@ -29,6 +30,7 @@ class Ad {
     required this.title,
     required this.description,
     required this.imageUrl,
+    required this.images,
     required this.amount,
     required this.currency,
     required this.category,
@@ -44,6 +46,28 @@ class Ad {
   });
 
   factory Ad.fromApi(Map<String, dynamic> j) {
+    // multi-images: accepter images sous plusieurs formes
+    List<String> parsedImages = const [];
+    final rawImages = j['images'];
+    if (rawImages is List) {
+      parsedImages = rawImages
+          .map((e) => e?.toString() ?? '')
+          .where((e) => e.isNotEmpty)
+          .toList();
+    } else {
+      final csv = (j['image_urls'] ?? j['images_csv'] ?? '').toString();
+      if (csv.isNotEmpty) {
+        parsedImages = csv
+            .split(',')
+            .map((e) => e.trim())
+            .where((e) => e.isNotEmpty)
+            .toList();
+      }
+    }
+    final single = j['image_url']?.toString() ?? '';
+    if (parsedImages.isEmpty && single.isNotEmpty) {
+      parsedImages = [single];
+    }
     return Ad(
       id: int.tryParse(j['id']?.toString() ?? '0') ?? 0,
       authorUserId: int.tryParse(j['author_user_id']?.toString() ?? '0') ?? 0,
@@ -52,7 +76,8 @@ class Ad {
       kind: j['kind']?.toString() ?? 'offer',
       title: j['title']?.toString() ?? '',
       description: j['description']?.toString() ?? '',
-      imageUrl: j['image_url']?.toString() ?? '',
+      imageUrl: (parsedImages.isNotEmpty ? parsedImages.first : single),
+      images: parsedImages,
       amount: j['amount'] == null
           ? null
           : double.tryParse(j['amount']?.toString() ?? ''),
