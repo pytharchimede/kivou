@@ -80,14 +80,11 @@ class _OrdersScreenState extends ConsumerState<OrdersScreen> {
 
     List<Widget> listChildren;
     if (loading && orders.isEmpty) {
-      listChildren = [
-        const SizedBox(height: 12),
-        ...List.generate(
-            6,
-            (i) => const Padding(
-                  padding: EdgeInsets.only(bottom: 12),
-                  child: _OrderSkeletonCard(),
-                )),
+      listChildren = const [
+        SizedBox(height: 140),
+        Center(child: CircularProgressIndicator()),
+        SizedBox(height: 12),
+        Center(child: Text('Chargement des commandes...')),
       ];
     } else if (filtered.isEmpty) {
       listChildren = const [
@@ -605,133 +602,4 @@ class _Avatar extends StatelessWidget {
 
 // _SectionHeader supprimé (plus utilisé).
 
-class _OrderSkeletonCard extends StatelessWidget {
-  const _OrderSkeletonCard();
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final base = theme.colorScheme.surfaceContainerHighest;
-    return Container(
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: theme.dividerColor.withValues(alpha: 0.2)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(14),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // avatar demandeur
-                _Shimmer(
-                  child: Container(
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: base,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      _SkeletonLine(widthFactor: 0.5, height: 16),
-                      SizedBox(height: 6),
-                      _SkeletonLine(widthFactor: 0.8),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            const _SkeletonLine(widthFactor: 0.6),
-            const SizedBox(height: 6),
-            const _SkeletonLine(widthFactor: 0.4),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _SkeletonLine extends StatelessWidget {
-  final double widthFactor;
-  final double height;
-  const _SkeletonLine({this.widthFactor = 1.0, this.height = 12});
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final base = theme.colorScheme.surfaceContainerHighest;
-    return FractionallySizedBox(
-      widthFactor: widthFactor,
-      child: _Shimmer(
-        child: Container(
-          height: height,
-          decoration: BoxDecoration(
-            color: base,
-            borderRadius: BorderRadius.circular(8),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _Shimmer extends StatefulWidget {
-  final Widget child;
-  const _Shimmer({required this.child});
-  @override
-  State<_Shimmer> createState() => _ShimmerState();
-}
-
-class _ShimmerState extends State<_Shimmer>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _ctrl;
-  late final Animation<double> _anim;
-
-  @override
-  void initState() {
-    super.initState();
-    _ctrl = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 1200))
-      ..repeat();
-    _anim = Tween<double>(begin: -1.0, end: 2.0)
-        .animate(CurvedAnimation(parent: _ctrl, curve: Curves.linear));
-  }
-
-  @override
-  void dispose() {
-    _ctrl.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final base = theme.colorScheme.surfaceContainerHighest;
-    final highlight = base.withValues(alpha: 0.5);
-    return AnimatedBuilder(
-      animation: _anim,
-      builder: (context, child) {
-        final grad = LinearGradient(
-          colors: [base, highlight, base],
-          stops: const [0.25, 0.5, 0.75],
-          begin: Alignment(-1 + _anim.value, 0),
-          end: Alignment(1 + _anim.value, 0),
-        );
-        return ShaderMask(
-          shaderCallback: (rect) => grad.createShader(rect),
-          blendMode: BlendMode.srcATop,
-          child: child,
-        );
-      },
-      child: widget.child,
-    );
-  }
-}
+// Cartes squelette supprimées pour éviter tout voile gris.
