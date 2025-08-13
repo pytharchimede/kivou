@@ -593,22 +593,43 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                             : MainAxisAlignment.start,
                         children: [
                           if (!mine) ...[
-                            CircleAvatar(
-                              radius: 14,
-                              backgroundImage: (conv
-                                          ?.clientAvatarUrl.isNotEmpty ??
-                                      false)
-                                  ? NetworkImage(_absUrl(conv!.clientAvatarUrl))
-                                  : (conv?.peerAvatarUrl.isNotEmpty ?? false)
-                                      ? NetworkImage(
-                                          _absUrl(conv!.peerAvatarUrl))
-                                      : null,
-                              child: ((conv?.clientAvatarUrl.isEmpty ?? true) &&
-                                      (conv?.peerAvatarUrl.isEmpty ?? true))
-                                  ? const Icon(Icons.person, size: 14)
-                                  : null,
-                            ),
-                            const SizedBox(width: 6),
+                            Builder(builder: (context) {
+                              final bool iAmProviderOwner =
+                                  (conv?.providerOwnerUserId != null &&
+                                      conv!.providerOwnerUserId == myId);
+                              String avatarUrl = '';
+                              if (iAmProviderOwner) {
+                                // Je suis côté prestataire -> à gauche: client
+                                avatarUrl =
+                                    (conv?.clientAvatarUrl ?? '').trim();
+                                if (avatarUrl.isEmpty) {
+                                  avatarUrl =
+                                      (conv?.peerAvatarUrl ?? '').trim();
+                                }
+                              } else {
+                                // Je suis côté client -> à gauche: prestataire
+                                avatarUrl =
+                                    (conv?.providerAvatarUrl ?? '').trim();
+                                if (avatarUrl.isEmpty) {
+                                  avatarUrl =
+                                      (conv?.peerAvatarUrl ?? '').trim();
+                                }
+                              }
+                              return Row(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 14,
+                                    backgroundImage: avatarUrl.isNotEmpty
+                                        ? NetworkImage(_absUrl(avatarUrl))
+                                        : null,
+                                    child: avatarUrl.isEmpty
+                                        ? const Icon(Icons.person, size: 14)
+                                        : null,
+                                  ),
+                                  const SizedBox(width: 6),
+                                ],
+                              );
+                            }),
                           ],
                           Flexible(
                             child: Column(
@@ -803,9 +824,22 @@ class _PinnedAdBanner extends StatelessWidget {
   }
 }
 
+// Décalage par défaut du serveur quand l'horodatage n'a PAS de fuseau (ex: "YYYY-MM-DD HH:MM:SS")
+// Ici on suppose le serveur en UTC+1 (Europe/Afrique de l'Ouest souvent +1 l'été),
+// pour afficher correctement en local (ex: Côte d'Ivoire GMT+0).
+const Duration _kServerNaiveTzFallback = Duration(hours: 1);
+
 String _fmtTime(DateTime dt) {
-  // Ajuste à l'heure locale de l'appareil (Côte d'Ivoire GMT+0)
-  final local = dt.toLocal();
+  DateTime local;
+  if (dt.isUtc) {
+    // L'horodatage a un fuseau (Z ou +hh:mm) => conversion locale standard
+    local = dt.toLocal();
+  } else {
+    // Horodatage "naïf" (sans fuseau). On l'interprète comme heure serveur (UTC+1),
+    // puis on convertit vers l'heure locale de l'utilisateur.
+    final assumedUtc = dt.subtract(_kServerNaiveTzFallback);
+    local = assumedUtc.toLocal();
+  }
   final h = local.hour.toString().padLeft(2, '0');
   final m = local.minute.toString().padLeft(2, '0');
   return '$h:$m';
